@@ -165,15 +165,23 @@ export function EditorialBreak() {
         sizes="100vw"
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
-      <div className="absolute inset-0 flex items-end bg-linear-to-t from-ink/45 to-transparent to-55%">
-        <div className="gutter flex w-full items-end justify-between py-5 text-bone md:py-8 lg:py-12">
-          <p className="text-quote-italic font-display italic">
-            Every detail, composed with intention.
-          </p>
-          <div className="text-label-sm hidden font-medium tracking-[0.3em] text-bone/75 uppercase md:block">
-            Hudson Valley, NY
-          </div>
-        </div>
+      {/* Banda de legibilidad acotada al pie, receta de Florale. La versión
+          anterior teñía el 55% de la foto de arriba abajo; esta cubre solo
+          lo que el pie necesita y deja la fotografía intacta. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-ink/85 via-ink/30 to-transparent md:h-36 lg:h-44"
+      />
+
+      {/* El pie baja al borde, donde el gradiente es denso: así el contraste
+          sale del sitio más oscuro de la banda y la banda puede ser suave.
+          Una sola línea — el "Hudson Valley, NY" que iba a la derecha ya
+          está en el hero y en el footer, y a 10px sobre mantel blanco no
+          alcanzaba el 4.5:1 sin oscurecer la foto de más. */}
+      <div className="gutter absolute inset-x-0 bottom-0 py-4 text-bone text-shadow-caption md:py-6 lg:py-8">
+        <p className="text-quote-italic font-display italic">
+          Every detail, composed with intention.
+        </p>
       </div>
     </section>
   );

@@ -263,6 +263,29 @@ The one `box-shadow` in the entire codebase is not elevation. The primary button
 
 The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero collage is the one exception, using fixed pixel heights with deliberate vertical offsets so the three images sit at different altitudes.
 
+### Scrims — two recipes, and only these
+
+Text over photography is legible by scrim, never by a box or a plate. There are exactly two, and they solve different problems:
+
+**1. Caption band** (`EditorialBreak`) — for a line sitting at the bottom edge:
+
+```
+absolute inset-x-0 bottom-0  h-28 md:h-36 lg:h-44
+bg-linear-to-t from-ink/85 via-ink/30 to-transparent
+```
+
+Height-bounded to 112 / 144 / 176px — roughly the bottom third — so the photograph above it stays completely untouched. The caption sits low inside the band (`py-4 md:py-6 lg:py-8`), which is the whole trick: **put the text where the gradient is already dense, and the gradient itself can stay short.** A softer, taller wash needs far more total darkening to hit the same contrast. Pair it with `text-shadow-caption`.
+
+**2. Headline wash** (`Hero`, mobile only) — for a headline centred over the image:
+
+```
+absolute inset-0 bg-linear-to-t from-ink/50 to-transparent to-60%
+```
+
+Full-height, because a vertically-centred H1 cannot be served by a bottom band.
+
+Contrast over photography is **measured against the brightest pixel under the text**, not eyeballed — white linen and candlelight are the failure case in this library. Verified: 4.70:1 at 1440, 4.85:1 at 834, 5.04:1 at 390.
+
 The logotype follows the same discipline: the bar in `J|S` is a 1px `<span>`, not the `|` character, so its height and spacing are controlled to the pixel instead of inheriting a font metric.
 
 ## Components
@@ -320,7 +343,8 @@ One open at a time. Trigger is a full-width button: lowercase roman numeral in `
 
 ### Don't:
 
-- **Don't** introduce an accent color, a tinted surface, a colored state, or a hue-carrying gradient. The only permitted gradient is the `rgba(20,19,18,.45) → transparent 55%` scrim that makes text legible over a photograph.
+- **Don't** introduce an accent color, a tinted surface, a colored state, or a hue-carrying gradient. The only permitted gradients are the two `ink` scrims in Shapes, and both exist for legibility, not for mood.
+- **Don't** wash a whole photograph to make a caption readable. Bound the band and drop the caption into it.
 - **Don't** add a border-radius anywhere, on anything, ever.
 - **Don't** add a drop shadow or any lift. If it looks like it needs one, it needs space.
 - **Don't** reach for the generic wedding-site vocabulary: hero carousels, vendor badges, script or handwritten typefaces, blush palettes, eucalyptus ornament, or "the day of your dreams" register.
