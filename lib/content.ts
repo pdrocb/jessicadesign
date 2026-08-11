@@ -56,7 +56,7 @@ export const services = [
     numeral: "No. II",
     name: "Celebrations",
     img: serviceCelebrations,
-    copy: "Showers, sweet sixteens, quinceañeras, mitzvahs — every milestone, thoughtfully styled.",
+    copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs — every milestone, thoughtfully styled.",
   },
   {
     numeral: "No. III",
@@ -66,9 +66,9 @@ export const services = [
   },
   {
     numeral: "No. IV",
-    name: "Day-Of Styling",
+    name: "Day-Of Set-Up",
     img: serviceDayOf,
-    copy: "Your vision, our hands — flawless setup and styling of every detail on the day.",
+    copy: "Your vision, our hands — including the decor you made yourself. Our team sets up every detail on the day.",
   },
 ];
 
