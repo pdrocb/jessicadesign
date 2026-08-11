@@ -291,7 +291,7 @@ The logotype follows the same discipline: the bar in `J|S` is a 1px `<span>`, no
 - **Shape:** square (`0px`), no exceptions.
 - **Primary:** `ink` fill, `bone` text, `label` type, padding `18px 56px`. Full width below 768px.
 - **Primary hover:** inverts to `bone` on `ink` text with an `inset 0 0 0 1px` hairline, 180ms. The inversion *is* the interaction — no lift, no scale, no shadow.
-- **Outline (nav CTA):** 1px `ink` border, transparent fill, `label-sm`, padding `9px 24px`. Hover fills to `ink` with `bone` text. On mobile it takes `min-height: 44px` and drops its vertical padding.
+- **Outline (nav CTA):** 1px `ink` border, transparent fill, `label-sm`. Hover fills to `ink` with `bone` text. Its visible box is **32px** so it does not dominate a 53px nav row; the touch target reaches **44px** through an `::after` that extends the hit area 6px above and below. Visual size and touch surface are not the same rectangle, and forcing them to be is what makes a small control look bloated.
 
 ### Links
 
@@ -333,7 +333,7 @@ One open at a time. Trigger is a full-width button: lowercase roman numeral in `
 - **Do** anchor any new type token with the `clamp(min, slope·vw + base, max)` formula so it lands exactly on its mobile and desktop sizes.
 - **Do** separate with a hairline, a tonal ground, or space — in that order.
 - **Do** cap reading measure on the paragraph itself in `ch`, never by narrowing the container. The rail belongs to the photography.
-- **Do** give mobile controls 44px of height even when it breaks a specified row height. Put the padding on the anchor and the underline on an inner span.
+- **Do** give mobile controls a 44px touch target — but reach it with an `::after` hit-area extension when 44px of *visible* box would overwhelm the composition. Put padding on the anchor and the underline on an inner span.
 - **Do** keep one `<h1>` per document; move its positioning anchor across breakpoints rather than duplicating it.
 - **Do** use typographic quotes and the `·` separator the system already uses in meta lines.
 

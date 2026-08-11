@@ -41,9 +41,13 @@ export function ButtonOutline({
   return (
     <a
       href={href}
-      // min-h-11 = 44px de área táctil en mobile (handoff §4); desde
-      // tablet manda el padding de la tabla de espaciado.
-      className={`text-label-sm inline-flex min-h-11 items-center border border-ink px-4 font-medium uppercase transition-colors duration-[180ms] hover:bg-ink hover:text-bone md:min-h-0 md:px-5 md:py-2 lg:px-6 lg:py-[9px] ${className}`}
+      // La caja visible mide 32px para no dominar una fila de 53; el área
+      // táctil llega a 44px con un ::after que la extiende 6px arriba y
+      // abajo. Tamaño visual y superficie de toque no son el mismo
+      // rectángulo — forzarlos a serlo es lo que engorda el botón.
+      // La extensión se mantiene en todos los breakpoints: las tablets
+      // también son táctiles, y en desktop un target indulgente no estorba.
+      className={`text-label-sm relative inline-flex items-center border border-ink px-4 py-[8px] font-medium uppercase transition-colors duration-[180ms] after:absolute after:inset-x-0 after:-top-1.5 after:-bottom-1.5 after:content-[''] hover:bg-ink hover:text-bone md:px-5 lg:px-6 lg:py-[9px] ${className}`}
     >
       {children}
     </a>
