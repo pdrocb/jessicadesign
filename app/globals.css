@@ -83,11 +83,6 @@
      Radio 0 en todo (handoff §2.4): no hay token de radio a propósito. */
   --ease-geometry: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  /* Legibilidad de pies sobre fotografía. NO es elevación — no viola la
-     regla No-Lift: es la sombra que despega el texto de un fondo que no
-     controlamos, tintada con `ink` y no con negro puro. */
-  --text-shadow-caption: 0 1px 4px rgba(20, 19, 18, 0.7);
-
   /* ── Z-index semántico ───────────────────────────────────────── */
   --z-nav: 60;
 }

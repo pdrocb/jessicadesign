@@ -46,7 +46,7 @@ export function Faqs() {
                     className="flex w-full cursor-pointer items-baseline justify-between gap-6 px-1 py-[18px] text-left md:py-[22px]"
                   >
                     <span className="flex items-baseline gap-3 lg:gap-[18px]">
-                      <span className="font-display text-[13px] text-ink-faint">
+                      <span className="font-display text-[13px] text-ink-subtle">
                         {faq.numeral}
                       </span>
                       <span className="font-display text-[17px] font-medium lg:text-[19px]">
@@ -55,7 +55,7 @@ export function Faqs() {
                     </span>
                     <span
                       aria-hidden
-                      className="font-display text-[22px] leading-none text-ink-faint"
+                      className="font-display text-[22px] leading-none text-ink-subtle"
                     >
                       {isOpen ? "−" : "+"}
                     </span>

@@ -140,7 +140,7 @@ export function Services() {
               sizes="(min-width: 1536px) 340px, (min-width: 1200px) 25vw, (min-width: 768px) 50vw, 100vw"
               className="mb-1 aspect-[4/5] w-full object-cover md:aspect-[3/4] lg:mb-2"
             />
-            <div className="font-display text-[13px] text-ink-faint md:text-[14px] lg:text-[15px]">
+            <div className="font-display text-[13px] text-ink-subtle md:text-[14px] lg:text-[15px]">
               {svc.numeral}
             </div>
             <h3 className="text-heading-md font-display font-medium">
@@ -155,35 +155,27 @@ export function Services() {
 }
 
 /* ── Break editorial ──────────────────────────────────────────────
-   Única receta permitida para texto sobre foto: gradiente al 45% (§2.5). */
+   Lámina a sangre con su pie debajo, como una plancha de libro de
+   fotografía. Sin scrim: la imagen no se toca, y el pie se lee sobre
+   papel en vez de pelear con un mantel blanco. */
 export function EditorialBreak() {
   return (
-    <section aria-label="Gallery" className="relative">
+    <figure className="m-0">
       <Image
         src={images.heroReception}
         alt="Full wedding reception design"
         sizes="100vw"
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
-      {/* Banda de legibilidad acotada al pie, receta de Florale. La versión
-          anterior teñía el 55% de la foto de arriba abajo; esta cubre solo
-          lo que el pie necesita y deja la fotografía intacta. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-ink/85 via-ink/30 to-transparent md:h-36 lg:h-44"
-      />
-
-      {/* El pie baja al borde, donde el gradiente es denso: así el contraste
-          sale del sitio más oscuro de la banda y la banda puede ser suave.
-          Una sola línea — el "Hudson Valley, NY" que iba a la derecha ya
-          está en el hero y en el footer, y a 10px sobre mantel blanco no
-          alcanzaba el 4.5:1 sin oscurecer la foto de más. */}
-      <div className="gutter absolute inset-x-0 bottom-0 py-4 text-bone text-shadow-caption md:py-6 lg:py-8">
-        <p className="text-quote-italic font-display italic">
+      <figcaption className="gutter shell flex flex-col gap-1 pt-3.5 md:flex-row md:items-baseline md:justify-between md:gap-8 md:pt-4 lg:pt-5">
+        <p className="text-quote-italic font-display text-ink italic">
           Every detail, composed with intention.
         </p>
-      </div>
-    </section>
+        <span className="text-label-sm shrink-0 font-medium tracking-[0.3em] text-ink-subtle uppercase">
+          Hudson Valley, NY
+        </span>
+      </figcaption>
+    </figure>
   );
 }
 
