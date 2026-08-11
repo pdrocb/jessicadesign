@@ -28,11 +28,19 @@ export function Hero() {
         />
 
         {/* Una sola instancia de la recepción — es el LCP en los tres
-            breakpoints, así que se precarga una vez y se reordena por CSS. */}
-        {/* `md:static` cambia el ancla del H1: en mobile se posiciona sobre
-            la foto, y desde tablet sobre el hero completo — un solo H1 en
-            el documento en lugar de una copia por breakpoint. */}
-        <div className="relative order-first md:static md:order-none">
+            breakpoints, así que se precarga una vez y se reordena por CSS.
+
+            El H1 vive aquí en los dos casos, pero cambia de naturaleza:
+            en mobile es un título en flujo normal, encima de la lámina y
+            sobre papel; desde tablet se vuelve absoluto y `md:static` en
+            el contenedor lo ancla al hero completo para superponerlo al
+            collage. Un solo H1 en el documento, sin copias por breakpoint. */}
+        <div className="order-first flex flex-col gap-5 md:static md:order-none md:block">
+          <h1 className="text-display-hero text-center font-display font-medium text-ink md:pointer-events-none md:absolute md:inset-0 md:flex md:items-center md:justify-center md:text-shadow-[0_0_40px_rgba(250,248,243,0.6)] lg:pt-15">
+            <span className="md:max-w-[13ch] lg:max-w-[14ch]">
+              The Art of the <em className="font-normal">Unforgettable</em>
+            </span>
+          </h1>
           <Image
             src={images.heroReception}
             alt="Wedding reception designed by J|S Events"
@@ -41,15 +49,6 @@ export function Hero() {
             fetchPriority="high"
             className="h-[420px] w-full object-cover md:h-[400px] lg:h-[560px]"
           />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-linear-to-t from-ink/50 to-transparent to-60% md:hidden"
-          />
-          <h1 className="text-display-hero absolute inset-0 flex items-center justify-center px-6 text-center font-display font-medium text-bone md:pointer-events-none md:px-0 md:text-ink md:text-shadow-[0_0_40px_rgba(250,248,243,0.6)] lg:pt-15">
-            <span className="md:max-w-[13ch] lg:max-w-[14ch]">
-              The Art of the <em className="font-normal">Unforgettable</em>
-            </span>
-          </h1>
         </div>
 
         <Image
