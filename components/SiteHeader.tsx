@@ -82,7 +82,12 @@ export function SiteHeader() {
         <div className="overflow-hidden border-b border-line">
           <nav
             aria-label="Primary"
-            className="gutter text-label-sm flex items-center gap-[22px] overflow-x-auto font-medium tracking-[0.2em] uppercase md:gap-7 md:py-[10px] md:tracking-[0.22em] lg:justify-center lg:gap-10 lg:pt-3 lg:pb-[11px] lg:text-label lg:tracking-[0.24em]"
+            // `justify-center-safe` centra los links en los tres
+            // breakpoints, pero degrada solo a alineación izquierda cuando
+            // no caben — en un teléfono estrecho, un `center` normal
+            // recortaría el principio de la fila y dejaría "Home"
+            // inalcanzable por scroll.
+            className="gutter text-label-sm flex items-center justify-center-safe gap-[22px] overflow-x-auto font-medium tracking-[0.2em] uppercase md:gap-7 md:py-[10px] md:tracking-[0.22em] lg:gap-10 lg:pt-3 lg:pb-[11px] lg:text-label lg:tracking-[0.24em]"
           >
             {navItems.map((item, i) => (
               <Link

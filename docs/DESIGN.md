@@ -303,7 +303,7 @@ The logotype follows the same discipline: the bar in `J|S` is a 1px `<span>`, no
 Two rows, and the rules here are stricter than anywhere else in the system.
 
 - **Row 1** (`1fr auto 1fr`): empty / centered logotype / `Inquire` outline button. It never moves.
-- **Row 2:** the four section links — centered from 1200px, horizontally scrollable and left-aligned below 768px.
+- **Row 2:** the four section links, centred at every breakpoint via `justify-center-safe`. The `safe` keyword matters: on a narrow phone the links no longer fit, and a plain `center` inside an `overflow-x: auto` row pushes the first item past the left edge where scrolling cannot reach it. `safe` degrades to left alignment exactly when that would happen — verified centred at 390, falling back and still scrollable at 320.
 - **Collapse:** past the hero, row 2 collapses and **only returns when the visitor scrolls back above the threshold** — not on any upward scroll mid-page. The threshold is a 1px sentinel the hero places 120px before its own end, watched by an `IntersectionObserver`. There is no scroll listener.
 - **Mechanics:** the collapse animates `grid-template-rows: 1fr → 0fr`, not a fixed `max-height`, because the row is a different height at every breakpoint. The bottom hairline lives inside the clipped child so it disappears with the row instead of stranding a line under the logo. Collapsed, the row carries `inert` — no tabbing to an invisible link.
 - **Motion:** 420ms `cubic-bezier(0.22, 0.61, 0.36, 1)` on geometry, 260ms on opacity. Instant under `prefers-reduced-motion`.
