@@ -6,7 +6,7 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 
 - **Formulario de inquiry.** Hoy el CTA "Inquire" marca por teléfono (`tel:`), el único canal real que da el handoff. Falta el overlay con formulario, endpoint, validación y confirmación. El molde está en `theclementine`: `components/Inquiry.tsx` + `app/api/inquiry/route.ts` + `emails/` (Resend + Neon).
 - **Assets fotográficos propios.** Las fotos de `assets/` se descargaron del Wix vigente de la clienta. Sustituir por arte final optimizado antes de publicar.
-- **Dominio y URL canónica.** `app/layout.tsx` usa `https://jsevents.vercel.app` como `metadataBase`. Actualizar cuando exista dominio.
+- **Dominio propio.** Producción vive en `jessicadesign.vercel.app`, que ya es el `metadataBase` de `app/layout.tsx`. Actualizar ahí cuando se conecte un dominio real.
 - **Favicon y open-graph.** Falta `app/icon.png` y `app/opengraph-image.png`. Depende de la decisión final sobre el logotipo.
 
 ## Pendientes de la fase impeccable

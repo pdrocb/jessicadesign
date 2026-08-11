@@ -12,7 +12,7 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-const siteUrl = "https://jsevents.vercel.app";
+const siteUrl = "https://jessicadesign.vercel.app";
 const title = "J|S Events | Hudson Valley Wedding & Event Design";
 const description =
   "Wedding and event design + styling in the Hudson Valley, New York. We are the design layer of your celebration — every color, texture, and detail composed with intention.";

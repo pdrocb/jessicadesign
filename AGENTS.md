@@ -22,7 +22,7 @@ One-pager de **J|S Events**, estudio de wedding & event design + styling en Huds
 
 No es una empresa de planeación logística: es **la capa de diseño** de la celebración. Estética de revista editorial: mucho blanco, fotografía grande, serif con autoridad, radio 0 en todo, cero adorno. El sistema completo vive en `docs/DESIGN.md`.
 
-Stack: Next.js 16 (App Router) + Tailwind v4, sin librerías extra. Deploy en Vercel.
+Stack: Next.js 16 (App Router) + Tailwind v4, sin librerías extra. Repo `pdrocb/jessicadesign`. Deploy en Vercel: proyecto `jessicadesign`, scope `productcb` (Product Pedro), producción en **jessicadesign.vercel.app**.
 
 **Estatus del diseño:** el handoff de diseño (`docs/DESIGN.md`) es un punto de partida validado visualmente, **no la verdad final**. La escala tipográfica, retícula, motion y arte de fotografía se cierran en la fase **impeccable**. Por eso todos los tokens viven en `app/globals.css` y ningún componente hardcodea valores — un cambio de escala o paleta se aplica en un solo archivo.
 
@@ -82,6 +82,8 @@ Cuando el PM corrige al agente ("no, hazlo así"), esa corrección se escribe en
 
 Reglas nacidas de incidentes reales. Cada una lleva su caso de origen.
 
+- **Esta máquina tiene dos identidades de GitHub por SSH.** `git@github.com` autentica como `pdrocb-46` y NO tiene acceso a este repo; la cuenta buena es `pdrocb`, que responde al alias `github-personal` (`~/.ssh/config`). El repo local guarda la URL canónica `git@github.com:pdrocb/...` — que es la que Vercel sabe leer — y un `url.insteadOf` **local** la reescribe al alias al conectar. No cambiar la URL del remoto al alias: Vercel entonces no puede parsear el repo. (Origen: primer push, ago 2026.)
+- **Deployment Protection está activa en el equipo.** Las URLs de deployment (`jessicadesign-*-productcb.vercel.app`) devuelven 302 al SSO de Vercel. La única URL pública es `jessicadesign.vercel.app`; usar esa para smoke tests. (Origen: primer deploy, ago 2026.)
 - **El puerto 3000 suele estar ocupado en esta máquina.** `.claude/launch.json` usa `autoPort: true`. No hardcodear 3000 en URLs de prueba. (Origen: primer preview, ago 2026.)
 - **El pane del navegador puede estar oculto (`document.visibilityState === "hidden"`).** Con el pane oculto los screenshots salen en blanco Y los `IntersectionObserver` no disparan — no es un bug del código. Verificar geometría midiendo el DOM con `javascript_tool`, y decir explícitamente que la verificación visual quedó pendiente. (Origen: construcción inicial, ago 2026.)
 - **La accesibilidad gana sobre las alturas del handoff.** Cuando los 44px de target táctil en mobile chocan con una altura declarada (p. ej. la fila 2 del nav a 37px), gana el target; la altura del handoff es provisional y así lo dice el propio documento. (Origen: nav mobile, ago 2026.)
