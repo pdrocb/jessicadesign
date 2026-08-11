@@ -18,6 +18,16 @@ Se editan in-place y deben reflejar el estado actual del proyecto.
 - **Vivo** → vive en `docs/`, se edita in-place, se actualiza en el mismo commit que el cambio que lo afecta.
 - **Terminado** → se mueve a `docs/archive/YYYY-MM-DD-slug.md` con un encabezado `Status: ARCHIVADO`. Nunca queda suelto en la raíz del repo.
 
-## Trampa conocida: skill `impeccable`
+## Skill `impeccable`: dónde viven sus archivos
 
-La skill de diseño `impeccable` escribe `PRODUCT.md` y `DESIGN.md` **en la raíz del repo** (visto en Florale). Cuando se corra aquí, fusionar/mover su contenido a los docs de `docs/` en el mismo flujo — si ambas copias existen, la de la raíz gana para la skill y la de `docs/` queda desactualizada sin que nadie lo note.
+`docs/` es una ubicación de primera clase para la skill, no una excepción tolerada. Su orden de resolución (verificado en `scripts/context.mjs` de la v4.0.4) es:
+
+1. Raíz del proyecto
+2. `.agents/context/` y luego **`docs/`** ← aquí
+3. Raíz del repo, como fallback
+
+Por eso `context.mjs` resuelve `docs/PRODUCT.md` y `docs/DESIGN.md` sin configuración. La advertencia anterior de este archivo — que la skill escribía en la raíz — venía de una versión previa y ya no aplica.
+
+Lo que sí conviene vigilar: si alguna vez aparece un `PRODUCT.md` o `DESIGN.md` en la raíz, gana sobre el de `docs/` y el de aquí queda muerto sin avisar. Un solo archivo por documento.
+
+`.impeccable/design.json` es el sidecar que consume el panel `live` (rampas tonales, tokens de motion, breakpoints y los snippets HTML/CSS de cada componente). Está en `.gitignore` porque se regenera desde `DESIGN.md` con `/impeccable document`.

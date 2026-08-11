@@ -1,114 +1,326 @@
-# Sistema de diseño — J|S Events
-
-**Estatus:** punto de partida validado visualmente, **no la verdad final**. La escala definitiva, la retícula, el motion y la dirección de fotografía se cierran en la fase **impeccable**. Hasta entonces, todo token vive en `app/globals.css` y ningún componente hardcodea valores.
-
-Origen: handoff de diseño v1.0 (agosto 2026), derivado de `Home.dc.html` y `Responsive Canvas.dc.html`.
-
+---
+name: J|S Events
+description: Wedding and event design in the Hudson Valley — editorial restraint built around photography.
+colors:
+  ink: "#141312"
+  ink-soft: "#2e2b27"
+  ink-muted: "#4a463f"
+  ink-subtle: "#6b6660"
+  ink-faint: "#8a8378"
+  paper: "#ffffff"
+  bone: "#faf8f3"
+  cream: "#f4efe3"
+  line: "#e4dfd6"
+  line-warm: "#d8d2c5"
+  line-dark: "#33302c"
+  on-dark-muted: "#c9c2b4"
+typography:
+  display-hero:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(40px, 5.33vw + 19.2px, 96px)"
+    fontWeight: 500
+    lineHeight: 1.04
+  display-lg:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(32px, 3.05vw + 20.1px, 64px)"
+    fontWeight: 500
+    lineHeight: 1.15
+  display-md:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(32px, 2.29vw + 23.1px, 56px)"
+    fontWeight: 400
+    lineHeight: 1.15
+  heading-lg:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(30px, 1.33vw + 24.8px, 44px)"
+    fontWeight: 500
+    lineHeight: 1.2
+  heading-md:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(21px, 0.29vw + 19.9px, 24px)"
+    fontWeight: 500
+    lineHeight: 1.3
+  quote-xl:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(26px, 1.33vw + 20.8px, 40px)"
+    fontWeight: 400
+    lineHeight: 1.45
+  quote-md:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(17px, 0.38vw + 15.5px, 21px)"
+    fontWeight: 400
+    lineHeight: 1.6
+  quote-italic:
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontSize: "clamp(18px, 0.76vw + 15px, 26px)"
+    fontWeight: 400
+    lineHeight: 1.6
+    fontStyle: "italic"
+  body-lg:
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontSize: "15px"
+    fontWeight: 400
+    lineHeight: 1.9
+  body-md:
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.85
+  body-sm:
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontSize: "13.5px"
+    fontWeight: 400
+    lineHeight: 1.75
+  label:
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontSize: "11px"
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: "0.3em"
+  label-sm:
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontSize: "10px"
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: "0.26em"
+  label-xs:
+    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontSize: "9px"
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: "0.3em"
+rounded:
+  none: "0px"
+spacing:
+  gutter-mobile: "20px"
+  gutter-tablet: "32px"
+  gutter-desktop: "48px"
+  section-mobile: "56px"
+  section-tablet: "80px"
+  section-desktop: "110px"
+  shell: "1180px"
+  shell-wide: "1280px"
+components:
+  button-primary:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.bone}"
+    typography: "{typography.label}"
+    rounded: "{rounded.none}"
+    padding: "18px 56px"
+  button-primary-hover:
+    backgroundColor: "{colors.bone}"
+    textColor: "{colors.ink}"
+  button-outline:
+    textColor: "{colors.ink}"
+    typography: "{typography.label-sm}"
+    rounded: "{rounded.none}"
+    padding: "9px 24px"
+  button-outline-hover:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.bone}"
+  link-underline:
+    textColor: "{colors.ink}"
+    typography: "{typography.label}"
+    rounded: "{rounded.none}"
+  link-underline-hover:
+    textColor: "{colors.ink-subtle}"
+  nav-link:
+    textColor: "{colors.ink}"
+    typography: "{typography.label}"
+  nav-link-hover:
+    textColor: "{colors.ink-subtle}"
+  eyebrow:
+    textColor: "{colors.ink-subtle}"
+    typography: "{typography.label}"
+  quote-block:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.bone}"
+    typography: "{typography.quote-md}"
+    padding: "44px 0"
 ---
 
-## 1. Tipografía
+# Design System: J|S Events
 
-| Rol                | Familia                | Fallback                | Uso                                              |
-| ------------------ | ---------------------- | ----------------------- | ------------------------------------------------ |
-| Display / headings | **Playfair Display**   | `Georgia, serif`        | H1–H3, citas, logotipo, numerales                |
-| UI / cuerpo        | **Helvetica Neue**     | `Helvetica, Arial, ss`  | párrafos, nav, botones, labels, footer           |
+## Overview
 
-Playfair se carga con `next/font/google` en pesos 400/500/600 + itálica 400. Helvetica Neue es de sistema: no viaja por la red.
+**Creative North Star: "The Laid Table"**
 
-**Regla de peso:** los ítems de navegación y labels en mayúsculas usan `font-weight: 500`, no 400. En cajas altas con letter-spacing amplio el 400 se lee anémico.
+The system behaves the way Jessica lays a table. The linen goes down first and it is deliberately quiet — off-white, warm, unpatterned — because everything placed on top of it is what people came to look at. Nothing sits on the table that does not earn its place. The luxury is in the placement and the restraint, never in ornament added afterward.
 
-### Escala
+This is not a metaphor borrowed from the category; it is her actual product. She owns the tabletop layer — linens, flatware, candles, china, runners — and does not own the tables and chairs. The interface honors that same boundary: it builds the surface, sets the objects on it with intention, and gets out of the way. Where a generic wedding site decorates, this one arranges.
 
-Los tokens `--text-*` de `globals.css` usan **interpolación anclada**: cada uno vale exactamente su tamaño mobile a 390px y su tamaño desktop a 1440px. Una `clamp()` con solo `vw` no puede tocar ambos extremos — el término fijo la reancla.
+The practical consequence runs through every decision below: **the palette carries no accent color at all.** Twelve tokens, all neutral, all warm-shifted. The color in this product comes from the photographs — the peonies, the candlelight, the linen, the hour of the day. A brand accent would compete with the only thing that actually sells the work.
+
+**Key Characteristics:**
+
+- Warm neutrals only; zero chroma in the system, all chroma in the photography.
+- Serif with authority for statement, neutral grotesque for everything operational.
+- Radius zero everywhere. Hairline rules instead of boxes.
+- Depth by tonal layering, never by shadow.
+- Generous vertical air; horizontal discipline against a hard grid.
+
+## Colors
+
+Twelve warm neutrals running from a near-black umber to paper white. There is no primary accent, and that absence is the system's strongest decision.
+
+### Neutral
+
+- **Umber Black** (`#141312`): the system's ink. Body headlines, the dark section band, the primary button fill. Warm-shifted off true black so it sits beside cream without going cold.
+- **Press Umber** (`#2e2b27`): reserved for press and partner marks on light ground. Currently unused — no press assets are cleared for publication.
+- **Reading Umber** (`#4a463f`): long-form body copy. Steps back from the headline without losing contrast.
+- **Quiet Stone** (`#6b6660`): eyebrows, captions, secondary copy, the hover destination for text links.
+- **Faint Stone** (`#8a8378`): roman numerals, attributions, and meta on the dark band. The lightest text weight the system permits.
+- **Paper White** (`#ffffff`): base ground.
+- **Bone** (`#faf8f3`): the alternating section ground, and the text color on the dark band. Doing double duty is intentional — the warm off-white reads as the same material whether it is behind type or is the type.
+- **Cream** (`#f4efe3`): reserved exclusively for the closing CTA block. Its one appearance is what makes the page feel like it arrives somewhere.
+- **Hairline** (`#e4dfd6`): dividers and section boundaries on light ground.
+- **Warm Hairline** (`#d8d2c5`): FAQ dividers only — a half-step warmer to separate a list of rules from a section boundary.
+- **Dark Hairline** (`#33302c`): dividers inside the dark band.
+- **Muted Bone** (`#c9c2b4`): contact details in the footer.
+
+### Named Rules
+
+**The Photograph Is the Palette Rule.** The system contributes no color. Every hue a visitor sees comes from a photograph. Never introduce a brand accent, a colored state, a tinted background, or a gradient that carries hue — the moment the interface has a color of its own, it starts competing with the work it exists to sell.
+
+**The Two Grounds Rule.** A page uses `paper` plus exactly one of `bone`/`cream`, plus the `ink` band. Three light grounds turn an editorial rhythm into a swatch test.
+
+## Typography
+
+**Display Font:** Playfair Display (fallback `Georgia, serif`), weights 400/500/600 plus 400 italic.
+**Body Font:** Helvetica Neue (fallback `Helvetica, Arial, sans-serif`), system-resident — nothing but Playfair crosses the network.
+
+**Character:** A high-contrast transitional serif doing all the talking, against a neutral grotesque that never raises its voice. The serif carries emotion and scale; the grotesque handles anything operational — navigation, labels, body copy, the footer. The pairing works because the roles never blur: no serif buttons, no grotesque headlines.
+
+### The scale is anchored, not fluid-by-eye
+
+Every `--text-*` token is a `clamp()` with a fixed term, not a bare `vw` value. Each one lands **exactly** on its mobile size at 390px and its desktop size at 1440px:
 
 ```
-pendiente = (max − min) / (1440 − 390)     base = min − 390 · pendiente
+slope = (max − min) / (1440 − 390)     base = min − 390 · slope
 ```
 
-| Token           | 390 → 1440 | Familia   | Uso                          |
-| --------------- | ---------- | --------- | ---------------------------- |
-| `display-hero`  | 40 → 96    | Playfair  | H1 del hero                  |
-| `display-lg`    | 32 → 64    | Playfair  | H2 del CTA                   |
-| `display-md`    | 32 → 56    | Playfair  | H2 de sección oscura y FAQs  |
-| `heading-lg`    | 30 → 44    | Playfair  | H2 de sección ("Expertise")  |
-| `quote-xl`      | 26 → 40    | Playfair  | Manifiesto                   |
-| `heading-md`    | 21 → 24    | Playfair  | H3 de tarjeta de servicio    |
-| `quote-md`      | 17 → 21    | Playfair  | Testimonios                  |
-| `quote-italic`  | 18 → 26    | Playfair  | Frases de apoyo              |
-| `body-lg`       | 15 / 1.9   | Helvetica | Párrafos largos              |
-| `body-md`       | 14 / 1.85  | Helvetica | Párrafos secundarios         |
-| `body-sm`       | 13.5/1.75  | Helvetica | Copy de tarjeta              |
-| `label`         | 11 · .30em | Helvetica | Eyebrows, botones, nav       |
-| `label-sm`      | 10 · .26em | Helvetica | Nav de footer, captions      |
-| `label-xs`      | 9 · .30em  | Helvetica | Bajada de logo               |
+A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted the hero to 95px at 1440 and 55px at 834. The fixed term re-anchors it. Any new type token joins the scale the same way.
 
-Todos los `label*` van en mayúsculas. El cuerpo nunca baja de 13px.
+### Hierarchy
 
-## 2. Color
+- **display-hero** (500, 40→96px, 1.04): the single H1. One per document — it changes positioning anchor across breakpoints rather than duplicating itself.
+- **display-lg** (500, 32→64px, 1.15): the closing CTA headline. The largest type after the hero, and the only other place that scale appears.
+- **display-md** (400, 32→56px, 1.15): section headings on the dark band and in FAQs. Weight 400, not 500 — on `ink` ground the lighter weight reads correctly.
+- **heading-lg** (500, 30→44px, 1.2): standard section headings on light ground.
+- **heading-md** (500, 21→24px, 1.3): service card titles.
+- **quote-xl** (400, 26→40px, 1.45): the manifesto statement. The loosest line-height in the system; it is meant to be read slowly.
+- **quote-md** (400, 17→21px, 1.6): testimonials, in typographic quotes.
+- **quote-italic** (400 italic, 18→26px, 1.6): supporting lines over photography and beside portraits.
+- **body-lg / body-md / body-sm** (400, 15 / 14 / 13.5px, 1.9 / 1.85 / 1.75): long copy, secondary copy, card copy. Note the line-height rises as size rises.
+- **label / label-sm / label-xs** (500, 11 / 10 / 9px, tracking .30 / .26 / .30em, uppercase): eyebrows, buttons, navigation, footer, logo subline.
 
-| Token             | Hex                  | Uso                                     |
-| ----------------- | -------------------- | --------------------------------------- |
-| `ink`             | `#141312`            | Texto principal, fondos oscuros, CTA    |
-| `ink-soft`        | `#2e2b27`            | Logos de prensa                         |
-| `ink-muted`       | `#4a463f`            | Párrafos de cuerpo                      |
-| `ink-subtle`      | `#6b6660`            | Eyebrows, copy secundario               |
-| `ink-faint`       | `#8a8378`            | Numerales, meta sobre oscuro            |
-| `paper`           | `#ffffff`            | Fondo base                              |
-| `bone`            | `#faf8f3`            | Fondo alterno + texto sobre oscuro      |
-| `cream`           | `#f4efe3`            | Fondo del bloque CTA                    |
-| `line`            | `#e4dfd6`            | Divisores sobre claro                   |
-| `line-warm`       | `#d8d2c5`            | Divisores de FAQ                        |
-| `line-dark`       | `#33302c`            | Divisores sobre oscuro                  |
-| `on-dark-muted`   | `#c9c2b4`            | Contacto en footer                      |
+### Named Rules
 
-Máximo 2 fondos claros por página (`paper` + uno de `bone`/`cream`) más el bloque oscuro `ink`. Nada de gradientes decorativos ni sombras de color.
+**The Medium-Not-Light Rule.** Every uppercase label sits at weight **500**, never 400. In tall caps with wide tracking, 400 goes anemic and the whole page reads cheap. This is the single most load-bearing typographic rule in the system.
 
-## 3. Espaciado y geometría
+**The Thirteen Floor Rule.** Body copy never goes below 13px at any breakpoint. Labels may — they are labels, not reading.
 
-- Escala base 4px.
-- Ancho máximo: **1280px** (`shell-wide`, grids de imagen) · **1180px** (`shell`, texto denso).
-- Gutters (`--gutter`): 48 desktop · 32 tablet · 20 mobile.
-- Padding vertical de sección (`--section-y`): 110 desktop · 80 tablet · 56 mobile.
-- **Radio 0 en todo.** No existe token de radio, a propósito.
-- **Sin sombras.** La única excepción del handoff era el canvas de presentación, que no se implementa.
+## Layout
 
-## 4. Nav de dos filas
+A 4px base scale on a hard editorial grid. Two container widths: `1280px` for image-led sections and `1180px` for dense text, so text measure never stretches to the width of a photo grid.
 
-Componente con más reglas del sistema — `components/SiteHeader.tsx`.
+Gutters and section rhythm are CSS variables that change at two breakpoints, so every section inherits the change without a media query of its own:
 
-- Fila 1: grid `1fr auto 1fr` — vacío / logo centrado / CTA "Inquire". Nunca se mueve.
-- Fila 2: links centrados en desktop, scroll horizontal en mobile.
-- Al pasar el hero, la fila 2 **colapsa** y solo reaparece al volver por encima del umbral (no con cualquier scroll hacia arriba a media página).
-- El umbral es un centinela de 1px que `Hero` coloca 120px antes de su final; un `IntersectionObserver` lo observa. No hay listener de scroll.
-- El colapso anima `grid-template-rows: 1fr → 0fr` en lugar de una `max-height` fija: la fila mide distinto por breakpoint y así no hay valor mágico que sincronizar.
-- Colapsada, la fila lleva `inert`: no se puede tabular a un link invisible.
-- Transición: 420ms `cubic-bezier(0.22,0.61,0.36,1)` en geometría, 260ms en opacidad. Con `prefers-reduced-motion` es instantánea.
+| | Mobile `<768` | Tablet `768–1199` | Desktop `≥1200` |
+|---|---|---|---|
+| `--gutter` | 20px | 32px | 48px |
+| `--section-y` | 56px | 80px | 110px |
+| Hero | 1 photograph | collage of 2 | collage of 3 |
+| Services | 1 column | 2 columns | 4 columns |
+| Manifesto | stacked, photo last | 150 / 1fr | 200 / 1fr / 200 |
+| Testimonials, FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
+| Look Book | 2 columns | 2 columns | 4 columns |
+| Editorial break | 320px tall | 420px | 640px |
+| Buttons | **full width** | inline | inline |
 
-## 5. Breakpoints
+The governing rule is **one column fewer per breakpoint down**, never a reflow into a different concept.
 
-|                  | Desktop `≥1200`   | Tablet `768–1199` | Mobile `<768`        |
-| ---------------- | ----------------- | ----------------- | -------------------- |
-| Gutter           | 48                | 32                | 20                   |
-| Hero             | collage de 3      | collage de 2      | 1 imagen, H1 en bone |
-| Servicios        | 4 col             | 2 col             | 1 col                |
-| Manifiesto       | 200 / 1fr / 200   | 150 / 1fr         | apilado, foto al final |
-| Testimonios/FAQs | 0.8fr / 1.2fr     | apilado           | apilado              |
-| Look Book        | 4 col             | 2 col             | 2 col                |
-| Break editorial  | alto 640          | 420               | 320                  |
-| Botones          | inline            | inline            | **ancho completo**   |
+**Touch targets are 44px minimum on mobile, and that rule outranks any height in the original handoff.** Where the two collide — the second nav row was specified at 37px — the target wins and the row grows to 45px. Padding lives on the anchor; the active-state underline lives on an inner span so it hugs the text instead of the edge of the tap area.
 
-Regla general: una columna menos por breakpoint. **Targets táctiles en mobile: 44px mínimo** — esta regla gana sobre las alturas declaradas del handoff cuando chocan.
+## Elevation & Depth
 
-## 6. Fotografía
+**This system is flat and has no shadow vocabulary.** Nothing is lifted, nothing floats, no surface casts.
 
-- Siempre `object-fit: cover`, sin esquinas redondeadas.
-- Proporciones: `3/4` (tarjeta de servicio), `4/5` (look book y servicio en mobile), `4/3` (manifiesto en mobile), alturas fijas en el collage del hero.
-- Texto sobre foto solo con `linear-gradient(to top, rgba(20,19,18,.45), transparent 55%)`.
-- Las fotos actuales se descargaron del Wix vigente a `assets/` y se importan estáticamente para que `next/image` genere AVIF/WebP en build. **Sustituir por arte final** — ver `docs/BACKLOG.md`.
+Depth is built two ways instead. First, **tonal layering**: consecutive full-width bands step through `paper → bone → paper → ink → cream`, so the page reads as stacked material rather than stacked cards. Second, **hairlines**: a single 1px rule in the appropriate divider token separates what a border-radius-and-shadow card would otherwise separate.
 
-## 7. Estados y motion
+The one `box-shadow` in the entire codebase is not elevation. The primary button's hover state swaps to a light fill and needs an outline; a real `border` would change its box and shift the layout mid-transition, so it uses `inset 0 0 0 1px` as a border substitute. It reads as a hairline, not a shadow.
 
-- Hover en links de texto: `ink` → `ink-subtle`. Sobre oscuro: `bone` → `ink-faint`. Sin subrayado nuevo.
-- Focus (provisional hasta impeccable): `outline: 1px solid currentColor; outline-offset: 3px`.
-- Transición estándar: 180ms ease en color, 420ms `cubic-bezier(0.22,0.61,0.36,1)` en geometría.
-- `prefers-reduced-motion` anula todas las transiciones y el scroll suave desde `globals.css`.
+### Named Rules
+
+**The No-Lift Rule.** Nothing in this system rises off the page. If an element needs separation, it gets a hairline, a tonal ground, or more space — in that order. A drop shadow anywhere is a defect.
+
+## Shapes
+
+**Radius is zero everywhere, and there is deliberately no radius scale to reach for** — buttons, images, cards, inputs, the dark band. The only `rounded` token is `none: 0px`, and it exists so components can reference the decision explicitly rather than omit the property by accident.
+
+The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero collage is the one exception, using fixed pixel heights with deliberate vertical offsets so the three images sit at different altitudes.
+
+The logotype follows the same discipline: the bar in `J|S` is a 1px `<span>`, not the `|` character, so its height and spacing are controlled to the pixel instead of inheriting a font metric.
+
+## Components
+
+### Buttons
+
+- **Shape:** square (`0px`), no exceptions.
+- **Primary:** `ink` fill, `bone` text, `label` type, padding `18px 56px`. Full width below 768px.
+- **Primary hover:** inverts to `bone` on `ink` text with an `inset 0 0 0 1px` hairline, 180ms. The inversion *is* the interaction — no lift, no scale, no shadow.
+- **Outline (nav CTA):** 1px `ink` border, transparent fill, `label-sm`, padding `9px 24px`. Hover fills to `ink` with `bone` text. On mobile it takes `min-height: 44px` and drops its vertical padding.
+
+### Links
+
+- **Underline link:** `label` type with a 1px `ink` bottom border on an inner span, 4px below the text. Hover moves the text to `ink-subtle`; the rule stays. Never add a second underline on hover.
+- **Text link on dark:** `bone` → `ink-faint` on hover.
+
+### Navigation — the signature component
+
+Two rows, and the rules here are stricter than anywhere else in the system.
+
+- **Row 1** (`1fr auto 1fr`): empty / centered logotype / `Inquire` outline button. It never moves.
+- **Row 2:** the four section links — centered from 1200px, horizontally scrollable and left-aligned below 768px.
+- **Collapse:** past the hero, row 2 collapses and **only returns when the visitor scrolls back above the threshold** — not on any upward scroll mid-page. The threshold is a 1px sentinel the hero places 120px before its own end, watched by an `IntersectionObserver`. There is no scroll listener.
+- **Mechanics:** the collapse animates `grid-template-rows: 1fr → 0fr`, not a fixed `max-height`, because the row is a different height at every breakpoint. The bottom hairline lives inside the clipped child so it disappears with the row instead of stranding a line under the logo. Collapsed, the row carries `inert` — no tabbing to an invisible link.
+- **Motion:** 420ms `cubic-bezier(0.22, 0.61, 0.36, 1)` on geometry, 260ms on opacity. Instant under `prefers-reduced-motion`.
+
+### Cards
+
+There are no cards. Service entries are a photograph, a roman numeral in Playfair, a title, and copy — stacked in a column with no container, no border, and no background. The grid does the grouping.
+
+### Quote block
+
+Playfair at `quote-md` in typographic quotes (`" "`, never `"`), attribution beneath in `label-sm` uppercase `ink-faint`, separated by a `line-dark` hairline. Lives on the `ink` band.
+
+### FAQ accordion
+
+One open at a time. Trigger is a full-width button: lowercase roman numeral in `ink-faint`, question in Playfair 500, and a Playfair `+` / `−` at 22px on the right. The answer is capped at `60ch` and indented to align with the question, not the numeral.
+
+### Inputs
+
+**Not yet designed.** The inquiry form does not exist. When it does, it inherits: square corners, hairline strokes, `label` type for field labels, and focus handled by the system focus ring rather than a colored border.
+
+## Do's and Don'ts
+
+### Do:
+
+- **Do** let photography carry every hue. The system's job is to frame, not to color.
+- **Do** set uppercase labels at weight 500 and the tracking their token specifies.
+- **Do** anchor any new type token with the `clamp(min, slope·vw + base, max)` formula so it lands exactly on its mobile and desktop sizes.
+- **Do** separate with a hairline, a tonal ground, or space — in that order.
+- **Do** give mobile controls 44px of height even when it breaks a specified row height. Put the padding on the anchor and the underline on an inner span.
+- **Do** keep one `<h1>` per document; move its positioning anchor across breakpoints rather than duplicating it.
+- **Do** use typographic quotes and the `·` separator the system already uses in meta lines.
+
+### Don't:
+
+- **Don't** introduce an accent color, a tinted surface, a colored state, or a hue-carrying gradient. The only permitted gradient is the `rgba(20,19,18,.45) → transparent 55%` scrim that makes text legible over a photograph.
+- **Don't** add a border-radius anywhere, on anything, ever.
+- **Don't** add a drop shadow or any lift. If it looks like it needs one, it needs space.
+- **Don't** reach for the generic wedding-site vocabulary: hero carousels, vendor badges, script or handwritten typefaces, blush palettes, eucalyptus ornament, or "the day of your dreams" register.
+- **Don't** signal luxury by accumulation — gold, marble, glinting serifs, dramatic entrance animation. Here luxury is restraint.
+- **Don't** overcorrect into clinical minimalism either. This sells warmth and celebration, not a design-studio portfolio or a SaaS landing page. The warm neutrals and the generous line-heights are what keep it from going cold.
+- **Don't** imply J|S runs the event. The visual system should never borrow the vocabulary of planning tools — timelines, checklists, coordination language.
+- **Don't** publish a press or partner section until real logos and written permission exist.
