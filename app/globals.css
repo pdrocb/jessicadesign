@@ -91,7 +91,12 @@
 :root {
   --gutter: 20px;
   --section-y: 56px;
-  --content-max: 1280px; /* secciones de texto denso usan 1180 */
+  /* Rail único de contenido, alineado con Florale: aprovecha monitores
+     amplios sin extenderse sin límite. Sustituye al doble ancho
+     1280/1180 del handoff — la medida de lectura ya no la controla el
+     contenedor sino un tope en `ch` sobre cada bloque de texto, que es
+     donde de verdad importa. */
+  --layout-content-max: 1536px;
 }
 
 @media (min-width: 768px) {
@@ -163,16 +168,9 @@ p {
   padding-block: var(--section-y);
 }
 
-/* Contenedor de ancho máximo. `wide` = 1280 (grids de imagen),
-   por defecto = 1180 (texto denso). */
+/* Un solo contenedor para todo el sitio. */
 @utility shell {
-  max-width: 1180px;
-  margin-inline: auto;
-  width: 100%;
-}
-
-@utility shell-wide {
-  max-width: var(--content-max);
+  max-width: var(--layout-content-max);
   margin-inline: auto;
   width: 100%;
 }

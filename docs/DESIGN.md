@@ -98,8 +98,7 @@ spacing:
   section-mobile: "56px"
   section-tablet: "80px"
   section-desktop: "110px"
-  shell: "1180px"
-  shell-wide: "1280px"
+  content-max: "1536px"
 components:
   button-primary:
     backgroundColor: "{colors.ink}"
@@ -222,7 +221,11 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
 
 ## Layout
 
-A 4px base scale on a hard editorial grid. Two container widths: `1280px` for image-led sections and `1180px` for dense text, so text measure never stretches to the width of a photo grid.
+A 4px base scale on a hard editorial grid.
+
+**One content rail: `--layout-content-max: 1536px`**, shared with Florale and applied to every section without exception. There is deliberately no second, narrower container for text.
+
+That is a real decision, not a simplification. A narrow container caps *everything* in the section — photographs included — to protect the measure of the paragraph inside it, which starves the imagery on wide monitors for the sake of one text block. Instead the rail stays wide and **reading measure is capped per block, in `ch`, where it actually matters**: the About paragraph at 66ch, testimonial quotes at 62ch, the manifesto body at 520px, FAQ answers at 60ch. Photography gets the full rail; prose gets a comfortable line.
 
 Gutters and section rhythm are CSS variables that change at two breakpoints, so every section inherits the change without a media query of its own:
 
@@ -310,6 +313,7 @@ One open at a time. Trigger is a full-width button: lowercase roman numeral in `
 - **Do** set uppercase labels at weight 500 and the tracking their token specifies.
 - **Do** anchor any new type token with the `clamp(min, slope·vw + base, max)` formula so it lands exactly on its mobile and desktop sizes.
 - **Do** separate with a hairline, a tonal ground, or space — in that order.
+- **Do** cap reading measure on the paragraph itself in `ch`, never by narrowing the container. The rail belongs to the photography.
 - **Do** give mobile controls 44px of height even when it breaks a specified row height. Put the padding on the anchor and the underline on an inner span.
 - **Do** keep one `<h1>` per document; move its positioning anchor across breakpoints rather than duplicating it.
 - **Do** use typographic quotes and the `·` separator the system already uses in meta lines.

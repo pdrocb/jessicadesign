@@ -16,14 +16,14 @@ export function Hero() {
   return (
     <section
       aria-label="Introduction"
-      className="gutter relative shell-wide pt-7 pb-10 md:pt-12 md:pb-16 lg:pt-18 lg:pb-24"
+      className="gutter relative shell pt-7 pb-10 md:pt-12 md:pb-16 lg:pt-18 lg:pb-24"
     >
       <div className="grid grid-cols-1 items-start gap-[18px] md:grid-cols-[1fr_1.2fr] lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-7">
         {/* El collage empieza en tablet: mobile muestra solo la recepción. */}
         <Image
           src={images.heroTablescape}
           alt="Styled wedding tablescape"
-          sizes="(min-width: 1200px) 30vw, 40vw"
+          sizes="(min-width: 1536px) 440px, (min-width: 1200px) 30vw, 40vw"
           className="hidden h-[300px] w-full object-cover md:mt-14 md:block lg:mt-18 lg:h-[440px]"
         />
 
@@ -36,7 +36,7 @@ export function Hero() {
           <Image
             src={images.heroReception}
             alt="Wedding reception designed by J|S Events"
-            sizes="(min-width: 1200px) 36vw, (min-width: 768px) 55vw, 100vw"
+            sizes="(min-width: 1536px) 505px, (min-width: 1200px) 36vw, (min-width: 768px) 55vw, 100vw"
             priority
             fetchPriority="high"
             className="h-[420px] w-full object-cover md:h-[400px] lg:h-[560px]"
@@ -55,7 +55,7 @@ export function Hero() {
         <Image
           src={images.heroDetail}
           alt="Event styling detail"
-          sizes="30vw"
+          sizes="(min-width: 1536px) 440px, 30vw"
           className="hidden h-[440px] w-full object-cover lg:mt-[110px] lg:block"
         />
       </div>
@@ -123,7 +123,7 @@ export function Services() {
     <section
       id="expertise"
       aria-label="Expertise"
-      className="gutter section-y shell-wide border-t border-line"
+      className="gutter section-y shell border-t border-line"
     >
       <div className="mb-7 flex flex-col gap-2 md:mb-11 md:flex-row md:items-baseline md:justify-between lg:mb-16">
         <h2 className="text-heading-lg font-display font-medium">Expertise</h2>
@@ -137,7 +137,7 @@ export function Services() {
             <Image
               src={svc.img}
               alt={svc.name}
-              sizes="(min-width: 1200px) 25vw, (min-width: 768px) 50vw, 100vw"
+              sizes="(min-width: 1536px) 340px, (min-width: 1200px) 25vw, (min-width: 768px) 50vw, 100vw"
               className="mb-1 aspect-[4/5] w-full object-cover md:aspect-[3/4] lg:mb-2"
             />
             <div className="font-display text-[13px] text-ink-faint md:text-[14px] lg:text-[15px]">
@@ -187,7 +187,7 @@ export function About() {
         <Image
           src={images.jessica}
           alt="Jessica Salomon, owner and lead stylist"
-          sizes="(min-width: 1200px) 40vw, 100vw"
+          sizes="(min-width: 1536px) 610px, (min-width: 1200px) 40vw, 100vw"
           className="w-full object-cover"
         />
         <div className="flex flex-col gap-5 lg:gap-6">
@@ -199,7 +199,9 @@ export function About() {
             Fifteen years of styling celebrations — from the Bronx to the Hudson
             Valley.
           </p>
-          <p className="text-body-md text-ink-muted lg:text-body-lg">
+          {/* Tope de medida: con el rail a 1536 esta columna llega a ~76ch,
+              por encima del límite cómodo de lectura. */}
+          <p className="text-body-md max-w-[66ch] text-ink-muted lg:text-body-lg">
             Jessica is the eye behind every J|S celebration. Her work begins
             with you — your story, your Pinterest board, the feeling you can’t
             quite put into words — and ends in a room your guests will talk
@@ -236,7 +238,7 @@ export function Testimonials() {
               key={q.who}
               className="flex flex-col gap-3 border-b border-line-dark py-[26px] md:gap-3.5 md:py-8 lg:gap-[18px] lg:py-11"
             >
-              <blockquote className="text-quote-md font-display text-[#efece5]">
+              <blockquote className="text-quote-md max-w-[62ch] font-display text-[#efece5]">
                 “{q.text}”
               </blockquote>
               <figcaption className="text-label-xs font-medium tracking-[0.3em] text-ink-faint uppercase md:text-label-sm md:tracking-[0.3em]">
@@ -255,7 +257,7 @@ export function Testimonials() {
 export function LookBook() {
   return (
     <section id="look-book" aria-label="Look book" className="section-y">
-      <div className="gutter shell-wide mb-7 flex items-baseline justify-between lg:mb-14">
+      <div className="gutter shell mb-7 flex items-baseline justify-between lg:mb-14">
         <h2 className="text-heading-lg font-display font-medium">
           The Look Book
         </h2>
