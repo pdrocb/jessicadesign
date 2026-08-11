@@ -1,49 +1,196 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════
+   TOKENS — fuente única del sistema visual (handoff §2).
+   El handoff advierte que estos valores son un punto de partida, no
+   la verdad final: la escala definitiva se cierra en la fase
+   "impeccable". Por eso todo vive aquí y NADA se hardcodea en los
+   componentes — cambiar la escala o la paleta se hace en este archivo.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  /* ── Color (handoff §2.3) ────────────────────────────────────────
+     Máximo 2 fondos claros por página (--paper + bone o cream) más el
+     bloque oscuro --ink. Sin gradientes decorativos ni sombras de color. */
+  --color-ink: #141312; /* texto principal, fondos oscuros, botón primario */
+  --color-ink-soft: #2e2b27; /* logos de prensa */
+  --color-ink-muted: #4a463f; /* párrafos de cuerpo */
+  --color-ink-subtle: #6b6660; /* eyebrows, copy secundario */
+  --color-ink-faint: #8a8378; /* numerales, meta sobre oscuro */
+  --color-paper: #ffffff; /* fondo base */
+  --color-bone: #faf8f3; /* fondo alterno + texto sobre oscuro */
+  --color-cream: #f4efe3; /* fondo del bloque CTA */
+  --color-line: #e4dfd6; /* divisores sobre claro */
+  --color-line-warm: #d8d2c5; /* divisores de FAQ */
+  --color-line-dark: #33302c; /* divisores sobre oscuro */
+  --color-on-dark-muted: #c9c2b4; /* contacto en footer */
+
+  /* ── Familias (handoff §2.1) ───────────────────────────────────── */
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* ── Escala tipográfica (handoff §2.2 + §4) ──────────────────────
+     Interpolación anclada: cada token vale exactamente su tamaño
+     mobile a 390px y su tamaño desktop a 1440px. Una clamp con solo
+     `vw` no puede tocar ambos extremos — el término fijo la reancla.
+     Fórmula: pendiente = (max−min)/(1440−390); base = min − 390·pend. */
+  --text-display-hero: clamp(40px, 5.33vw + 19.2px, 96px); /* 40 → 96 */
+  --text-display-hero--line-height: 1.04;
+
+  --text-display-lg: clamp(32px, 3.05vw + 20.1px, 64px); /* 32 → 64 */
+  --text-display-lg--line-height: 1.15;
+
+  --text-display-md: clamp(32px, 2.29vw + 23.1px, 56px); /* 32 → 56 */
+  --text-display-md--line-height: 1.15;
+
+  --text-heading-lg: clamp(30px, 1.33vw + 24.8px, 44px); /* 30 → 44 */
+  --text-heading-lg--line-height: 1.2;
+
+  --text-quote-xl: clamp(26px, 1.33vw + 20.8px, 40px); /* 26 → 40 */
+  --text-quote-xl--line-height: 1.45;
+
+  --text-heading-md: clamp(21px, 0.29vw + 19.9px, 24px); /* 21 → 24 */
+  --text-heading-md--line-height: 1.3;
+
+  --text-quote-md: clamp(17px, 0.38vw + 15.5px, 21px); /* 17 → 21 */
+  --text-quote-md--line-height: 1.6;
+
+  --text-quote-italic: clamp(18px, 0.76vw + 15px, 26px); /* 18 → 26 */
+  --text-quote-italic--line-height: 1.6;
+
+  --text-body-lg: 15px;
+  --text-body-lg--line-height: 1.9;
+
+  --text-body-md: 14px;
+  --text-body-md--line-height: 1.85;
+
+  --text-body-sm: 13.5px;
+  --text-body-sm--line-height: 1.75;
+
+  --text-label: 11px;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.3em;
+
+  --text-label-sm: 10px;
+  --text-label-sm--line-height: 1.4;
+  --text-label-sm--letter-spacing: 0.26em;
+
+  --text-label-xs: 9px;
+  --text-label-xs--line-height: 1.4;
+  --text-label-xs--letter-spacing: 0.3em;
+
+  /* ── Geometría ───────────────────────────────────────────────────
+     Radio 0 en todo (handoff §2.4): no hay token de radio a propósito. */
+  --ease-geometry: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* ── Z-index semántico ───────────────────────────────────────── */
+  --z-nav: 60;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Fuera de @theme: cambian por viewport (handoff §4). */
+:root {
+  --gutter: 20px;
+  --section-y: 56px;
+  --content-max: 1280px; /* secciones de texto denso usan 1180 */
+}
+
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --gutter: 32px;
+    --section-y: 80px;
   }
 }
 
-html {
-  height: 100%;
+@media (min-width: 1200px) {
+  :root {
+    --gutter: 48px;
+    --section-y: 110px;
+  }
 }
 
-html,
-body {
-  max-width: 100vw;
+/* ═══════════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════════ */
+
+html {
+  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
 body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+::selection {
+  background: var(--color-ink);
+  color: var(--color-bone);
 }
 
 a {
   color: inherit;
   text-decoration: none;
+  transition: color 180ms ease;
 }
 
-@media (prefers-color-scheme: dark) {
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Provisional hasta la fase impeccable (handoff §5 · Estados). */
+:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UTILIDADES DE LAYOUT
+   ═══════════════════════════════════════════════════════════════════ */
+
+@utility gutter {
+  padding-inline: var(--gutter);
+}
+
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+/* Contenedor de ancho máximo. `wide` = 1280 (grids de imagen),
+   por defecto = 1180 (texto denso). */
+@utility shell {
+  max-width: 1180px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+@utility shell-wide {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOTION — el usuario que pide menos movimiento no negocia (§7).
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
   html {
-    color-scheme: dark;
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -1,9 +1,109 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# AGENTS.md
 
-# This is NOT the Next.js you know
+Fuente única de verdad para agentes de código (Claude Code, Codex, Gemini CLI, u otros) en este repositorio. `CLAUDE.md` solo apunta aquí — no dupliques contenido entre ambos.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+## Las dos personas
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+Este repo tiene dos personas distintas — no confundirlas:
 
-<!-- END:nextjs-agent-rules -->
+1. **El usuario del agente** es el PM (abajo). Con él se habla en español y se negocia el trabajo.
+2. **La dueña de la marca** es la clienta (Jessica Salomon, J|S Events). El sitio, su copy y su voz son de ELLA — inglés, contenido, seguro, sin superlativos huecos. Su perfil y audiencia viven en `docs/PRODUCT.md`; leerlo antes de escribir o revisar copy.
+
+## Contexto del usuario
+
+- **Senior Project Manager**, NO desarrollador. Entiende tecnología y arquitectura de alto nivel; no escribe código directamente.
+- Delega la implementación al agente y valida el resultado por comportamiento observable, no leyendo diffs.
+- **Idioma:** responder SIEMPRE en español. Código, identificadores y mensajes de commit se mantienen en inglés por convención de industria.
+- Al citar código, explicar lo que hace en español — no asumir que el PM lee el código.
+
+## Contexto del proyecto
+
+One-pager de **J|S Events**, estudio de wedding & event design + styling en Hudson Valley, Nueva York. Una sola marca, un solo idioma (inglés en el sitio).
+
+No es una empresa de planeación logística: es **la capa de diseño** de la celebración. Estética de revista editorial: mucho blanco, fotografía grande, serif con autoridad, radio 0 en todo, cero adorno. El sistema completo vive en `docs/DESIGN.md`.
+
+Stack: Next.js 16 (App Router) + Tailwind v4, sin librerías extra. Deploy en Vercel.
+
+**Estatus del diseño:** el handoff de diseño (`docs/DESIGN.md`) es un punto de partida validado visualmente, **no la verdad final**. La escala tipográfica, retícula, motion y arte de fotografía se cierran en la fase **impeccable**. Por eso todos los tokens viven en `app/globals.css` y ningún componente hardcodea valores — un cambio de escala o paleta se aplica en un solo archivo.
+
+## Reading map
+
+Para tocar X, lee/edita Y primero — no explores a ciegas:
+
+| Tarea                             | Archivo                                        |
+| --------------------------------- | ---------------------------------------------- |
+| Copy/textos y fotos del sitio     | `lib/content.ts`                               |
+| Diseño / tokens / escala          | `docs/DESIGN.md` · `app/globals.css`           |
+| Nav de dos filas y su colapso     | `components/SiteHeader.tsx`                    |
+| Secciones de la home              | `components/sections.tsx`                      |
+| Acordeón de FAQs                  | `components/Faqs.tsx`                          |
+| Primitivas (botones, links, logo) | `components/ui.tsx`                            |
+| SEO, metadata, JSON-LD, fuentes   | `app/layout.tsx`                               |
+| Composición de la página          | `app/page.tsx`                                 |
+| Producto / marca / voz            | `docs/PRODUCT.md`                              |
+| Pendientes de diseño/producto     | `docs/BACKLOG.md`                              |
+| Deuda técnica                     | `docs/TECH_DEBT.md`                            |
+
+## Working agreement
+
+### 1. Plan-first agresivo
+
+- **Entrar en plan mode automáticamente** si la tarea cumple cualquiera de estos criterios: 3+ pasos de implementación, 3+ archivos tocados, una decisión arquitectónica, o una feature nueva.
+- **Ejecutar directo** si es trivial: typo, rename, ajuste de 1 línea, cambio de copy.
+- El plan se presenta en español y el PM lo aprueba antes de tocar código.
+
+### 2. Subagent strategy
+
+- **Exploración de 3+ queries de búsqueda** → delegar a un subagente de exploración.
+- **Research paralelo sobre áreas independientes** → lanzar múltiples agentes en un solo mensaje.
+- **Una tarea por subagente**, con paths y preguntas concretas.
+
+### 3. Verificación obligatoria antes de "listo"
+
+Toda tarea cierra con CUATRO pasos fijos, en orden:
+
+1. **TypeScript:** `npx tsc --noEmit` si se tocó código TS.
+2. **Línea de paridad responsive:** si el cambio toca UI, declarar explícitamente `Desktop (1440): verificado / Tablet (834): verificado / Mobile (390): verificado | N/A`. Nunca debe haber overflow horizontal, y los targets táctiles en mobile son de 44px mínimo.
+3. **Resumen de comportamiento** en español, 2-3 bullets, sobre _qué cambió en la app_ desde el punto de vista del usuario final.
+4. **Pasos para probar manualmente** — qué abrir, qué observar, resultado esperado. Local: `npm run dev` (el puerto lo asigna el preview — ver Learned patterns).
+
+Si no se puede verificar, decirlo explícitamente en vez de asumir éxito.
+
+### 4. Bug fixing autónomo
+
+- Cuando el PM reporta un bug: diagnosticar y arreglar sin ping-pong.
+- Si hay 2+ arreglos viables con trade-offs reales → presentar opciones con pros/cons y recomendar una.
+
+### 5. Captura de lecciones
+
+Cuando el PM corrige al agente ("no, hazlo así"), esa corrección se escribe en **Learned patterns** (abajo), en el mismo commit del cambio que la originó.
+
+## Learned patterns
+
+Reglas nacidas de incidentes reales. Cada una lleva su caso de origen.
+
+- **El puerto 3000 suele estar ocupado en esta máquina.** `.claude/launch.json` usa `autoPort: true`. No hardcodear 3000 en URLs de prueba. (Origen: primer preview, ago 2026.)
+- **El pane del navegador puede estar oculto (`document.visibilityState === "hidden"`).** Con el pane oculto los screenshots salen en blanco Y los `IntersectionObserver` no disparan — no es un bug del código. Verificar geometría midiendo el DOM con `javascript_tool`, y decir explícitamente que la verificación visual quedó pendiente. (Origen: construcción inicial, ago 2026.)
+- **La accesibilidad gana sobre las alturas del handoff.** Cuando los 44px de target táctil en mobile chocan con una altura declarada (p. ej. la fila 2 del nav a 37px), gana el target; la altura del handoff es provisional y así lo dice el propio documento. (Origen: nav mobile, ago 2026.)
+- **`w-full` en un elemento absoluto dentro de una caja con padding desborda.** Resuelve contra el padding-box pero arranca en el content-box: usar `inset-x-0`. (Origen: centinela del nav, ago 2026.)
+- **Un H1 por página, también entre breakpoints.** No duplicar el H1 con `hidden`/`md:hidden`: cambiar el ancla de posición (`relative` → `md:static`) para que un solo H1 sirva a mobile y desktop. (Origen: hero, ago 2026.)
+
+## Documentación
+
+- En la raíz del repo solo viven `CLAUDE.md`, `AGENTS.md` y `README.md`. Todo lo demás va en `docs/` (índice: `docs/README.md`).
+- Documentos **vivos** se editan in-place. Planes o checklists **terminados** se mueven a `docs/archive/YYYY-MM-DD-slug.md`.
+- Si un cambio afecta lo que un doc describe, el doc se actualiza **en el mismo commit**.
+- En `docs/BACKLOG.md` y `docs/TECH_DEBT.md` los ítems resueltos **se borran**, no se marcan como hechos.
+
+## Git
+
+- Nunca usar `--no-verify` ni saltar hooks. Hay un hook que bloquea `git commit` si `tsc --noEmit` falla.
+- Stagear solo archivos que esta conversación tocó, por path explícito. Nunca `git add -A` ni `git add .`.
+- Commits en inglés, formato `<type>: <summary>`.
+
+## Core principles
+
+- **Simplicity first** — el cambio mínimo que resuelve el problema. No añadir abstracciones para casos hipotéticos.
+- **No laziness** — ir al root cause, no workarounds.
+- **Minimal impact** — no tocar lo que no hay que tocar.
+- **Demand elegance (balanceado)** — para cambios no triviales, pausar y preguntar "¿hay una forma más elegante?".

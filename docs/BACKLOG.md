@@ -1,0 +1,26 @@
+# Backlog de diseño y producto
+
+Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hechos.
+
+## Bloquean producción
+
+- **Formulario de inquiry.** Hoy el CTA "Inquire" marca por teléfono (`tel:`), el único canal real que da el handoff. Falta el overlay con formulario, endpoint, validación y confirmación. El molde está en `theclementine`: `components/Inquiry.tsx` + `app/api/inquiry/route.ts` + `emails/` (Resend + Neon).
+- **Assets fotográficos propios.** Las fotos de `assets/` se descargaron del Wix vigente de la clienta. Sustituir por arte final optimizado antes de publicar.
+- **Dominio y URL canónica.** `app/layout.tsx` usa `https://jsevents.vercel.app` como `metadataBase`. Actualizar cuando exista dominio.
+- **Favicon y open-graph.** Falta `app/icon.png` y `app/opengraph-image.png`. Depende de la decisión final sobre el logotipo.
+
+## Pendientes de la fase impeccable
+
+- **Escala tipográfica definitiva** — ¿escala modular o valores curados? Los actuales son interpolación anclada sobre los valores del handoff.
+- **Menú mobile completo (overlay).** El diseño original mostraba una hamburguesa en mobile que no se implementó: todos los links del nav ya son alcanzables en la fila 2, y un control muerto es peor que ninguno. Si el overlay se diseña, la hamburguesa vuelve con él.
+- **Sistema de motion** — reveals al scroll, transiciones de página, hover en imágenes.
+- **Páginas internas** — Look Book, Luxury Picnics, Blog. Hoy los links del nav apuntan a anclas de la home o a `#`.
+- **Dirección de fotografía** — color vs. monocromo, ratios oficiales, tratamiento. El prototipo tenía un toggle global de monocromo (`grayscale(1) contrast(1.02)`) que no se implementó por no tener decisión.
+- **Estados de foco definitivos.** Hoy es provisional: `outline: 1px solid currentColor`.
+- **Logotipo** — construcción del monograma J|S, espacio de respeto, versiones.
+- **"As Featured In"** — solo se publica con logos reales y permiso.
+
+## Decisiones tomadas que conviene recordar
+
+- La fila 2 del nav mide 45px en mobile, no los 37px del handoff: los targets táctiles de 44px ganan.
+- El H1 es uno solo en el documento; cambia de ancla (`relative` → `md:static`) en vez de duplicarse por breakpoint.
