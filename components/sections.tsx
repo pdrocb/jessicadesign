@@ -1,6 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { images, lookbook, process, quotes, services, site } from "@/lib/content";
+import {
+  images,
+  lookbook,
+  process,
+  quotes,
+  services,
+  silkFlorals,
+  site,
+} from "@/lib/content";
 import {
   ButtonPrimary,
   Eyebrow,
@@ -222,6 +230,58 @@ export function Process() {
   );
 }
 
+/* ── Silk Florals ──────────────────────────────────────────────────
+   Línea en crecimiento de la marca (PRODUCT.md). NO es una quinta
+   tarjeta de Expertise: los cuatro servicios son tipos de ocasión y
+   esto es un material — mezclarlos degrada la línea a "un servicio
+   más" justo cuando está creciendo.
+
+   Composición deliberadamente distinta de Manifesto y About, que ya son
+   splits de foto + texto: aquí el texto manda y las dos fotografías van
+   escalonadas a distinta altura, el gesto del collage del hero. La
+   página venía de dos rejillas seguidas (4 col y 3 col) y una tercera
+   la habría vuelto una pila de grids. */
+export function SilkFlorals() {
+  return (
+    <section
+      id="silk-florals"
+      aria-label="Silk florals"
+      className="gutter section-y scroll-mt-28 border-t border-line lg:py-30"
+    >
+      <div className="shell grid items-start gap-8 md:grid-cols-[1fr_0.8fr] md:gap-12 lg:grid-cols-[1fr_0.7fr_0.7fr] lg:gap-16">
+        <div data-reveal className="flex flex-col gap-5 md:gap-6 lg:gap-7">
+          <Eyebrow>{silkFlorals.eyebrow}</Eyebrow>
+          <p className="text-quote-xl font-display font-normal lg:max-w-[16ch]">
+            {silkFlorals.statement}
+          </p>
+          <p className="text-body-md max-w-[52ch] text-ink-muted lg:text-body-lg">
+            {silkFlorals.copy}
+          </p>
+        </div>
+
+        <Image
+          src={images.heroDetail}
+          alt="Silk floral arrangement styled on a table"
+          sizes="(min-width: 1200px) 26vw, (min-width: 768px) 36vw, 100vw"
+          data-reveal
+          className="aspect-[4/5] w-full object-cover md:aspect-[3/4]"
+        />
+
+        {/* La segunda foto aparece solo en desktop y baja 80px: el
+            escalonado es lo que distingue esta banda de un split. */}
+        <Image
+          src={images.manifesto02}
+          alt="Silk and fresh florals combined in a centrepiece"
+          sizes="26vw"
+          data-reveal
+          style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
+          className="hidden aspect-[3/4] w-full object-cover lg:mt-20 lg:block"
+        />
+      </div>
+    </section>
+  );
+}
+
 /* ── Break editorial ──────────────────────────────────────────────
    Lámina a sangre con su pie debajo, como una plancha de libro de
    fotografía. Sin scrim: la imagen no se toca, y el pie se lee sobre
@@ -393,7 +453,8 @@ export function SiteFooter() {
     { label: "Home", href: "/" },
     { label: "Look Book", href: "/#look-book" },
     { label: "Luxury Picnics", href: "/#luxury-picnics" },
-    { label: "The Process", href: "/#process" },
+    { label: "Silk Florals", href: "/#silk-florals" },
+    { label: "Process", href: "/#process" },
     { label: "Inquire", href: "/inquire" },
   ];
 

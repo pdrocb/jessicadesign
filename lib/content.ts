@@ -40,7 +40,8 @@ export const navItems = [
   { label: "Home", href: "/" },
   { label: "Look Book", href: "/#look-book" },
   { label: "Luxury Picnics", href: "/#luxury-picnics" },
-  { label: "The Process", href: "/#process" },
+  { label: "Silk Florals", href: "/#silk-florals" },
+  { label: "Process", href: "/#process" },
 ];
 
 export const images = {
@@ -84,6 +85,21 @@ export const services = [
     copy: "Your vision, our hands — including the decor you made yourself. Our team sets up every detail on the day.",
   },
 ];
+
+/**
+ * Silk florals: línea en crecimiento (PRODUCT.md, ago 2026). Los tres
+ * mensajes van en un solo párrafo — alternativa a la fresca, rental al
+ * cliente, y diseño híbrido.
+ *
+ * El matiz de posicionamiento (la fresca sigue siendo del florista del
+ * cliente; la seda sí es suya) NO va aquí: sonaría defensivo. Vive en la
+ * FAQ "Can you do the florals?", que es donde de verdad se pregunta.
+ */
+export const silkFlorals = {
+  eyebrow: "Silk Florals",
+  statement: "Not every flower has to be cut.",
+  copy: "Elevated silk florals, arranged and styled like every other piece on the table. Take them in place of fresh, rent them for the day, or let us weave silk and fresh together so the room reads as one.",
+};
 
 /**
  * Proceso de diseño confirmado por la clienta (PRODUCT.md, ago 2026).
@@ -206,16 +222,21 @@ export const faqs = [
   },
   {
     numeral: "iii.",
+    q: "Can you do the florals?",
+    a: "Fresh florals stay with your florist, and we design hand in hand with them. Silk is ours — an elevated collection you can take in place of fresh, rent for the day, or blend with fresh so the two read as one.",
+  },
+  {
+    numeral: "iv.",
     q: "When should I book design & styling?",
     a: "Ideally 6–12 months before your date, so the design concept can inform your florals, rentals, and stationery. That said, we’ve created magic on shorter timelines — reach out.",
   },
   {
-    numeral: "iv.",
+    numeral: "v.",
     q: "Do you travel outside the Hudson Valley?",
     a: "Home base is the Hudson Valley, New York — and yes, we love to travel. Tell us where you’re celebrating.",
   },
   {
-    numeral: "v.",
+    numeral: "vi.",
     q: "What does the complimentary consultation include?",
     a: "A one-hour conversation about your story, your inspiration, and the feeling you want the day to hold. You’ll leave with a clear sense of direction — no strings attached.",
   },

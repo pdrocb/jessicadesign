@@ -255,12 +255,19 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 | Hero collage | 1 photograph | collage of 2 | collage of 3 |
 | Services | 1 column | 2 columns | 4 columns |
 | Manifesto | stacked, photo last | 150 / 1fr | 200 / 1fr / 200 |
+| Silk Florals | stacked, 1 photo | 1fr / 0.8fr | 1fr / 0.7fr / 0.7fr, 2nd photo +80px |
 | Testimonials, FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
 | Look Book | 2 columns | 2 columns | 4 columns |
 | Editorial break | 320px tall | 420px | 640px |
 | Buttons | **full width** | inline | inline |
 
 The governing rule is **one column fewer per breakpoint down**, never a reflow into a different concept.
+
+### A section's shape argues for its content
+
+Silk Florals is text-led with two photographs at **different altitudes**, borrowing the hero collage's stagger rather than the Manifesto's symmetric flanking. That is not decoration: Manifesto and About are both photo-and-text splits already, and the page reaches this point having just run two grids back to back (Expertise at 4 columns, Process at 3). A third grid would have made the page read as a stack of grids, and a third split would have made the section read as one more paragraph. The stagger is what tells a scrolling visitor that this is a different kind of claim.
+
+It also belongs nowhere else: the four Expertise entries are *occasions*, and silk is a *material*. Filing it as a fifth card would have demoted a growing line to a footnote and orphaned it in a four-column grid.
 
 ### The hero orders message before proof
 

@@ -10,6 +10,7 @@ import {
   Manifesto,
   Process,
   Services,
+  SilkFlorals,
   SiteFooter,
   Testimonials,
 } from "@/components/sections";
@@ -24,6 +25,7 @@ export default function Page() {
         <Manifesto />
         <Services />
         <Process />
+        <SilkFlorals />
         <EditorialBreak />
         <About />
         <Testimonials />
