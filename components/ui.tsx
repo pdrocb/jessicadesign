@@ -3,6 +3,10 @@
  * de `app/globals.css` — ningún valor literal de color o tipografía.
  */
 
+import Image from "next/image";
+import logoMark from "@/assets/logo-mark.png";
+import logoMarkLight from "@/assets/logo-mark-light.png";
+
 type Props = { children: React.ReactNode; className?: string };
 
 /** Eyebrow de sección: label 11px/500, tracking .34em, --ink-subtle. */
@@ -74,18 +78,20 @@ export function LinkUnderline({
 }
 
 /**
- * Logotipo "Jessica S. Designs".
+ * Logotipo "Jessica S. Designs" — el de la clienta, recortado del
+ * original y con el fondo blanco convertido en alfa para que se apoye
+ * sobre marfil sin recuadro.
  *
- * PROVISIONAL — reproduce en texto la parte de palabra del logotipo que
- * entregó la clienta (serif en versales), pero NO el monograma J+S
- * entrelazado, que es un dibujo y necesita su SVG. Cuando llegue el
- * archivo, esto se sustituye por la imagen.
+ * Se usa la versión SIN la línea "Wedding & Event Design & Styling"
+ * (decisión PM): en el nav esa tercera línea satura, y el tagline ya
+ * vive en el hero y en el footer. `logo-full.png` conserva el lockup
+ * completo para piezas donde sí quepa.
  *
- * La línea "Wedding & Event Design & Styling" del logotipo NO se usa
- * aquí por decisión del PM: en el nav satura, y el tagline ya vive en el
- * hero y en el footer.
+ * Hay dos archivos en vez de recolorear por CSS porque el logotipo es un
+ * mapa de bits: el ink va en `logo-mark`, el bone en `logo-mark-light`.
  *
- * `tone` decide el color sobre claro u oscuro.
+ * El alto manda: el lockup es apilado (1.35:1) y son sus proporciones,
+ * no el ancho, las que fijan si "JESSICA S. DESIGNS" se lee.
  */
 export function Wordmark({
   size = "md",
@@ -94,19 +100,17 @@ export function Wordmark({
   size?: "sm" | "md" | "lg";
   tone?: "dark" | "light";
 }) {
-  const scale = {
-    sm: "text-[12px] tracking-[0.16em]",
-    md: "text-[14px] tracking-[0.18em]",
-    lg: "text-[15px] tracking-[0.2em]",
-  }[size];
+  const height = { sm: 46, md: 54, lg: 60 }[size];
 
   return (
-    <span
-      className={`font-display font-medium whitespace-nowrap uppercase ${scale} ${
-        tone === "dark" ? "text-ink" : "text-bone"
-      }`}
-    >
-      Jessica S. Designs
-    </span>
+    <Image
+      src={tone === "dark" ? logoMark : logoMarkLight}
+      alt="Jessica S. Designs"
+      height={height}
+      width={Math.round(height * (logoMark.width / logoMark.height))}
+      priority
+      className="w-auto"
+      style={{ height }}
+    />
   );
 }
