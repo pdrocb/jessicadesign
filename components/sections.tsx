@@ -120,12 +120,12 @@ export function Manifesto() {
               afirma. Y el "not décor dropped into a room" es la otra
               mitad del posicionamiento — ni planner ni decoradora. */}
           <p className="text-body-md text-ink-muted lg:max-w-[520px] lg:text-body-lg">
-            We are the design layer of your celebration — not the logistics,
-            and not décor dropped into a room. It’s the whole visual world:
+            We design the way your celebration looks and feels. That covers
             tablescapes, linens, candles, florals, signage, stationery,
             furniture, and every small thing that makes a space feel
-            considered. We work hand in hand with your planner, florist, and
-            venue so all of it arrives as one idea, unmistakably yours.
+            considered. Your planner keeps the day running and your florist
+            brings the flowers. We make sure all of it arrives as one idea,
+            unmistakably yours.
           </p>
         </div>
         <Image
@@ -338,8 +338,8 @@ export function About() {
               por encima del límite cómodo de lectura. */}
           <p className="text-body-md max-w-[66ch] text-ink-muted lg:text-body-lg">
             Jessica is the eye behind every JSD celebration. Her work begins
-            with you — your story, your Pinterest board, the feeling you can’t
-            quite put into words — and ends in a room your guests will talk
+            with your story, your Pinterest board, and the feeling you can’t
+            quite put into words. It ends in a room your guests will talk
             about for years. Details matter; she designs every one of them. And
             she takes on a small number of celebrations each year, by choice:
             fewer rooms, more of her in each one.

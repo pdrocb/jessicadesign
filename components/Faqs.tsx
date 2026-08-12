@@ -27,7 +27,7 @@ export function Faqs() {
           </h2>
           <div aria-hidden className="hidden h-px w-12 bg-ink-faint md:block" />
           <p className="font-display text-[16px] leading-relaxed text-ink-subtle italic lg:text-[17px]">
-            Everything else, over a glass of something — in your complimentary
+            Everything else, over a glass of something, in your complimentary
             consultation.
           </p>
         </div>

@@ -116,7 +116,7 @@ export const process = {
   eyebrow: "The Process",
   heading: "How a room becomes yours.",
   intro:
-    "From the first conversation to the last candle lit — six steps, and you see the room for yourself before the day arrives.",
+    "Six steps, from the first conversation to the last candle lit. You see the room for yourself before the day arrives.",
   steps: [
     {
       numeral: "No. I",
@@ -131,7 +131,7 @@ export const process = {
     {
       numeral: "No. III",
       name: "Sourcing",
-      copy: "Every piece selected and secured — linens, candles, china, furniture, florals fresh or silk. Nothing left to chance.",
+      copy: "We select and secure every piece, from linens and candles to china, furniture, and florals fresh or silk.",
     },
     {
       numeral: "No. IV",
@@ -141,7 +141,7 @@ export const process = {
     {
       numeral: "No. V",
       name: "The Mock-Up",
-      copy: "We build a table in person, before the day. You see it, touch it, change your mind — while changing it still costs nothing.",
+      copy: "We build a table in person, before the day. You see it, touch it, and change your mind while changing it still costs nothing.",
     },
     {
       numeral: "No. VI",
@@ -154,15 +154,15 @@ export const process = {
 export const quotes = [
   {
     text: "Truly more beautiful than I could have ever imagined. She is patient, responsive, and has great design ideas — I would work with Jess again in a heartbeat.",
-    who: "Brittney A. — Summer Wedding",
+    who: "Brittney A. · Summer Wedding",
   },
   {
     text: "My wedding was perfect and envisioned exactly the way I wanted. Jessica is very personable and I loved working with her.",
-    who: "Yvette A. — Summer Wedding",
+    who: "Yvette A. · Summer Wedding",
   },
   {
     text: "She thought of every last detail, from the flower arrangement to the napkins and glassware — and she nailed it.",
-    who: "Emily G. — Engagement, Beacon NY",
+    who: "Emily G. · Engagement, Beacon NY",
   },
 ];
 
@@ -202,7 +202,7 @@ export const inquiry = {
   intro:
     "A few details to start. We reply personally, and the first conversation is a complimentary hour.",
   submit: "Send Your Inquiry",
-  successHeading: "Thank you — your inquiry is on its way.",
+  successHeading: "Thank you. Your inquiry is on its way.",
   successBody:
     "We read every one personally and reply within a few days to arrange your complimentary consultation.",
   fields: [
@@ -225,7 +225,7 @@ export const inquiry = {
     { name: "date", label: "Date of the Event", type: "date", required: false },
     { name: "venue", label: "Name & Location of Venue", type: "text", required: false },
     { name: "guests", label: "How Many Guests", type: "number", required: false },
-    { name: "pinterest", label: "Pinterest Board — share the link", type: "url", required: false },
+    { name: "pinterest", label: "Pinterest Board", type: "url", required: false },
     { name: "vision", label: "Share Your Vision", type: "textarea", required: false },
   ],
 } as const;
@@ -244,17 +244,17 @@ export const faqs = [
   {
     numeral: "iii.",
     q: "Can you do the florals?",
-    a: "Fresh florals stay with your florist, and we design hand in hand with them. Silk is ours — an elevated collection you can take in place of fresh, rent for the day, or blend with fresh so the two read as one.",
+    a: "Fresh florals stay with your florist, and we design hand in hand with them. Silk is ours, an elevated collection you can take in place of fresh, rent for the day, or blend with fresh so the two read as one.",
   },
   {
     numeral: "iv.",
     q: "When should I book design & styling?",
-    a: "Ideally 6–12 months before your date, so the design concept can inform your florals, rentals, and stationery. That said, we’ve created magic on shorter timelines — reach out.",
+    a: "Ideally 6–12 months before your date, so the design concept can inform your florals, rentals, and stationery. We have worked on shorter timelines too, so ask us.",
   },
   {
     numeral: "v.",
     q: "Do you travel outside the Hudson Valley?",
-    a: "Home base is the Hudson Valley, New York — and yes, we love to travel. Tell us where you’re celebrating.",
+    a: "Home base is the Hudson Valley, New York, and yes, we love to travel. Tell us where you’re celebrating.",
   },
   {
     numeral: "vi.",

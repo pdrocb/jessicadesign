@@ -18,7 +18,7 @@ const title = "Jessica S. Designs | Hudson Valley Wedding & Event Design";
 // distinción diseñadora-no-planner, y los objetos concretos — que es lo
 // que una novia reconoce al escanear resultados de Google.
 const description =
-  "Wedding and event design & styling in the Hudson Valley, New York. Not planning, not décor drop-off — the whole visual world of your day: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.";
+  "Wedding and event design & styling in the Hudson Valley, New York. We design how your celebration looks and feels: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.";
 
 export const viewport: Viewport = {
   // El marfil de --color-paper, no blanco puro: el sistema no lleva
