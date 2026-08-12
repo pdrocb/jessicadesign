@@ -283,25 +283,42 @@ export function SilkFlorals() {
 }
 
 /* ── Break editorial ──────────────────────────────────────────────
-   Lámina a sangre con su pie debajo, como una plancha de libro de
-   fotografía. Sin scrim: la imagen no se toca, y el pie se lee sobre
-   papel en vez de pelear con un mantel blanco. */
+   Lámina a sangre con el pie DENTRO de la imagen, sobre un scrim de
+   banda inferior (DESIGN.md §"The plate scrim").
+
+   El pie va anclado con `inset-x-0` y no con `w-full`: dentro de una
+   caja con padding, `w-full` resuelve contra el padding-box pero
+   arranca en el content-box y desborda. */
 export function EditorialBreak() {
   return (
-    <figure data-reveal className="m-0">
+    <figure data-reveal className="relative m-0">
       <Image
         src={images.heroReception}
         alt="Full wedding reception design"
         sizes="100vw"
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
-      <figcaption className="gutter shell flex flex-col gap-1 pt-3.5 md:flex-row md:items-baseline md:justify-between md:gap-8 md:pt-4 lg:pt-5">
-        <p className="text-quote-italic font-display text-ink italic">
-          Every detail, composed with intention.
-        </p>
-        <span className="text-label-sm shrink-0 font-medium tracking-[0.3em] text-ink-subtle uppercase">
-          Hudson Valley, NY
-        </span>
+
+      {/* 288px en los tres breakpoints — un solo valor porque así pasa
+          en todos. Es el doble que los 144px de Florale a propósito: un
+          degradado largo oscurece con suavidad, mientras que una banda
+          corta necesita más alfa y se ve como una barra pegada. */}
+      <div
+        aria-hidden
+        className="plate-scrim pointer-events-none absolute inset-x-0 bottom-0 h-72"
+      />
+
+      <figcaption className="absolute inset-x-0 bottom-0">
+        <div className="gutter shell flex flex-col gap-1 pb-5 md:flex-row md:items-baseline md:justify-between md:gap-8 md:pb-6 lg:pb-8">
+          <p className="text-quote-italic font-display text-bone italic">
+            Every detail, composed with intention.
+          </p>
+          {/* En `bone`, no en `on-dark-muted`: a 10px hace falta 4.5:1 y
+              el tono apagado solo llegaba a 1.67 sobre el mantel. */}
+          <span className="text-label-sm shrink-0 font-medium tracking-[0.3em] text-bone uppercase">
+            Hudson Valley, NY
+          </span>
+        </div>
       </figcaption>
     </figure>
   );

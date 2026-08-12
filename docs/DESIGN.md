@@ -317,9 +317,28 @@ The one `box-shadow` in the entire codebase is not elevation. The primary button
 
 The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero collage is the one exception, using fixed pixel heights with deliberate vertical offsets so the three images sit at different altitudes.
 
-### Captions sit below the plate, not on it
+### The plate scrim *(supersedes "Captions sit below the plate", Aug 2026)*
 
-**The photograph is never scrimmed to make a caption readable.** A full-bleed image carries its caption underneath, on paper, the way a plate in a photography book carries its credit line:
+The full-bleed plate carries its caption **inside the image**, over a bottom scrim. The rule this replaces said the opposite, and said it forcefully; the reversal is a deliberate client-direction call, taken with the reference in hand.
+
+**The recipe, and why it is not the reference's.** Florale's gallery cards use `linear-gradient(to top, …/0.7 0%, …/0.25 50%, transparent 100%)` over `#211b1b`, in a 144px band. Dropped onto this library's photography that recipe measures **2.84:1** for `bone` text — below even the 3:1 large-text floor, because the plate's bottom edge is sunlit white linen. The shipped values were solved numerically against the composited pixels at all three breakpoints:
+
+| | value | why |
+|---|---|---|
+| colour | `--color-ink` | ours, not the reference's `#211b1b` — same role, our token |
+| stops | 85% at bottom, 55% at mid, 0 at top | the lightest pair that clears AA on the worst crop |
+| band | 288px, every breakpoint | one value that passes everywhere; double the reference's 144px on purpose |
+| text | `bone`, both lines | `on-dark-muted` measured 1.67:1 at 10px and was cut |
+
+Measured contrast: **6.93 desktop · 7.22 tablet · 5.71 mobile.**
+
+**Mobile governs.** At 390×320 the `object-fit: cover` crop lands squarely on the brightest linen in the frame and the caption occupies 30% of the plate; desktop passed at settings where mobile measured 1.69:1. Any future change to this scrim is re-measured on mobile first.
+
+**A long band beats a strong one.** 288px over a 320px plate reads as a slow darkening; the same contrast bought with a short band needs so much alpha that it reads as a bar stuck to the bottom edge.
+
+**This licenses one scrim, not a habit.** It exists for the single editorial plate. Elsewhere the older instinct still holds: reach for a scrim only when the composition genuinely requires type on an image, and never without measuring against the actual pixels — eyeballing one is how you ship 1.6:1.
+
+The superseded pattern, for reference — a caption below the plate, aligned to the same rail:
 
 ```
 <figure>
@@ -330,7 +349,7 @@ The form language is rectangles and hairlines. Photographs are hard-cropped with
 
 The caption aligns to the same rail as every other section — its left and right edges land exactly on the Expertise header's — so a full-bleed image reads as part of the grid rather than as a floating banner. The statement goes left in `quote-italic`, the location right in `label-sm` `ink-subtle`. On mobile they stack.
 
-A scrim buys legibility by damaging the only asset that sells the work. It also never looks expensive: a gradient over a photograph is the visual signature of a stock template. Below the plate, contrast is a solved problem (18.6:1 for the statement, 5.7:1 for the meta) and the photograph is untouched.
+That arrangement kept the photograph untouched and made contrast a solved problem (18.6:1 for the statement, 5.7:1 for the meta). It remains the right answer for any plate whose caption is incidental — a credit line, a location, a date. The scrim above is for the one plate whose caption is the point.
 
 **`ink-faint` is a dark-ground token only.** On `paper` or `bone` it measures 3.75:1 and fails AA for anything under 24px. Numerals, meta, and captions on light ground use `ink-subtle`.
 
@@ -411,7 +430,7 @@ The scheduling calendar of the legacy Wix site is deliberately **not** reproduce
 ### Don't:
 
 - **Don't** introduce any accent beyond `petal`, `rose-umber`, and `sage`, and don't let any exceed its named jobs. No hue-carrying gradients, no pure white, no tinted states outside the accents' assignments.
-- **Don't** scrim a photograph to make a caption readable. Put the caption below the plate. A gradient over an image is the signature of a template, and it costs the one asset that sells the work.
+- **Don't** add a second scrim. The editorial plate has one, measured; anywhere else, put the caption below the image. And never ship a scrim whose contrast was judged by eye — measure it against the composited pixels, mobile crop first.
 - **Don't** use `ink-faint` on light ground — it fails AA below 24px. It is the dark-ground token.
 - **Don't** add a border-radius anywhere, on anything, ever.
 - **Don't** add a drop shadow or any lift. If it looks like it needs one, it needs space.
