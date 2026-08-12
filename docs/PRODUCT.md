@@ -28,13 +28,31 @@ El límite es deliberado y es parte del posicionamiento, no una carencia: su tra
 
 Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunca debe sugerir que J|S dirige la logística, el timeline o los proveedores del evento. Prometer eso le vende un trabajo que ella rechazó a propósito.
 
+**Quality over quantity** (brief de la clienta, ago 2026): toma deliberadamente menos bodas y eventos para dar una experiencia de diseño más personal y hands-on a cada cliente. Es el tono premium correcto — escasez sin hablar de precio — y el sitio puede decirlo explícitamente.
+
+**Silk florals** (brief de la clienta, ago 2026): línea creciente de la marca. J|S ofrece florales de seda elevados — como alternativa a la flor fresca, como *rental* al cliente, o en diseños **híbridos** de seda + fresca. Matiz importante: para flor fresca Jessica sigue trabajando junto al florista del cliente; en seda, ella **sí es la proveedora**. Redactar sin invadir el rol del florista ni sugerir que dirige proveedores.
+
+**El "vision gap" es el momento de venta.** La clienta lo dijo así: los clientes llegan con una visión — o sin saber cómo armarla — y ella desarrolla el look & feel completo y une todos los detalles con cohesión. La reacción que el sitio debe producir: *"This is more than decorating. She is going to take my vision, thoughtfully design the entire aesthetic, and make everything feel cohesive and beautiful."*
+
 ## Operating Context
 
 - La entrada es un formulario de *inquiry* que agenda una **consulta gratuita de una hora**. Está confirmado: aparece textual en su sitio vigente — *"Head on over to our inquiry tab to schedule a free 1 hour consultation to learn more about our services!"*
 - El formulario vigente (jessicasalomondesigns.com/contact) pide: nombre, email, tipo de celebración, teléfono de contacto para la consulta, fecha del evento, nombre y ubicación del venue, número de invitados, link al tablero de Pinterest, y una descripción libre de la visión. Lleva calendario integrado para elegir horario.
 - **El tablero de Pinterest es un artefacto real de su proceso**, no un adorno: lo pide en el formulario y lo menciona en su propio "about" (*"My aim is to bring your Pinterest vision board to life, while adding some of my own expertise"*).
 - La página "Book Online" del sitio vigente está vacía ("Nothing to book right now").
-- **Qué ocurre después de la consulta no está definido** — si termina en propuesta visual, en cotización directa, o si ramifica por tipo de evento. No inventarlo.
+
+### El proceso de diseño (confirmado por la clienta, ago 2026)
+
+La clienta definió su proceso completo y quiere que el sitio lo destaque — es parte central de la experiencia que vende. Seis pasos, en este orden:
+
+1. Desarrollo del **concepto de diseño**.
+2. **Design deck** a medida.
+3. **Selección y sourcing** de décor y rentals.
+4. **Floor plans**, cuando hacen falta.
+5. **Mock-up presencial** — prueba diferenciadora fuerte; poquísimos competidores lo ofrecen.
+6. **Styling y ejecución** el día del evento.
+
+Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": la consulta gratuita desemboca en este proceso. Lo que sigue sin definirse (y no se inventa) es la mecánica comercial — propuesta, cotización, contrato.
 
 ## Capabilities and Constraints
 
@@ -47,9 +65,13 @@ Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunc
 | Luxury Picnics   | Picnics curados para cualquier ocasión                                          |
 | Day-Of Set-Up    | Montaje del decor el día del evento, incluido decor DIY del cliente             |
 
-**Tiene:** inventario propio de mantelería, cubertería, velas, vajilla, caminos de mesa y detalle pequeño de mesa.
-**No tiene, pero puede conseguir:** mesas y sillas.
+**Tiene:** inventario propio de mantelería, cubertería, velas, vajilla, caminos de mesa y detalle pequeño de mesa. Además, **silk florals** propios para venta, rental al cliente y diseños híbridos.
+**No tiene, pero puede conseguir:** mesas y sillas, y en general mobiliario y piezas mayores.
 **No hace, por decisión:** planeación y responsabilidad integral del evento.
+
+**El repertorio de detalle que el sitio debe mostrar** (brief de la clienta): tablescapes, velas, florales, signage, stationery, texturas, mobiliario, mantelería — todo lo que hace que el cuarto entero se sienta intencional.
+
+**Regla de sourcing (PM, ago 2026):** al cliente final le es indiferente si una pieza es inventario propio o rentada de un tercero — y mucho probablemente se renta. El sitio **nunca expone esa mecánica**: no decir "lo rentamos" ni distinguir propio vs. conseguido. La única mención legítima de "rentals" es la inversa — los silk florals y piezas que J|S renta **al** cliente como parte de su oferta.
 
 **Restricciones de información:**
 
@@ -59,9 +81,10 @@ Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunc
 
 ## Brand Commitments
 
-- **Nombre en el sitio nuevo: "J|S Events"**, comprometido por el handoff de diseño. Ojo: el sitio vigente usa tres nombres distintos entre sí — "Jessica S. Designs", "JSE Event Design & Styling" y "JS Design". **Cuál es el nombre correcto es una decisión abierta** que conviene cerrar antes de imprimir nada.
+- **Nombre en el sitio nuevo: "J|S Events"**, comprometido por el handoff de diseño. Ojo: el sitio vigente usa tres nombres distintos entre sí — "Jessica S. Designs", "JSE Event Design & Styling" y "JS Design". En su brief de ago 2026 la clienta escribe **"Jessica S. Designs"** y la sigla **"JSD"** — una señal más, no una decisión. **Cuál es el nombre correcto sigue abierto** y sube de urgencia; cerrarlo con ella antes de imprimir nada.
 - Razón social: J|S Events, Event Styling & Decorating Co. LLC.
 - Voz: contenida, segura, sin superlativos huecos. Frases cortas. Nunca "¡El día de tus sueños!". El sitio va en **inglés**; la conversación con el PM, en español.
+- Adjetivos de marca, en palabras de la clienta (ago 2026): *elevated, sophisticated, modern, warm, intentional — luxury, but still approachable*. Anti-referencias explícitas: corporativo, genérico, "traditional wedding décor company". Referencias visuales que ama: simplicityinmind.com (vintage-elegante) y nyflorale.com (flujo, color cálido con acentos) — quiere un punto medio entre vintage, elegante y moderno.
 - Jessica Salomon, dueña y lead stylist. Neoyorquina criada en el Bronx, ~15 años estilizando eventos, madre de tres.
 - Canales existentes: Instagram [`js_eventsllc`](https://instagram.com/js_eventsllc) · Facebook [`celebratewithJess`](https://www.facebook.com/celebratewithJess) · teléfono 845-375-7820.
 

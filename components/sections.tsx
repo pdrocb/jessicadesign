@@ -21,6 +21,9 @@ export function Hero() {
       {/* El titular se apoya en papel en los tres breakpoints, nunca sobre
           una fotografía. Lo editorial del hero es el escalonado del
           collage, no la superposición — el escalonado se conserva entero. */}
+      {/* La itálica del hero va en tinta, no en rose-umber: itálica de
+          color + botón sage sobre crema era la fórmula literal del hero
+          de Florale (DESIGN.md, Italic Accent Word). */}
       <h1 className="text-display-hero mx-auto max-w-[14ch] text-center font-display font-medium text-ink">
         The Art of the <em className="font-normal">Unforgettable</em>
       </h1>
@@ -89,7 +92,7 @@ export function Manifesto() {
           sizes="(min-width: 1200px) 200px, (min-width: 768px) 150px, 100vw"
           className="order-2 aspect-[4/3] w-full object-cover md:order-none md:aspect-[3/4]"
         />
-        <div className="flex flex-col gap-5 md:gap-6 lg:items-center lg:gap-8 lg:text-center">
+        <div data-reveal className="flex flex-col gap-5 md:gap-6 lg:items-center lg:gap-8 lg:text-center">
           <Eyebrow>Our Philosophy</Eyebrow>
           <p className="text-quote-xl font-display font-normal lg:max-w-[22ch]">
             A beautiful wedding is planned. An unforgettable one is{" "}
@@ -122,15 +125,21 @@ export function Services() {
       aria-label="Expertise"
       className="gutter section-y shell border-t border-line"
     >
-      <div className="mb-7 flex flex-col gap-2 md:mb-11 md:flex-row md:items-baseline md:justify-between lg:mb-16">
+      <div data-reveal className="mb-7 flex flex-col gap-2 md:mb-11 md:flex-row md:items-baseline md:justify-between lg:mb-16">
         <h2 className="text-heading-lg font-display font-medium">Expertise</h2>
         <div className="text-label-sm font-medium tracking-[0.3em] text-ink-subtle uppercase md:text-label">
           Design · Styling · Execution
         </div>
       </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-7">
-        {services.map((svc) => (
-          <article key={svc.name} className="flex flex-col gap-3">
+        {services.map((svc, i) => (
+          <article
+            key={svc.name}
+            data-reveal
+            // Escalonado de 80ms entre tarjetas (DESIGN.md §Motion).
+            style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+            className="flex flex-col gap-3"
+          >
             <Image
               src={svc.img}
               alt={svc.name}
@@ -157,7 +166,7 @@ export function Services() {
    papel en vez de pelear con un mantel blanco. */
 export function EditorialBreak() {
   return (
-    <figure className="m-0">
+    <figure data-reveal className="m-0">
       <Image
         src={images.heroReception}
         alt="Full wedding reception design"
@@ -187,7 +196,7 @@ export function About() {
           sizes="(min-width: 1536px) 610px, (min-width: 1200px) 40vw, 100vw"
           className="w-full object-cover"
         />
-        <div className="flex flex-col gap-5 lg:gap-6">
+        <div data-reveal className="flex flex-col gap-5 lg:gap-6">
           <Eyebrow>The Designer</Eyebrow>
           <h2 className="text-display-md font-display font-medium">
             Jessica Salomon
@@ -212,33 +221,37 @@ export function About() {
 }
 
 /* ── Testimonios ──────────────────────────────────────────────────
-   Encabezado sticky en desktop; apilado en tablet y mobile (§4). */
+   Encabezado sticky en desktop; apilado en tablet y mobile (§4).
+   Vive sobre --petal (recalibración ago 2026): el rosa de sus flores
+   como atmósfera — las citas se leen luminosas, no solemnes. */
 export function Testimonials() {
   return (
     <section
       aria-label="Testimonials"
-      className="gutter section-y bg-ink text-bone lg:py-30"
+      className="gutter section-y bg-petal lg:py-30"
     >
       <div className="shell grid items-start gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
-        <div className="flex flex-col gap-3.5 lg:sticky lg:top-16 lg:gap-6">
-          <div className="text-label-sm font-medium tracking-[0.34em] text-ink-faint uppercase md:text-label">
+        <div data-reveal className="flex flex-col gap-3.5 lg:sticky lg:top-16 lg:gap-6">
+          <div className="text-label-sm font-medium tracking-[0.34em] text-rose-umber uppercase md:text-label">
             Kind Words
           </div>
           <h2 className="text-display-md font-display font-normal">
-            In their <em>own</em> words
+            In their <em className="text-rose-umber">own</em> words
           </h2>
-          <div aria-hidden className="hidden h-px w-12 bg-ink-faint md:block" />
+          <div aria-hidden className="hidden h-px w-12 bg-petal-line md:block" />
         </div>
         <div className="flex flex-col">
-          {quotes.map((q) => (
+          {quotes.map((q, i) => (
             <figure
               key={q.who}
-              className="flex flex-col gap-3 border-b border-line-dark py-[26px] md:gap-3.5 md:py-8 lg:gap-[18px] lg:py-11"
+              data-reveal
+              style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+              className="flex flex-col gap-3 border-b border-petal-line py-[26px] md:gap-3.5 md:py-8 lg:gap-[18px] lg:py-11"
             >
-              <blockquote className="text-quote-md max-w-[62ch] font-display text-[#efece5]">
+              <blockquote className="text-quote-md max-w-[62ch] font-display text-ink">
                 “{q.text}”
               </blockquote>
-              <figcaption className="text-label-xs font-medium tracking-[0.3em] text-ink-faint uppercase md:text-label-sm md:tracking-[0.3em]">
+              <figcaption className="text-label-xs font-medium tracking-[0.3em] text-rose-umber uppercase md:text-label-sm md:tracking-[0.3em]">
                 {q.who}
               </figcaption>
             </figure>
@@ -254,21 +267,26 @@ export function Testimonials() {
 export function LookBook() {
   return (
     <section id="look-book" aria-label="Look book" className="section-y">
-      <div className="gutter shell mb-7 flex items-baseline justify-between lg:mb-14">
+      <div data-reveal className="gutter shell mb-7 flex items-baseline justify-between lg:mb-14">
         <h2 className="text-heading-lg font-display font-medium">
           The Look Book
         </h2>
         <LinkUnderline href="#look-book">View All</LinkUnderline>
       </div>
       <div className="grid grid-cols-2 gap-2 px-2 lg:grid-cols-4">
-        {lookbook.map((shot) => (
-          <Image
+        {lookbook.map((shot, i) => (
+          <div
             key={shot.alt}
-            src={shot.img}
-            alt={shot.alt}
-            sizes="(min-width: 1200px) 25vw, 50vw"
-            className="aspect-[4/5] w-full object-cover"
-          />
+            data-reveal
+            style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+          >
+            <Image
+              src={shot.img}
+              alt={shot.alt}
+              sizes="(min-width: 1200px) 25vw, 50vw"
+              className="aspect-[4/5] w-full object-cover"
+            />
+          </div>
         ))}
       </div>
     </section>
@@ -281,18 +299,22 @@ export function Cta() {
     <section
       id="inquire"
       aria-label="Begin the experience"
-      className="gutter section-y flex flex-col items-center gap-5 border-t border-line bg-cream text-center md:gap-7 lg:gap-9 lg:py-32"
+      className="gutter section-y border-t border-line bg-cream lg:py-32"
     >
-      <Eyebrow>Begin the Experience</Eyebrow>
-      <h2 className="text-display-lg max-w-[16ch] font-display font-medium">
-        Your day, designed to be remembered.
-      </h2>
-      <p className="text-body-md text-ink-subtle">
-        Complimentary one-hour design consultation.
-      </p>
-      <ButtonPrimary href={site.phoneHref} className="w-full md:w-auto">
-        Inquire
-      </ButtonPrimary>
+      {/* El reveal va en el contenido, no en la sección: transformar la
+          banda a sangre completa dejaría ver el fondo de atrás. */}
+      <div data-reveal className="flex flex-col items-center gap-5 text-center md:gap-7 lg:gap-9">
+        <Eyebrow>Begin the Experience</Eyebrow>
+        <h2 className="text-display-lg max-w-[16ch] font-display font-medium">
+          Your day, designed to be remembered.
+        </h2>
+        <p className="text-body-md text-ink-subtle">
+          Complimentary one-hour design consultation.
+        </p>
+        <ButtonPrimary href={site.phoneHref} className="w-full md:w-auto">
+          Inquire
+        </ButtonPrimary>
+      </div>
     </section>
   );
 }

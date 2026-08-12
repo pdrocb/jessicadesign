@@ -7,13 +7,18 @@ colors:
   ink-muted: "#4a463f"
   ink-subtle: "#6b6660"
   ink-faint: "#8a8378"
-  paper: "#ffffff"
+  paper: "#fefbf6"
   bone: "#faf8f3"
   cream: "#f4efe3"
   line: "#e4dfd6"
   line-warm: "#d8d2c5"
   line-dark: "#33302c"
   on-dark-muted: "#c9c2b4"
+  petal: "#f3e7e2"
+  petal-line: "#ddc9c2"
+  rose-umber: "#8a5a52"
+  sage: "#4f5a48"
+  sage-deep: "#3c4536"
 typography:
   display-hero:
     fontFamily: "Playfair Display, Georgia, serif"
@@ -101,21 +106,21 @@ spacing:
   content-max: "1536px"
 components:
   button-primary:
-    backgroundColor: "{colors.ink}"
+    backgroundColor: "{colors.sage}"
     textColor: "{colors.bone}"
     typography: "{typography.label}"
     rounded: "{rounded.none}"
     padding: "18px 56px"
   button-primary-hover:
-    backgroundColor: "{colors.bone}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.sage-deep}"
+    textColor: "{colors.bone}"
   button-outline:
     textColor: "{colors.ink}"
     typography: "{typography.label-sm}"
     rounded: "{rounded.none}"
     padding: "9px 24px"
   button-outline-hover:
-    backgroundColor: "{colors.ink}"
+    backgroundColor: "{colors.sage}"
     textColor: "{colors.bone}"
   link-underline:
     textColor: "{colors.ink}"
@@ -132,8 +137,8 @@ components:
     textColor: "{colors.ink-subtle}"
     typography: "{typography.label}"
   quote-block:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.bone}"
+    backgroundColor: "{colors.petal}"
+    textColor: "{colors.ink}"
     typography: "{typography.quote-md}"
     padding: "44px 0"
 ---
@@ -148,11 +153,11 @@ The system behaves the way Jessica lays a table. The linen goes down first and i
 
 This is not a metaphor borrowed from the category; it is her actual product. She owns the tabletop layer — linens, flatware, candles, china, runners — and does not own the tables and chairs. The interface honors that same boundary: it builds the surface, sets the objects on it with intention, and gets out of the way. Where a generic wedding site decorates, this one arranges.
 
-The practical consequence runs through every decision below: **the palette carries no accent color at all.** Twelve tokens, all neutral, all warm-shifted. The color in this product comes from the photographs — the peonies, the candlelight, the linen, the hour of the day. A brand accent would compete with the only thing that actually sells the work.
+The practical consequence runs through every decision below: **every hue in the interface is harvested from the photography, never invented beside it.** The system began with twelve warm neutrals and zero accent. The client's brief (Aug 2026) — *"elevated, warm, some vintage, colors are bright"*, with simplicityinmind.com and nyflorale.com as loved references — recalibrated that stance, tuned toward Simplicity in Mind's temperament: the canvas is now ivory instead of pure white, a pale blush ground (`petal`) carries atmosphere, and two harvested accents appear with strictly rationed jobs — **sage** (the foliage) as the single strong accent, **rose umber** (the dusty rose of her florals) as a quiet typographic inflection. A first pass with a deep wine was rejected by the PM as reading "old"; the rose lives in the grounds and the italics now, not in heavy ink.
 
 **Key Characteristics:**
 
-- Warm neutrals only; zero chroma in the system, all chroma in the photography.
+- Warm neutrals as the ground, no pure white anywhere; blush as atmosphere (`petal`), sage as the one strong accent, rose umber as an inflection; the loud chroma stays in the photography.
 - Serif with authority for statement, neutral grotesque for everything operational.
 - Radius zero everywhere. Hairline rules instead of boxes.
 - Depth by tonal layering, never by shadow.
@@ -160,7 +165,7 @@ The practical consequence runs through every decision below: **the palette carri
 
 ## Colors
 
-Twelve warm neutrals running from a near-black umber to paper white. There is no primary accent, and that absence is the system's strongest decision.
+Twelve warm neutrals running from a near-black umber to ivory, plus the Aug 2026 recalibration: a blush ground (`petal`), a dark sage accent, and a rose-umber inflection. The neutrals are still the system's spine; the accents are guests with assigned seats, never hosts.
 
 ### Neutral
 
@@ -168,20 +173,28 @@ Twelve warm neutrals running from a near-black umber to paper white. There is no
 - **Press Umber** (`#2e2b27`): reserved for press and partner marks on light ground. Currently unused — no press assets are cleared for publication.
 - **Reading Umber** (`#4a463f`): long-form body copy. Steps back from the headline without losing contrast.
 - **Quiet Stone** (`#6b6660`): eyebrows, captions, secondary copy, the hover destination for text links.
-- **Faint Stone** (`#8a8378`): roman numerals, attributions, and meta on the dark band. The lightest text weight the system permits.
-- **Paper White** (`#ffffff`): base ground.
-- **Bone** (`#faf8f3`): the alternating section ground, and the text color on the dark band. Doing double duty is intentional — the warm off-white reads as the same material whether it is behind type or is the type.
+- **Faint Stone** (`#8a8378`): roman numerals, attributions, and meta on the `ink` footer. The lightest text weight the system permits.
+- **Ivory** (`#fefbf6`, token still named `paper`): base ground, taken from Simplicity in Mind's canvas. **There is no pure white anywhere in the system** — the warm base is what keeps light-background photography from floating cut-out against the page.
+- **Bone** (`#faf8f3`): the alternating section ground, and the text color on the `ink` footer. Doing double duty is intentional — the warm off-white reads as the same material whether it is behind type or is the type.
 - **Cream** (`#f4efe3`): reserved exclusively for the closing CTA block. Its one appearance is what makes the page feel like it arrives somewhere.
 - **Hairline** (`#e4dfd6`): dividers and section boundaries on light ground.
 - **Warm Hairline** (`#d8d2c5`): FAQ dividers only — a half-step warmer to separate a list of rules from a section boundary.
-- **Dark Hairline** (`#33302c`): dividers inside the dark band.
+- **Dark Hairline** (`#33302c`): dividers inside the `ink` footer.
 - **Muted Bone** (`#c9c2b4`): contact details in the footer.
+
+### Accent
+
+- **Petal** (`#f3e7e2`): a pale blush ground harvested from her florals — the rose as *atmosphere, not ink*. One job: the testimonial band, which moves off the dark `ink` ground onto this luminous one. Text on petal is `ink` for quotes and `rose-umber` for attributions.
+- **Petal Line** (`#ddc9c2`): hairlines on a petal ground only.
+- **Rose Umber** (`#8a5a52`): the dusty rose of her florals, deepened to 5.5:1 on `bone`/`paper` — passes AA for its sizes. Exactly three jobs: the italic accent word inside a display headline, attributions/meta on petal ground, and `::selection`. Never a fill, never a button, never body copy.
+- **Sage** (`#4f5a48`): the foliage behind the florals — the system's **only strong accent**, the role muted green plays on Simplicity in Mind. Exactly three jobs: the primary button fill, the outline button's hover fill, and small typographic marks (the fleuron, the FAQ `+`/`−`). Measures 7:1 against `bone` text and ground — both directions pass AA.
+- **Deep Sage** (`#3c4536`): the primary button's hover fill. Never a text color.
 
 ### Named Rules
 
-**The Photograph Is the Palette Rule.** The system contributes no color. Every hue a visitor sees comes from a photograph. Never introduce a brand accent, a colored state, a tinted background, or a gradient that carries hue — the moment the interface has a color of its own, it starts competing with the work it exists to sell.
+**The Harvested Palette Rule** *(supersedes "The Photograph Is the Palette", Aug 2026)*. The interface may only wear a hue the photography already contains. Rose and sage qualify because they are in the flowers and the foliage; a blue, a gold, a coral would not. Never introduce an accent that cannot be pointed to inside a photograph on the page, and never let an accent exceed its named jobs — scattered accents read as template, rationed accents read as intent.
 
-**The Two Grounds Rule.** A page uses `paper` plus exactly one of `bone`/`cream`, plus the `ink` band. Three light grounds turn an editorial rhythm into a swatch test.
+**The Grounds Ladder Rule** *(supersedes "The Two Grounds", Aug 2026)*. The page steps through its grounds in one fixed ladder: `paper` (base) → `bone` (alternating band) → `petal` (testimonials, once) → `cream` (closing CTA, once) → `ink` (footer only). Each tinted ground appears exactly once; `ink` is no longer a mid-page band — lifting the dark slab out of the middle is part of what makes the page read bright.
 
 ## Typography
 
@@ -206,7 +219,7 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
 
   **The floor here is not taste, it is hierarchy.** `display-lg` — the closing CTA headline — is 64px. The hero has to stay far enough above it that the page has one clear loudest voice; at 80px the step is 16px and holds. Below roughly 76px the two collapse into each other and the site loses its accent.
 - **display-lg** (500, 32→64px, 1.15): the closing CTA headline. The largest type after the hero, and the only other place that scale appears.
-- **display-md** (400, 32→56px, 1.15): section headings on the dark band and in FAQs. Weight 400, not 500 — on `ink` ground the lighter weight reads correctly.
+- **display-md** (400, 32→56px, 1.15): section headings on the testimonial band and in FAQs. Weight 400, not 500 — at this scale the lighter weight reads correctly.
 - **heading-lg** (500, 30→44px, 1.2): standard section headings on light ground.
 - **heading-md** (500, 21→24px, 1.3): service card titles.
 - **quote-xl** (400, 26→40px, 1.45): the manifesto statement. The loosest line-height in the system; it is meant to be read slowly.
@@ -216,6 +229,10 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
 - **label / label-sm / label-xs** (500, 11 / 10 / 9px, tracking .30 / .26 / .30em, uppercase): eyebrows, buttons, navigation, footer, logo subline.
 
 ### Named Rules
+
+**The Italic Accent Word Rule** *(Aug 2026)*. A display headline may set **at most one word or phrase** in Playfair italic, optionally in `rose-umber` — the vintage inflection the client asked for. One per headline, never in body copy, never in labels. Two italic words in one headline is a costume. **Exception: the hero's italic stays `ink`.** A colored italic word beside the sage button on a warm ground is Florale's hero formula verbatim (PM call, Aug 2026); rose-umber in display type is reserved for headlines further down the page, where the echo dissolves.
+
+**The Fleuron Rule** *(Aug 2026)*. The system permits a single ornament glyph — the fleuron `❋`, set in Playfair at `sage` or `ink-subtle` — as a section divider in place of a hairline. At most one per page. It is the only ornament the system will ever allow; it earns its place by being typographic, not decorative clip-art.
 
 **The Medium-Not-Light Rule.** Every uppercase label sits at weight **500**, never 400. In tall caps with wide tracking, 400 goes anemic and the whole page reads cheap. This is the single most load-bearing typographic rule in the system.
 
@@ -255,11 +272,29 @@ Moving location and CTA above the collage recovers it without gutting anything: 
 
 **Touch targets are 44px minimum on mobile, and that rule outranks any height in the original handoff.** Where the two collide — the second nav row was specified at 37px — the target wins and the row grows to 45px. Padding lives on the anchor; the active-state underline lives on an inner span so it hugs the text instead of the edge of the tap area.
 
+## Motion
+
+*(Added Aug 2026 — the client asked for "movement"; the system answers with slow editorial reveals, not spectacle.)*
+
+One easing, two speeds, one pattern:
+
+- **Easing:** `cubic-bezier(0.22, 0.61, 0.36, 1)` — the same curve the nav already uses. Nothing bounces, nothing overshoots.
+- **Durations:** 640ms for geometry (rise, scale), 400ms for opacity. Interactive states stay at the existing 180ms.
+- **The Reveal:** sections and images fade in and rise 24px as they enter the viewport, once, via `IntersectionObserver`. Siblings stagger 80ms. Images may additionally settle from `scale(1.04)` to `1` — the photograph breathes into place.
+
+**Named rules:**
+
+**The Once Rule.** A reveal plays once per page load. Nothing re-animates on scroll-up, nothing loops, nothing moves while the visitor reads.
+
+**The No-Parallax Rule.** No scroll-linked transforms, no parallax, no pinned sections. Movement here is arrival, not choreography.
+
+Under `prefers-reduced-motion`, everything is instant — already enforced globally in `globals.css`.
+
 ## Elevation & Depth
 
 **This system is flat and has no shadow vocabulary.** Nothing is lifted, nothing floats, no surface casts.
 
-Depth is built two ways instead. First, **tonal layering**: consecutive full-width bands step through `paper → bone → paper → ink → cream`, so the page reads as stacked material rather than stacked cards. Second, **hairlines**: a single 1px rule in the appropriate divider token separates what a border-radius-and-shadow card would otherwise separate.
+Depth is built two ways instead. First, **tonal layering**: consecutive full-width bands step through the Grounds Ladder — `paper → bone → petal → cream → ink` — so the page reads as stacked material rather than stacked cards. Second, **hairlines**: a single 1px rule in the appropriate divider token separates what a border-radius-and-shadow card would otherwise separate.
 
 The one `box-shadow` in the entire codebase is not elevation. The primary button's hover state swaps to a light fill and needs an outline; a real `border` would change its box and shift the layout mid-transition, so it uses `inset 0 0 0 1px` as a border substitute. It reads as a hairline, not a shadow.
 
@@ -298,10 +333,10 @@ The logotype follows the same discipline: the bar in `J|S` is a 1px `<span>`, no
 
 ### Buttons
 
-- **Shape:** square (`0px`), no exceptions.
-- **Primary:** `ink` fill, `bone` text, `label` type, padding `18px 56px`. Full width below 768px.
-- **Primary hover:** inverts to `bone` on `ink` text with an `inset 0 0 0 1px` hairline, 180ms. The inversion *is* the interaction — no lift, no scale, no shadow.
-- **Outline (nav CTA):** 1px `ink` border, transparent fill, `label-sm`. Hover fills to `ink` with `bone` text. Its visible box is **32px** so it does not dominate a 53px nav row; the touch target reaches **44px** through an `::after` that extends the hit area 6px above and below. Visual size and touch surface are not the same rectangle, and forcing them to be is what makes a small control look bloated.
+- **Shape:** square (`0px`), no exceptions — Florale's pills stay Florale's.
+- **Primary:** `sage` fill, `bone` text, `label` type, padding `18px 56px`. Full width below 768px. *(Recolored from `ink` in the Aug 2026 recalibration — the one place the palette's warmth meets the one action that matters.)*
+- **Primary hover:** deepens to `sage-deep`, 180ms. No lift, no scale, no shadow.
+- **Outline (nav CTA):** 1px `ink` border, transparent fill, `label-sm`. Hover fills to `sage` with `bone` text. Its visible box is **32px** so it does not dominate a 53px nav row; the touch target reaches **44px** through an `::after` that extends the hit area 6px above and below. Visual size and touch surface are not the same rectangle, and forcing them to be is what makes a small control look bloated.
 
 ### Links
 
@@ -324,7 +359,7 @@ There are no cards. Service entries are a photograph, a roman numeral in Playfai
 
 ### Quote block
 
-Playfair at `quote-md` in typographic quotes (`" "`, never `"`), attribution beneath in `label-sm` uppercase `ink-faint`, separated by a `line-dark` hairline. Lives on the `ink` band.
+Playfair at `quote-md` in typographic quotes (`" "`, never `"`), attribution beneath in `label-sm` uppercase `rose-umber`, separated by a `petal-line` hairline. Lives on the `petal` band — moved off `ink` in the Aug 2026 recalibration; the quotes now read luminous instead of solemn.
 
 ### FAQ accordion
 
@@ -338,7 +373,7 @@ One open at a time. Trigger is a full-width button: lowercase roman numeral in `
 
 ### Do:
 
-- **Do** let photography carry every hue. The system's job is to frame, not to color.
+- **Do** harvest any interface hue from the photography — rose from the florals, sage from the foliage — and keep each accent inside its named jobs.
 - **Do** set uppercase labels at weight 500 and the tracking their token specifies.
 - **Do** anchor any new type token with the `clamp(min, slope·vw + base, max)` formula so it lands exactly on its mobile and desktop sizes.
 - **Do** separate with a hairline, a tonal ground, or space — in that order.
@@ -349,7 +384,7 @@ One open at a time. Trigger is a full-width button: lowercase roman numeral in `
 
 ### Don't:
 
-- **Don't** introduce an accent color, a tinted surface, a colored state, or a hue-carrying gradient.
+- **Don't** introduce any accent beyond `petal`, `rose-umber`, and `sage`, and don't let any exceed its named jobs. No hue-carrying gradients, no pure white, no tinted states outside the accents' assignments.
 - **Don't** scrim a photograph to make a caption readable. Put the caption below the plate. A gradient over an image is the signature of a template, and it costs the one asset that sells the work.
 - **Don't** use `ink-faint` on light ground — it fails AA below 24px. It is the dark-ground token.
 - **Don't** add a border-radius anywhere, on anything, ever.

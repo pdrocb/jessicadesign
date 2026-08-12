@@ -16,7 +16,8 @@ export function Eyebrow({ children, className = "" }: Props) {
   );
 }
 
-/** CTA principal: fondo --ink. Hover invierte a --bone con borde interior. */
+/** CTA principal: fondo --sage, el único acento fuerte del sistema.
+ *  Hover profundiza a --sage-deep — sin inversión, sin lift. */
 export function ButtonPrimary({
   href,
   children,
@@ -25,7 +26,7 @@ export function ButtonPrimary({
   return (
     <a
       href={href}
-      className={`text-label inline-block bg-ink px-14 py-[18px] text-center font-medium text-bone uppercase transition-[background-color,color,box-shadow] duration-[180ms] hover:bg-bone hover:text-ink hover:shadow-[inset_0_0_0_1px_var(--color-ink)] ${className}`}
+      className={`text-label inline-block bg-sage px-14 py-[18px] text-center font-medium text-bone uppercase transition-colors duration-[180ms] hover:bg-sage-deep ${className}`}
     >
       {children}
     </a>
@@ -47,7 +48,7 @@ export function ButtonOutline({
       // rectángulo — forzarlos a serlo es lo que engorda el botón.
       // La extensión se mantiene en todos los breakpoints: las tablets
       // también son táctiles, y en desktop un target indulgente no estorba.
-      className={`text-label-sm relative inline-flex items-center border border-ink px-4 py-[8px] font-medium uppercase transition-colors duration-[180ms] after:absolute after:inset-x-0 after:-top-1.5 after:-bottom-1.5 after:content-[''] hover:bg-ink hover:text-bone md:px-5 lg:px-6 lg:py-[9px] ${className}`}
+      className={`text-label-sm relative inline-flex items-center border border-ink px-4 py-[8px] font-medium uppercase transition-colors duration-[180ms] after:absolute after:inset-x-0 after:-top-1.5 after:-bottom-1.5 after:content-[''] hover:border-sage hover:bg-sage hover:text-bone md:px-5 lg:px-6 lg:py-[9px] ${className}`}
     >
       {children}
     </a>

@@ -9,17 +9,24 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 @theme inline {
-  /* ── Color (handoff §2.3) ────────────────────────────────────────
-     Máximo 2 fondos claros por página (--paper + bone o cream) más el
-     bloque oscuro --ink. Sin gradientes decorativos ni sombras de color. */
-  --color-ink: #141312; /* texto principal, fondos oscuros, botón primario */
+  /* ── Color (DESIGN.md §Colors, recalibración ago 2026) ──────────
+     Escalera de fondos fija: paper → bone → petal → cream → ink (footer).
+     Cada fondo tintado aparece UNA vez. Acentos cosechados de la foto:
+     sage (único acento fuerte) y rose-umber (inflexión tipográfica).
+     Sin blanco puro en el sistema. Sin gradientes ni sombras de color. */
+  --color-ink: #141312; /* texto principal, footer */
   --color-ink-soft: #2e2b27; /* logos de prensa */
   --color-ink-muted: #4a463f; /* párrafos de cuerpo */
   --color-ink-subtle: #6b6660; /* eyebrows, copy secundario */
   --color-ink-faint: #8a8378; /* numerales, meta sobre oscuro */
-  --color-paper: #ffffff; /* fondo base */
+  --color-paper: #fefbf6; /* fondo base: marfil de Simplicity in Mind, nunca blanco puro */
   --color-bone: #faf8f3; /* fondo alterno + texto sobre oscuro */
   --color-cream: #f4efe3; /* fondo del bloque CTA */
+  --color-petal: #f3e7e2; /* fondo blush de la banda de testimonios (una vez por página) */
+  --color-petal-line: #ddc9c2; /* divisores sobre petal */
+  --color-rose-umber: #8a5a52; /* itálica de acento, meta sobre petal, ::selection — nunca fill */
+  --color-sage: #4f5a48; /* único acento fuerte: botón primario, fleurón, +/− de FAQ */
+  --color-sage-deep: #3c4536; /* hover del botón primario — nunca texto */
   --color-line: #e4dfd6; /* divisores sobre claro */
   --color-line-warm: #d8d2c5; /* divisores de FAQ */
   --color-line-dark: #33302c; /* divisores sobre oscuro */
@@ -136,7 +143,7 @@
   }
 
   ::selection {
-    background: var(--color-ink);
+    background: var(--color-rose-umber);
     color: var(--color-bone);
   }
 
@@ -183,7 +190,33 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   MOTION — el usuario que pide menos movimiento no negocia (§7).
+   MOTION — el Reveal editorial (DESIGN.md §Motion, ago 2026).
+
+   Los elementos con [data-reveal] entran con fade + subida de 24px,
+   UNA vez, cuando cruzan el viewport (RevealObserver los observa).
+   Doble compuerta: `scripting: enabled` evita ocultar contenido si no
+   hay JS, y `prefers-reduced-motion` lo deja todo visible e inmóvil.
+   Escalonado entre hermanos vía --reveal-delay inline (múltiplos de 80ms).
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      transform 640ms var(--ease-geometry),
+      opacity 400ms var(--ease-geometry);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal].revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   El usuario que pide menos movimiento no negocia (§7).
    ═══════════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,4 +1,5 @@
 import { Faqs } from "@/components/Faqs";
+import { RevealObserver } from "@/components/RevealObserver";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
   About,
@@ -15,6 +16,7 @@ import {
 export default function Page() {
   return (
     <>
+      <RevealObserver />
       <SiteHeader />
       <main>
         <Hero />

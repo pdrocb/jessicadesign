@@ -53,9 +53,11 @@ export function Faqs() {
                         {faq.q}
                       </span>
                     </span>
+                    {/* El +/− es marca tipográfica pequeña: trabajo del
+                        acento sage (DESIGN.md §Accent). */}
                     <span
                       aria-hidden
-                      className="font-display text-[22px] leading-none text-ink-subtle"
+                      className="font-display text-[22px] leading-none text-sage"
                     >
                       {isOpen ? "−" : "+"}
                     </span>
