@@ -63,21 +63,21 @@ export const services = [
     slug: "weddings",
     name: "Weddings",
     img: serviceWeddings,
-    copy: "Full design & styling, from concept to reveal — the complete visual world of your wedding day.",
+    copy: "Full design and styling, from the first concept through the reveal on the day.",
   },
   {
     numeral: "No. II",
     slug: "celebrations",
     name: "Celebrations",
     img: serviceCelebrations,
-    copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs — designed with the same care as a wedding.",
+    copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs, designed with the same care as a wedding.",
   },
   {
     numeral: "No. III",
     slug: "luxury-picnics",
     name: "Luxury Picnics",
     img: servicePicnics,
-    copy: "Curated open-air experiences, styled to the last napkin and glass.",
+    copy: "Open-air celebrations, styled to the last napkin and glass.",
   },
   {
     numeral: "No. IV",
@@ -88,7 +88,7 @@ export const services = [
     // a J|S como manos de alquiler para montar el DIY ajeno — justo lo
     // contrario del posicionamiento. El servicio es el mismo; ahora lidera
     // el oficio de styling y el DIY va como inciso, no como titular.
-    copy: "The design is settled; now it has to land. Our team sets and styles every piece on site — including what you’ve gathered yourself — so the room arrives finished.",
+    copy: "Our team sets and styles every piece on site, including what you’ve gathered yourself, so nothing is left to the morning of.",
   },
 ];
 
@@ -103,8 +103,8 @@ export const services = [
  */
 export const silkFlorals = {
   eyebrow: "Silk Florals",
-  statement: "Not every flower has to be cut.",
-  copy: "Elevated silk florals, arranged and styled like every other piece on the table. Take them in place of fresh, rent them for the day, or let us weave silk and fresh together so the room reads as one.",
+  statement: "Real enough to lean in and check.",
+  copy: "Elevated silk florals, arranged and styled like every other piece on the table. Take them in place of fresh, rent them for the day, or let us weave silk and fresh together, indistinguishable by the time your guests sit down.",
 };
 
 /**
@@ -116,17 +116,17 @@ export const process = {
   eyebrow: "The Process",
   heading: "How a room becomes yours.",
   intro:
-    "Design is the work, and the work has a shape. From the first conversation to the last candle lit, here is how we get there together.",
+    "From the first conversation to the last candle lit — six steps, and you see the room for yourself before the day arrives.",
   steps: [
     {
       numeral: "No. I",
       name: "The Concept",
-      copy: "We start with your story, your inspiration, and the feeling you want the day to hold — and shape it into a direction.",
+      copy: "We start with your story, your inspiration, and the feeling you want the day to hold, and shape it into a direction.",
     },
     {
       numeral: "No. II",
       name: "Your Design Deck",
-      copy: "A custom deck: palette, textures, tablescapes, florals, stationery, signage. The whole world of the day, on paper.",
+      copy: "A custom deck: palette, textures, tablescapes, florals, stationery, signage. The day as it will look, on paper.",
     },
     {
       numeral: "No. III",
@@ -200,7 +200,7 @@ export const inquiry = {
   eyebrow: "Inquire",
   heading: "Tell us about your celebration.",
   intro:
-    "A few details to start. We reply personally, and the first conversation is a complimentary hour — your story, your inspiration, and the feeling you want the day to hold.",
+    "A few details to start. We reply personally, and the first conversation is a complimentary hour.",
   submit: "Send Your Inquiry",
   successHeading: "Thank you — your inquiry is on its way.",
   successBody:
@@ -234,7 +234,7 @@ export const faqs = [
   {
     numeral: "i.",
     q: "How do you work with my wedding planner?",
-    a: "Hand in hand. Your planner runs the logistics and the timeline; we design and style every visual moment. We collaborate closely with planners, florists, and venues so the day looks — and feels — seamless.",
+    a: "Hand in hand. Your planner runs the logistics and the timeline; we design and style every visual moment. We collaborate closely with planners, florists, and venues so the day holds together from start to finish.",
   },
   {
     numeral: "ii.",
@@ -259,6 +259,6 @@ export const faqs = [
   {
     numeral: "vi.",
     q: "What does the complimentary consultation include?",
-    a: "A one-hour conversation about your story, your inspiration, and the feeling you want the day to hold. You’ll leave with a clear sense of direction — no strings attached.",
+    a: "A one-hour conversation about the celebration you’re imagining. You’ll leave with a clear sense of direction, and no obligation to book.",
   },
 ];

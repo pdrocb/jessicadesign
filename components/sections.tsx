@@ -331,7 +331,7 @@ export function About() {
             Jessica Salomon
           </h2>
           <p className="text-quote-italic font-display text-ink-muted italic">
-            Fifteen years of styling celebrations — from the Bronx to the Hudson
+            Fifteen years of styling celebrations, from the Bronx to the Hudson
             Valley.
           </p>
           {/* Tope de medida: con el rail a 1536 esta columna llega a ~76ch,
@@ -456,8 +456,7 @@ export function Cta() {
           Tell us how you want it to feel.
         </h2>
         <p className="text-body-md max-w-[46ch] text-ink-subtle">
-          A complimentary hour together — your story, your inspiration, and
-          where the design could go. No obligation after it.
+          A complimentary hour together, and no obligation after it.
         </p>
         <ButtonPrimary href="/inquire" className="w-full md:w-auto">
           Start With a Conversation
@@ -534,8 +533,11 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-2 border-t border-line-dark pt-5 text-[9px] tracking-[0.18em] text-ink-faint md:flex-row md:justify-between md:text-[10px] lg:pt-6">
+          {/* Se retiró "Intentional Design · Elevated Experience": dos
+              abstracciones que no decían nada, y el tagline real ya vive
+              arriba en este mismo footer. */}
           <span>© 2026 {site.legalName}</span>
-          <span>Intentional Design · Elevated Experience</span>
+          <span>{site.location}</span>
         </div>
       </div>
     </footer>
