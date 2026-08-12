@@ -50,15 +50,18 @@ export function SiteHeader() {
           aria-label={`${site.name} — home`}
           className="flex min-h-11 items-center justify-center md:min-h-0"
         >
-          <span className="lg:hidden">
-            <Wordmark size="sm" />
-          </span>
-          <span className="hidden lg:inline-flex xl:hidden">
-            <Wordmark size="md" />
-          </span>
-          <span className="hidden xl:inline-flex">
-            <Wordmark size="lg" />
-          </span>
+          {/* El logo entra grande —lo bastante para que se lea el nombre—
+              y se encoge al mismo tiempo que colapsa la fila 2, con la
+              misma curva y duración. Al volver arriba, recupera su
+              tamaño. Un solo <Wordmark>: el alto lo llevan las clases,
+              no tres instancias ocultas entre sí. */}
+          <Wordmark
+            className={`transition-[height] duration-[420ms] ease-[var(--ease-geometry)] ${
+              collapsed
+                ? "h-[46px] lg:h-[54px] xl:h-[60px]"
+                : "h-[70px] lg:h-[80px] xl:h-[84px]"
+            }`}
+          />
         </Link>
         <div className="flex justify-end">
           <ButtonOutline href="/inquire">Inquire</ButtonOutline>

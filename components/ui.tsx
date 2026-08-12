@@ -91,26 +91,31 @@ export function LinkUnderline({
  * mapa de bits: el ink va en `logo-mark`, el bone en `logo-mark-light`.
  *
  * El alto manda: el lockup es apilado (1.35:1) y son sus proporciones,
- * no el ancho, las que fijan si "JESSICA S. DESIGNS" se lee.
+ * no el ancho, las que fijan si "JESSICA S. DESIGNS" se lee. En el asset
+ * las versales ocupan el 13.7% del alto, así que hacen falta ~80px de
+ * logo para que lleguen a los 11px del token `label`; por debajo de ~70
+ * el nombre se vuelve una mancha. Quien pone el alto es el llamador —
+ * en el nav cambia al colapsar. Arreglo real pendiente: versión
+ * horizontal del logotipo.
+ *
+ * `width`/`height` fijan la relación de aspecto y el srcset apuntando al
+ * uso MÁS GRANDE; el alto real lo decide `className`.
  */
 export function Wordmark({
-  size = "md",
   tone = "dark",
+  className = "",
 }: {
-  size?: "sm" | "md" | "lg";
   tone?: "dark" | "light";
+  className?: string;
 }) {
-  const height = { sm: 46, md: 54, lg: 60 }[size];
-
   return (
     <Image
       src={tone === "dark" ? logoMark : logoMarkLight}
       alt="Jessica S. Designs"
-      height={height}
-      width={Math.round(height * (logoMark.width / logoMark.height))}
+      width={113}
+      height={84}
       priority
-      className="w-auto"
-      style={{ height }}
+      className={`w-auto ${className}`}
     />
   );
 }

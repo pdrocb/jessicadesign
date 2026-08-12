@@ -484,7 +484,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:items-start md:justify-between md:gap-10">
           <div className="flex flex-col gap-2.5">
             <div className="flex items-start">
-              <Wordmark size="md" tone="light" />
+              <Wordmark tone="light" className="h-[80px]" />
             </div>
             <div className="text-label-xs font-medium text-ink-faint uppercase">
               {site.tagline}

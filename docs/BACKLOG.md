@@ -17,7 +17,7 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 - **Páginas internas** — Look Book, Luxury Picnics, Blog. Hoy los links del nav apuntan a anclas de la home o a `#`.
 - **Dirección de fotografía** — color vs. monocromo, ratios oficiales, tratamiento. El prototipo tenía un toggle global de monocromo (`grayscale(1) contrast(1.02)`) que no se implementó por no tener decisión.
 - **Estados de foco definitivos.** Hoy es provisional: `outline: 1px solid currentColor`.
-- **Logotipo** — la clienta entregó el suyo (ago 2026) pero **el archivo aún no está en el repo**. Hasta que llegue, `Wordmark` en `components/ui.tsx` reproduce solo la parte de palabra en Playfair; falta el monograma J+S entrelazado, que es un dibujo y necesita su SVG. Pendiente además: espacio de respeto, versión sobre oscuro y favicon.
+- **Logotipo** — pendiente pedirle a su diseñador una **versión horizontal** (monograma a la izquierda, nombre a la derecha). El lockup apilado que entregó no cabe legible en una barra de nav; hoy se resuelve encogiéndolo al colapsar el nav, que es un parche. Falta además el favicon.
 - **"As Featured In"** — solo se publica con logos reales y permiso.
 
 ## Decisiones tomadas que conviene recordar

@@ -339,9 +339,19 @@ This is the third and final position, and the route matters because both alterna
 
 Contrast over photography, wherever it is unavoidable, is **measured against the actual pixels under the text** — sample the image, compose the overlay alpha, take the worst case. White linen and candlelight are the failure case in this library, and eyeballing a scrim is how you ship 1.6:1.
 
-The logotype is the client's own (Aug 2026): an interlocking J+S monogram with **JESSICA S. DESIGNS** in serif caps laid across it at mid-height. **The navigation uses the mark without the tagline line that sits beneath it** — in a 53px row that third line collapses into noise, and the tagline already appears in the hero and the footer.
+The logotype is the client's own (Aug 2026): an interlocking J+S monogram with **JESSICA S. DESIGNS** in serif caps laid across it at mid-height. **The navigation uses the mark without the tagline line beneath it** — that third line turns to noise at nav scale, and the tagline already appears in the hero and the footer. `logo-full.png` keeps the complete lockup for pieces with room.
 
-**Currently provisional in code.** The monogram is a drawing and needs its SVG; until that file lands, `Wordmark` renders only the word portion in Playfair caps. The earlier `J|S` construction — a 1px `<span>` standing in for the `|` character — is gone with the name it belonged to.
+The delivered artwork was a white-ground JPEG; the shipped assets are cropped to the ink and have that white converted to alpha, so the mark sits on ivory without a box. A `-light` file carries the bone version for the footer, because a bitmap cannot be recoloured in CSS.
+
+### The logotype shrinks with the nav
+
+**The lockup is stacked, roughly 1.35∶1 — it is not a nav-shaped mark.** Its wordmark occupies 13.7% of the mark's height, so the logo must stand about **80px tall for "JESSICA S. DESIGNS" to reach the 11px of the `label` token**. Below ~70px the name stops being read and becomes a grey smudge across the monogram. At the 60px that a slim row wants, it measured 8.2px: present, illegible.
+
+Rather than choose between a legible mark and a slim header, the logo **rides the nav's existing collapse**. It arrives at full height — 70px on mobile, 80 at `lg`, 84 at `xl` — and shrinks to 46/54/60 at the same moment row 2 collapses, on the same 420ms `--ease-geometry` curve. Scrolling back above the threshold restores it. The visitor meets the brand at a size where it can be read, and gets the compact header for the rest of the page.
+
+This reuses the `collapsed` flag the header already keeps; there is no second observer and no scroll listener. Under `prefers-reduced-motion` the change is instant, via the global rule.
+
+**The real fix is still a horizontal lockup** — monogram left, name right — which the client's designer can produce. Until it exists, the height dance is the honest workaround, not the intended end state.
 
 ## Components
 
