@@ -317,41 +317,23 @@ The one `box-shadow` in the entire codebase is not elevation. The primary button
 
 The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero collage is the one exception, using fixed pixel heights with deliberate vertical offsets so the three images sit at different altitudes.
 
-### The plate scrim *(supersedes "Captions sit below the plate", Aug 2026)*
+### The uncaptioned plate
 
-The full-bleed plate carries its caption **inside the image**, over a bottom scrim. The rule this replaces said the opposite, and said it forcefully; the reversal is a deliberate client-direction call, taken with the reference in hand.
+**The editorial plate is a photograph and nothing else.** No scrim, no caption over it, no caption under it — the full width, the full height, and the visitor's attention undivided. It is the one moment in the page where the interface stops talking.
 
-**The recipe, and why it is not the reference's.** Florale's gallery cards use `linear-gradient(to top, …/0.7 0%, …/0.25 50%, transparent 100%)` over `#211b1b`, in a 144px band. Dropped onto this library's photography that recipe measures **2.84:1** for `bone` text — below even the 3:1 large-text floor, because the plate's bottom edge is sunlit white linen. The shipped values were solved numerically against the composited pixels at all three breakpoints:
+This is the third and final position, and the route matters because both alternatives were built and measured:
 
-| | value | why |
-|---|---|---|
-| colour | `--color-ink` | ours, not the reference's `#211b1b` — same role, our token |
-| stops | 80% at bottom, 50% at mid, 0 at top | **the floor** — at 75/45 the worst case falls to 4.33 and fails |
-| band | 288 mobile · 256 tablet · 224 desktop | shrinks as the viewport grows; see below |
-| text | `bone`, both lines | `on-dark-muted` measured 1.67:1 at 10px and was cut |
+1. **Caption below the plate.** Contrast was a solved problem (18.6:1) and the photograph stayed untouched, but the lines read as a credit slug on a page that never needed one.
+2. **Caption on the plate, over a scrim** — Florale's gallery-card recipe, retuned. It worked, and the numbers are recorded below because they were expensive to find. It was cut on aesthetics: the gradient cost more than the words returned (PM call, Aug 2026).
+3. **Neither.** The photograph carries the section alone.
 
-Measured contrast: **5.06 desktop · 5.74 tablet · 4.81 mobile.**
+**What the scrim experiment established**, should type over photography ever be genuinely unavoidable here: the reference's own recipe (`0.7/0.25` over `#211b1b`, 144px band) measures **2.84:1** on this library — the plate's bottom edge is sunlit white linen. Solved numerically against the composited pixels, the floor was **0.80/0.50 over `ink`** in a band of 288/256/224px (mobile→desktop), giving 5.06 · 5.74 · 4.81. Below that it fails. Three findings outlived the feature:
 
-**Mobile governs, and the band shrinks upward.** At 390×320 the `object-fit: cover` crop lands squarely on the brightest linen in the frame and the caption occupies 30% of the plate; desktop passed at settings where mobile measured 1.69:1. Hence the inversion — the *smallest* viewport gets the *longest* gradient. Any future change here is re-measured on mobile first.
+- **Mobile governs.** Its `object-fit: cover` crop lands on the brightest linen in the frame; settings that passed at 1440 measured **1.69:1** at 390. Measure mobile first, always.
+- **A long band beats a strong one.** To lighten a scrim, lengthen the gradient before lowering alpha — a short band needs so much alpha it reads as a bar stuck to the edge.
+- **Small type sets the floor.** A 26px italic needs 3:1 and survives almost anything; a 10px tracked label needs 4.5:1 and holds the whole overlay up.
 
-**A long band beats a strong one.** A gradient running 35–90% of the plate reads as a slow darkening; the same contrast bought with a short band needs so much alpha that it reads as a bar stuck to the bottom edge. When asked to lighten the scrim, lengthen the band before raising alpha.
-
-**The 10px label is what sets the floor.** The italic statement is large text and needs only 3:1 — it would survive alphas around 0.65/0.35. It is the uppercase location line, at 10px, that demands 4.5:1 and holds the whole scrim up. Moving that line off the plate is the only way to go meaningfully lighter.
-
-**This licenses one scrim, not a habit.** It exists for the single editorial plate. Elsewhere the older instinct still holds: reach for a scrim only when the composition genuinely requires type on an image, and never without measuring against the actual pixels — eyeballing one is how you ship 1.6:1.
-
-The superseded pattern, for reference — a caption below the plate, aligned to the same rail:
-
-```
-<figure>
-  <Image className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]" />
-  <figcaption className="gutter shell flex flex-col gap-1 pt-3.5
-                         md:flex-row md:items-baseline md:justify-between md:pt-4 lg:pt-5">
-```
-
-The caption aligns to the same rail as every other section — its left and right edges land exactly on the Expertise header's — so a full-bleed image reads as part of the grid rather than as a floating banner. The statement goes left in `quote-italic`, the location right in `label-sm` `ink-subtle`. On mobile they stack.
-
-That arrangement kept the photograph untouched and made contrast a solved problem (18.6:1 for the statement, 5.7:1 for the meta). It remains the right answer for any plate whose caption is incidental — a credit line, a location, a date. The scrim above is for the one plate whose caption is the point.
+**Don't re-add either version without a new reason.** Both have been built, measured, and rejected on this plate.
 
 **`ink-faint` is a dark-ground token only.** On `paper` or `bone` it measures 3.75:1 and fails AA for anything under 24px. Numerals, meta, and captions on light ground use `ink-subtle`.
 
@@ -386,6 +368,10 @@ Two rows, and the rules here are stricter than anywhere else in the system.
 ### Cards
 
 There are no cards. Service entries are a photograph, a roman numeral in Playfair, a title, and copy — stacked in a column with no container, no border, and no background. The grid does the grouping.
+
+Look Book albums follow the same discipline: a cover photograph at 4/5 and its title 14px below, left-aligned to the image's own edge — not to the page rail, because the grid runs nearly full-bleed at 8px. **The title is `label`, not Playfair**: four serif headings under a photo grid would compete with the section's own `heading-lg`, and uppercase tracked type reads as the plate label it is. Titles sit in `ink-subtle` so the photographs stay the loudest thing in the section.
+
+Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 
 ### Quote block
 
@@ -432,7 +418,7 @@ The scheduling calendar of the legacy Wix site is deliberately **not** reproduce
 ### Don't:
 
 - **Don't** introduce any accent beyond `petal`, `rose-umber`, and `sage`, and don't let any exceed its named jobs. No hue-carrying gradients, no pure white, no tinted states outside the accents' assignments.
-- **Don't** add a second scrim. The editorial plate has one, measured; anywhere else, put the caption below the image. And never ship a scrim whose contrast was judged by eye — measure it against the composited pixels, mobile crop first.
+- **Don't** scrim a photograph. There are none in the system — the editorial plate carries no type at all. If a composition ever genuinely requires type over an image, measure the contrast against the composited pixels, mobile crop first; never judge one by eye.
 - **Don't** use `ink-faint` on light ground — it fails AA below 24px. It is the dark-ground token.
 - **Don't** add a border-radius anywhere, on anything, ever.
 - **Don't** add a drop shadow or any lift. If it looks like it needs one, it needs space.

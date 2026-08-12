@@ -283,46 +283,19 @@ export function SilkFlorals() {
 }
 
 /* ── Break editorial ──────────────────────────────────────────────
-   Lámina a sangre con el pie DENTRO de la imagen, sobre un scrim de
-   banda inferior (DESIGN.md §"The plate scrim").
-
-   El pie va anclado con `inset-x-0` y no con `w-full`: dentro de una
-   caja con padding, `w-full` resuelve contra el padding-box pero
-   arranca en el content-box y desborda. */
+   Lámina a sangre y nada más: sin scrim y sin pie (DESIGN.md §"The
+   uncaptioned plate"). La fotografía es el argumento entero; cualquier
+   cosa encima o debajo le restaba. */
 export function EditorialBreak() {
   return (
-    <figure data-reveal className="relative m-0">
+    <div data-reveal>
       <Image
         src={images.heroReception}
         alt="Full wedding reception design"
         sizes="100vw"
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
-
-      {/* La banda ENCOGE al crecer el viewport, al revés de lo que se
-          esperaría: el recorte de mobile cae sobre el mantel iluminado y
-          necesita más degradado, mientras que en desktop 224px sobre una
-          lámina de 640 bastan. Sigue siendo un degradado largo y suave —
-          una banda corta necesitaría más alfa y se vería como una barra
-          pegada al borde. */}
-      <div
-        aria-hidden
-        className="plate-scrim pointer-events-none absolute inset-x-0 bottom-0 h-72 md:h-64 lg:h-56"
-      />
-
-      <figcaption className="absolute inset-x-0 bottom-0">
-        <div className="gutter shell flex flex-col gap-1 pb-5 md:flex-row md:items-baseline md:justify-between md:gap-8 md:pb-6 lg:pb-8">
-          <p className="text-quote-italic font-display text-bone italic">
-            Every detail, composed with intention.
-          </p>
-          {/* En `bone`, no en `on-dark-muted`: a 10px hace falta 4.5:1 y
-              el tono apagado solo llegaba a 1.67 sobre el mantel. */}
-          <span className="text-label-sm shrink-0 font-medium tracking-[0.3em] text-bone uppercase">
-            Hudson Valley, NY
-          </span>
-        </div>
-      </figcaption>
-    </figure>
+    </div>
   );
 }
 
@@ -421,20 +394,26 @@ export function LookBook() {
           The Look Book
         </h2>
       </div>
-      <div className="grid grid-cols-2 gap-2 px-2 lg:grid-cols-4">
-        {lookbook.map((shot, i) => (
-          <div
-            key={shot.alt}
+      <div className="grid grid-cols-2 gap-x-2 gap-y-7 px-2 lg:grid-cols-4 lg:gap-y-9">
+        {lookbook.map((album, i) => (
+          <article
+            key={album.title}
             data-reveal
             style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
           >
             <Image
-              src={shot.img}
-              alt={shot.alt}
+              src={album.cover}
+              alt={album.alt}
               sizes="(min-width: 1200px) 25vw, 50vw"
               className="aspect-[4/5] w-full object-cover"
             />
-          </div>
+            {/* Label y no Playfair a propósito: cuatro títulos serif bajo
+                la retícula competirían con el h2 de la sección. En
+                mayúsculas tracked se leen como el pie de una plancha. */}
+            <h3 className="text-label mt-3.5 font-medium text-ink-subtle uppercase lg:mt-4">
+              {album.title}
+            </h3>
+          </article>
         ))}
       </div>
     </section>

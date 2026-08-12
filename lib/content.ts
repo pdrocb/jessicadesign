@@ -159,11 +159,26 @@ export const quotes = [
   },
 ];
 
+/**
+ * Álbumes del Look Book. Cada uno tendrá varias fotos y una portada;
+ * por ahora solo existe `cover` y el título — el campo se llama así, y
+ * no `img`, para que el modelo ya sea el correcto cuando lleguen las
+ * galerías.
+ *
+ * PENDIENTE DE LA CLIENTA: los títulos describen lo que se ve en cada
+ * foto. Los nombres reales de álbum (pareja, venue, temporada) los tiene
+ * que dar ella — no se inventan.
+ *
+ * OJO con los nombres de archivo: vienen del Wix y NO describen su
+ * contenido. `hero-01-tablescape` es una pareja en blanco y negro, y las
+ * dos `manifesto-*` son bodegones de papelería. Fiarse de la imagen, no
+ * del nombre.
+ */
 export const lookbook = [
-  { img: manifesto01, alt: "Reception styling" },
-  { img: manifesto02, alt: "Tablescape detail" },
-  { img: heroTablescape, alt: "Luxury picnic" },
-  { img: heroDetail, alt: "Ceremony design" },
+  { cover: manifesto01, title: "Bridal Details", alt: "Flat lay of bridal shoes, rings and calligraphed envelopes" },
+  { cover: manifesto02, title: "Stationery Suite", alt: "Invitation suite styled with florals and a silver tray" },
+  { cover: heroTablescape, title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
+  { cover: heroDetail, title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
 ];
 
 /**

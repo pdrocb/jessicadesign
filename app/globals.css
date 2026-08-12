@@ -193,32 +193,6 @@
   width: 100%;
 }
 
-/* Scrim de lámina: banda inferior que oscurece lo justo para que el pie
-   se lea SOBRE la fotografía (DESIGN.md §"The plate scrim").
-
-   Punto de partida: las gallery cards de Florale (0.70 / 0.25 / 0 sobre
-   #211b1b). Sobre NUESTRA fotografía esa receta falla: medida contra los
-   píxeles reales del mantel iluminado da 2.84:1 para `bone` — por debajo
-   incluso del mínimo de texto grande.
-
-   Resuelto numéricamente sobre la imagen compuesta, en los tres
-   breakpoints: 0.80 abajo y 0.50 a media altura dan 5.06 / 5.74 / 5.08.
-   Es el PISO: con 0.75/0.45 el peor caso cae a 4.33 y ya no pasa AA.
-   Mobile manda — su recorte cae de lleno sobre el mantel blanco. El
-   color es --color-ink, no el #211b1b de Florale: mismo papel, nuestro
-   token.
-
-   La banda NO cubre la foto entera: se ancla abajo y muere antes del
-   centro, así que la imagen queda intacta donde de verdad se mira. */
-@utility plate-scrim {
-  background-image: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--color-ink) 80%, transparent) 0%,
-    color-mix(in srgb, var(--color-ink) 50%, transparent) 50%,
-    transparent 100%
-  );
-}
-
 /* ═══════════════════════════════════════════════════════════════════
    MOTION — el Reveal editorial (DESIGN.md §Motion, ago 2026).
 
