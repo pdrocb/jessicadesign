@@ -17,7 +17,7 @@ colors:
 typography:
   display-hero:
     fontFamily: "Playfair Display, Georgia, serif"
-    fontSize: "clamp(40px, 5.33vw + 19.2px, 96px)"
+    fontSize: "clamp(40px, 3.81vw + 25.14px, 80px)"
     fontWeight: 500
     lineHeight: 1.04
   display-lg:
@@ -202,7 +202,9 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
 
 ### Hierarchy
 
-- **display-hero** (500, 40→96px, 1.04): the single H1. One per document — it changes positioning anchor across breakpoints rather than duplicating itself.
+- **display-hero** (500, 40→80px, 1.04): the single H1, one per document. It sits on paper, never on a photograph.
+
+  **The floor here is not taste, it is hierarchy.** `display-lg` — the closing CTA headline — is 64px. The hero has to stay far enough above it that the page has one clear loudest voice; at 80px the step is 16px and holds. Below roughly 76px the two collapse into each other and the site loses its accent.
 - **display-lg** (500, 32→64px, 1.15): the closing CTA headline. The largest type after the hero, and the only other place that scale appears.
 - **display-md** (400, 32→56px, 1.15): section headings on the dark band and in FAQs. Weight 400, not 500 — on `ink` ground the lighter weight reads correctly.
 - **heading-lg** (500, 30→44px, 1.2): standard section headings on light ground.
@@ -233,7 +235,7 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 |---|---|---|---|
 | `--gutter` | 20px | 32px | 48px |
 | `--section-y` | 56px | 80px | 110px |
-| Hero | 1 photograph | collage of 2 | collage of 3 |
+| Hero collage | 1 photograph | collage of 2 | collage of 3 |
 | Services | 1 column | 2 columns | 4 columns |
 | Manifesto | stacked, photo last | 150 / 1fr | 200 / 1fr / 200 |
 | Testimonials, FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
@@ -242,6 +244,14 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 | Buttons | **full width** | inline | inline |
 
 The governing rule is **one column fewer per breakpoint down**, never a reflow into a different concept.
+
+### The hero orders message before proof
+
+Headline → location → CTA → collage, at every breakpoint. The headline never sits on a photograph.
+
+This order is load-bearing, not stylistic. The original composition overlapped the headline on the collage, and that overlap was quietly doing two jobs: it looked editorial, and it compressed roughly 250px of height. Lifting the headline onto paper for contrast cost that compression and pushed the CTA off the fold — measured at 1144px on a 1440×900 screen. Shrinking the headline and the collage could not recover it without gutting both.
+
+Moving location and CTA above the collage recovers it without gutting anything: the collage holds its full 560px, and the CTA lands at **464px on desktop, 367 on tablet, 309 on mobile** — inside the fold even on a laptop with browser chrome. The collage becomes the reward for scrolling rather than a gate in front of the ask, and the nav's persistent `Inquire` covers everyone who scrolls past.
 
 **Touch targets are 44px minimum on mobile, and that rule outranks any height in the original handoff.** Where the two collide — the second nav row was specified at 37px — the target wins and the row grows to 45px. Padding lives on the anchor; the active-state underline lives on an inner span so it hugs the text instead of the edge of the tap area.
 

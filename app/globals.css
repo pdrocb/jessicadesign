@@ -34,7 +34,7 @@
      mobile a 390px y su tamaño desktop a 1440px. Una clamp con solo
      `vw` no puede tocar ambos extremos — el término fijo la reancla.
      Fórmula: pendiente = (max−min)/(1440−390); base = min − 390·pend. */
-  --text-display-hero: clamp(40px, 5.33vw + 19.2px, 96px); /* 40 → 96 */
+  --text-display-hero: clamp(40px, 3.81vw + 25.14px, 80px); /* 40 → 80 */
   --text-display-hero--line-height: 1.04;
 
   --text-display-lg: clamp(32px, 3.05vw + 20.1px, 64px); /* 32 → 64 */

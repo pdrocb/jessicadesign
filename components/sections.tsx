@@ -21,11 +21,24 @@ export function Hero() {
       {/* El titular se apoya en papel en los tres breakpoints, nunca sobre
           una fotografía. Lo editorial del hero es el escalonado del
           collage, no la superposición — el escalonado se conserva entero. */}
-      <h1 className="text-display-hero mx-auto mb-5 max-w-[14ch] text-center font-display font-medium text-ink md:mb-10 lg:mb-14">
+      <h1 className="text-display-hero mx-auto max-w-[14ch] text-center font-display font-medium text-ink">
         The Art of the <em className="font-normal">Unforgettable</em>
       </h1>
 
-      <div className="grid grid-cols-1 items-start gap-[18px] md:grid-cols-[1fr_1.2fr] lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-7">
+      {/* Ubicación y CTA van ANTES del collage: sin el solape, el hero
+          creció 250px y el botón caía fuera del pliegue en cualquier
+          portátil. Aquí aterriza sobre los 500px y el collage queda
+          como la recompensa del scroll. */}
+      <div className="mt-5 flex flex-col items-center gap-3.5 md:mt-7 md:gap-4 lg:mt-9 lg:gap-[18px]">
+        <p className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
+          {site.location} &amp; Beyond
+        </p>
+        <ButtonPrimary href="#inquire" className="w-full md:w-auto">
+          Begin Your Design
+        </ButtonPrimary>
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 items-start gap-[18px] md:mt-12 md:grid-cols-[1fr_1.2fr] lg:mt-16 lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-7">
         {/* El collage empieza en tablet: mobile muestra solo la recepción. */}
         <Image
           src={images.heroTablescape}
@@ -51,15 +64,6 @@ export function Hero() {
           sizes="(min-width: 1536px) 440px, 30vw"
           className="hidden h-[440px] w-full object-cover lg:mt-[110px] lg:block"
         />
-      </div>
-
-      <div className="mt-7 flex flex-col items-center gap-3.5 md:mt-11 md:gap-4 lg:mt-14 lg:gap-[18px]">
-        <p className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
-          {site.location} &amp; Beyond
-        </p>
-        <ButtonPrimary href="#inquire" className="w-full md:w-auto">
-          Begin Your Design
-        </ButtonPrimary>
       </div>
 
       {/* Umbral del colapso del nav (handoff §3): 120px antes del final
