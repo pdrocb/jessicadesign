@@ -40,7 +40,6 @@ export const navItems = [
   { label: "Home", href: "/" },
   { label: "Look Book", href: "/#look-book" },
   { label: "Luxury Picnics", href: "/#luxury-picnics" },
-  { label: "Silk Florals", href: "/#silk-florals" },
   { label: "Process", href: "/#process" },
 ];
 
