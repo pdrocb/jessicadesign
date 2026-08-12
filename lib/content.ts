@@ -215,7 +215,7 @@ export const inquiry = {
       required: true,
       options: [
         "Wedding",
-        "Celebration — birthday, shower, sweet sixteen, quinceañera, mitzvah",
+        "Celebration (birthday, shower, sweet sixteen, quinceañera, mitzvah)",
         "Luxury Picnic",
         "Day-Of Set-Up",
         "Something else",
@@ -244,7 +244,7 @@ export const faqs = [
   {
     numeral: "iii.",
     q: "Can you do the florals?",
-    a: "Fresh florals stay with your florist, and we design hand in hand with them. Silk is ours, an elevated collection you can take in place of fresh, rent for the day, or blend with fresh so the two read as one.",
+    a: "Fresh florals stay with your florist, and we design hand in hand with them. Silk is ours, a collection you can buy outright, rent for the day, or blend with fresh so the two read as one.",
   },
   {
     numeral: "iv.",
