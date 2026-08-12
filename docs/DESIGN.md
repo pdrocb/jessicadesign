@@ -295,6 +295,8 @@ One easing, two speeds, one pattern:
 
 **The No-Parallax Rule.** No scroll-linked transforms, no parallax, no pinned sections. Movement here is arrival, not choreography.
 
+**The Instant Jump Rule** *(Aug 2026)*. Anchor navigation does **not** smooth-scroll. The home page is ~10,700px tall and its nav jumps up to 8,300px; animating that takes seconds the visitor spends watching content blur past, and it fires the page's 28 reveals in one burst on the way. An eight-thousand-pixel animated scroll is choreography, which this system does not do — and it was the single thing that made navigating feel slow. Sections carry `scroll-margin-top` so the destination clears the sticky header on arrival.
+
 Under `prefers-reduced-motion`, everything is instant — already enforced globally in `globals.css`.
 
 ## Elevation & Depth

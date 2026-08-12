@@ -131,7 +131,11 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /* Sin `scroll-behavior: smooth`: el home mide 10.700px y el nav
+       salta hasta 8.300 de golpe. Animar ese recorrido tarda segundos
+       durante los cuales el visitante mira pasar la página borrosa, y
+       de paso dispara los 28 reveals al vuelo. El salto instantáneo es
+       lo que hace que navegar se sienta inmediato. */
     overflow-x: hidden;
   }
 
@@ -220,10 +224,6 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {
