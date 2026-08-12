@@ -378,7 +378,11 @@ Square corners, no fills, and **a single hairline under each field** rather than
 
 ### The inquiry page is its own room
 
-`/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries **row 1 of the navigation only** — the logotype, which is the single way back — and drops the section links and the `Inquire` button, since the visitor has arrived. One exit, identical in concept at 390, 834 and 1440; a conversion surface should not offer four lateral escapes, but it must never trap.
+`/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries the **full two-row navigation**, and row 2 never collapses there — the collapse is driven by a sentinel the hero plants, and off the home page there is no sentinel, so the links simply stay.
+
+A first pass gave the page row 1 only, on the theory that a conversion surface should not offer lateral escapes. That was wrong in practice (PM call, Aug 2026): **a centred logotype does not read as an exit.** Visitors did not perceive a way back at all, which is a worse failure than a few extra links — a trapped visitor leaves the site, not just the page. The nav anchors are therefore root-relative (`/#look-book`, not `#look-book`) so they resolve from any page.
+
+The content column is **centred in the document** at `max-w-[900px]`, not hung off the left rail. The wide rail exists to feed photography; a form has none, and left-aligning it stranded half the viewport empty.
 
 The scheduling calendar of the legacy Wix site is deliberately **not** reproduced. Times get negotiated in the reply; a public calendar promises an availability nobody is maintaining.
 

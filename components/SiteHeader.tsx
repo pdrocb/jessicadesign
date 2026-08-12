@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { navItems, site } from "@/lib/content";
 import { ButtonOutline, Wordmark } from "@/components/ui";
@@ -18,8 +19,11 @@ import { ButtonOutline, Wordmark } from "@/components/ui";
  */
 export function SiteHeader() {
   const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Fuera del home no hay centinela: la fila 2 se queda visible, que es
+    // justo lo que hace falta en `/inquire` para poder volver.
     const sentinel = document.getElementById("nav-threshold");
     if (!sentinel) return;
 
@@ -89,11 +93,14 @@ export function SiteHeader() {
             // inalcanzable por scroll.
             className="gutter text-label-sm flex items-center justify-center-safe gap-[22px] overflow-x-auto font-medium tracking-[0.2em] uppercase md:gap-7 md:py-[10px] md:tracking-[0.22em] lg:gap-10 lg:pt-3 lg:pb-[11px] lg:text-label lg:tracking-[0.24em]"
           >
-            {navItems.map((item, i) => (
+            {navItems.map((item) => {
+              // El activo se calcula, no se hardcodea: ya hay dos páginas.
+              const active = item.href === pathname;
+              return (
               <Link
                 key={item.label}
                 href={item.href}
-                aria-current={i === 0 ? "page" : undefined}
+                aria-current={active ? "page" : undefined}
                 // 15px arriba y abajo llevan el target táctil a 44px en
                 // mobile (handoff §4); desde tablet manda el padding del nav.
                 className="whitespace-nowrap py-[15px] transition-colors duration-[180ms] hover:text-ink-subtle md:py-0"
@@ -101,12 +108,13 @@ export function SiteHeader() {
                 {/* El subrayado del activo va en el span: pegado al texto,
                     no al borde del área táctil. */}
                 <span
-                  className={i === 0 ? "border-b border-ink pb-[2px]" : undefined}
+                  className={active ? "border-b border-ink pb-[2px]" : undefined}
                 >
                   {item.label}
                 </span>
               </Link>
-            ))}
+              );
+            })}
           </nav>
         </div>
       </div>

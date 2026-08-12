@@ -29,10 +29,14 @@ export const site = {
   legalName: "J|S Events, Event Styling & Decorating Co. LLC",
 };
 
+/**
+ * Los anclas van con `/` delante a propósito: el nav vive también en
+ * `/inquire`, y un `#look-book` suelto ahí no lleva a ninguna parte.
+ */
 export const navItems = [
   { label: "Home", href: "/" },
-  { label: "Look Book", href: "#look-book" },
-  { label: "Luxury Picnics", href: "#expertise" },
+  { label: "Look Book", href: "/#look-book" },
+  { label: "Luxury Picnics", href: "/#expertise" },
   { label: "Blog", href: "#" },
 ];
 
