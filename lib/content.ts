@@ -19,8 +19,11 @@ import servicePicnics from "@/assets/service-picnics.jpg";
 import serviceWeddings from "@/assets/service-weddings.jpg";
 
 export const site = {
-  name: "J|S Events",
-  tagline: "Wedding & Event Design + Styling",
+  // Nombre y tagline tomados del logotipo entregado por la clienta
+  // (ago 2026), que cierra la decisión que PRODUCT.md tenía abierta.
+  // `legalName` NO cambia: es la razón social de la LLC, otra cosa.
+  name: "Jessica S. Designs",
+  tagline: "Wedding & Event Design & Styling",
   location: "Hudson Valley, New York",
   phone: "845 · 375 · 7820",
   phoneHref: "tel:+18453757820",

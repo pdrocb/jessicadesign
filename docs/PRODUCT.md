@@ -14,7 +14,7 @@ La mayoría llega con un tablero de Pinterest ya armado y sin lenguaje técnico 
 
 ## Product Purpose
 
-Posicionar a J|S Events en el rango premium/editorial del mercado de bodas del Hudson Valley y convertir visitas en *inquiries*. El éxito se mide en solicitudes de consulta de gente que ya entendió qué hace Jessica y qué no — no en volumen de tráfico.
+Posicionar a Jessica S. Designs en el rango premium/editorial del mercado de bodas del Hudson Valley y convertir visitas en *inquiries*. El éxito se mide en solicitudes de consulta de gente que ya entendió qué hace Jessica y qué no — no en volumen de tráfico.
 
 El sitio anterior (Wix) se siente genérico y diluye el trabajo; también usa tres nombres distintos para el mismo negocio. Este rediseño existe para que la calidad del sitio iguale la calidad del trabajo fotografiado.
 
@@ -26,11 +26,11 @@ Tiene inventario propio de los detalles pequeños — mantelería, cubertería, 
 
 El límite es deliberado y es parte del posicionamiento, no una carencia: su trabajo **roza** el de una event planner, y ella no se vende así **por decisión propia** — no quiere la responsabilidad de llevar el evento completo. Trabaja junto al planner, florista y venue del cliente.
 
-Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunca debe sugerir que J|S dirige la logística, el timeline o los proveedores del evento. Prometer eso le vende un trabajo que ella rechazó a propósito.
+Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunca debe sugerir que JSD dirige la logística, el timeline o los proveedores del evento. Prometer eso le vende un trabajo que ella rechazó a propósito.
 
 **Quality over quantity** (brief de la clienta, ago 2026): toma deliberadamente menos bodas y eventos para dar una experiencia de diseño más personal y hands-on a cada cliente. Es el tono premium correcto — escasez sin hablar de precio — y el sitio puede decirlo explícitamente.
 
-**Silk florals** (brief de la clienta, ago 2026): línea creciente de la marca. J|S ofrece florales de seda elevados — como alternativa a la flor fresca, como *rental* al cliente, o en diseños **híbridos** de seda + fresca. Matiz importante: para flor fresca Jessica sigue trabajando junto al florista del cliente; en seda, ella **sí es la proveedora**. Redactar sin invadir el rol del florista ni sugerir que dirige proveedores.
+**Silk florals** (brief de la clienta, ago 2026): línea creciente de la marca. JSD ofrece florales de seda elevados — como alternativa a la flor fresca, como *rental* al cliente, o en diseños **híbridos** de seda + fresca. Matiz importante: para flor fresca Jessica sigue trabajando junto al florista del cliente; en seda, ella **sí es la proveedora**. Redactar sin invadir el rol del florista ni sugerir que dirige proveedores.
 
 **El "vision gap" es el momento de venta.** La clienta lo dijo así: los clientes llegan con una visión — o sin saber cómo armarla — y ella desarrolla el look & feel completo y une todos los detalles con cohesión. La reacción que el sitio debe producir: *"This is more than decorating. She is going to take my vision, thoughtfully design the entire aesthetic, and make everything feel cohesive and beautiful."*
 
@@ -71,7 +71,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 
 **El repertorio de detalle que el sitio debe mostrar** (brief de la clienta): tablescapes, velas, florales, signage, stationery, texturas, mobiliario, mantelería — todo lo que hace que el cuarto entero se sienta intencional.
 
-**Regla de sourcing (PM, ago 2026):** al cliente final le es indiferente si una pieza es inventario propio o rentada de un tercero — y mucho probablemente se renta. El sitio **nunca expone esa mecánica**: no decir "lo rentamos" ni distinguir propio vs. conseguido. La única mención legítima de "rentals" es la inversa — los silk florals y piezas que J|S renta **al** cliente como parte de su oferta.
+**Regla de sourcing (PM, ago 2026):** al cliente final le es indiferente si una pieza es inventario propio o rentada de un tercero — y mucho probablemente se renta. El sitio **nunca expone esa mecánica**: no decir "lo rentamos" ni distinguir propio vs. conseguido. La única mención legítima de "rentals" es la inversa — los silk florals y piezas que JSD renta **al** cliente como parte de su oferta.
 
 **Restricciones de información:**
 
@@ -82,8 +82,10 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 
 ## Brand Commitments
 
-- **Nombre en el sitio nuevo: "J|S Events"**, comprometido por el handoff de diseño. Ojo: el sitio vigente usa tres nombres distintos entre sí — "Jessica S. Designs", "JSE Event Design & Styling" y "JS Design". En su brief de ago 2026 la clienta escribe **"Jessica S. Designs"** y la sigla **"JSD"** — una señal más, no una decisión. **Cuál es el nombre correcto sigue abierto** y sube de urgencia; cerrarlo con ella antes de imprimir nada.
-- Razón social: J|S Events, Event Styling & Decorating Co. LLC.
+- **Nombre: "Jessica S. Designs", sigla "JSD". DECISIÓN CERRADA** (ago 2026) — la clienta entregó su logotipo y ahí está escrito. Sustituye a "J|S Events", que venía del handoff de diseño y nunca fue suyo. El sitio vigente usaba tres nombres distintos ("Jessica S. Designs", "JSE Event Design & Styling", "JS Design"); esta es la unificación.
+- **Tagline: "Wedding & Event Design & Styling"**, también tomado del logotipo. Reemplaza al "+ Styling" del handoff.
+- Razón social: J|S Events, Event Styling & Decorating Co. LLC. **No cambia** — es la entidad legal, y es normal que difiera del nombre comercial. Solo aparece en el aviso de copyright del footer y en `legalName` del JSON-LD.
+- **Logotipo** (ago 2026): monograma J+S entrelazado, con "JESSICA S. DESIGNS" en versales serif cruzando el monograma a media altura, y debajo "Wedding & Event Design & Styling" en una sans ligera espaciada. **En el nav NO se usa esa línea inferior** (decisión PM): satura, y el tagline ya vive en el hero y en el footer.
 - Voz: contenida, segura, sin superlativos huecos. Frases cortas. Nunca "¡El día de tus sueños!". El sitio va en **inglés**; la conversación con el PM, en español.
 - Adjetivos de marca, en palabras de la clienta (ago 2026): *elevated, sophisticated, modern, warm, intentional — luxury, but still approachable*. Anti-referencias explícitas: corporativo, genérico, "traditional wedding décor company". Referencias visuales que ama: simplicityinmind.com (vintage-elegante) y nyflorale.com (flujo, color cálido con acentos) — quiere un punto medio entre vintage, elegante y moderno.
 - Jessica Salomon, dueña y lead stylist. Neoyorquina criada en el Bronx, ~15 años estilizando eventos, madre de tres.
@@ -102,7 +104,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 
 ## Product Principles
 
-1. **El diseño es el producto; la logística no.** Ninguna página debe implicar que J|S dirige el evento — ese trabajo ella lo rechaza a propósito.
+1. **El diseño es el producto; la logística no.** Ninguna página debe implicar que JSD dirige el evento — ese trabajo ella lo rechaza a propósito.
 2. **Nombrar lo específico gana a nombrar la categoría.** "Mantelería, velas y vajilla propias" prueba algo; "styling de lujo" no prueba nada y lo dice cualquiera.
 3. **Se juzga por fotografías, no por adjetivos.** Cuando compitan espacio el copy y la imagen, gana la imagen.
 4. **Todo camino lleva a una conversación, no a un precio.** El destino único es la consulta gratuita de una hora.

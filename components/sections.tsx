@@ -71,7 +71,7 @@ export function Hero() {
             breakpoints. */}
         <Image
           src={images.heroReception}
-          alt="Wedding reception designed by J|S Events"
+          alt="Wedding reception designed by Jessica S. Designs"
           sizes="(min-width: 1536px) 505px, (min-width: 1200px) 36vw, (min-width: 768px) 55vw, 100vw"
           priority
           fetchPriority="high"
@@ -337,7 +337,7 @@ export function About() {
           {/* Tope de medida: con el rail a 1536 esta columna llega a ~76ch,
               por encima del límite cómodo de lectura. */}
           <p className="text-body-md max-w-[66ch] text-ink-muted lg:text-body-lg">
-            Jessica is the eye behind every J|S celebration. Her work begins
+            Jessica is the eye behind every JSD celebration. Her work begins
             with you — your story, your Pinterest board, the feeling you can’t
             quite put into words — and ends in a room your guests will talk
             about for years. Details matter; she designs every one of them. And

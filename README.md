@@ -1,6 +1,6 @@
-# J|S Events
+# Jessica S. Designs
 
-One-pager de **J|S Events** — estudio de wedding & event design + styling en Hudson Valley, Nueva York.
+One-pager de **Jessica S. Designs** — estudio de wedding & event design + styling en Hudson Valley, Nueva York.
 
 Next.js 16 (App Router) + Tailwind v4. Sin librerías extra.
 

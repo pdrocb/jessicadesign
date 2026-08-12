@@ -1,4 +1,4 @@
-# Documentación de J|S Events
+# Documentación de Jessica S. Designs
 
 Índice maestro. Los entrypoints para agentes de IA (`CLAUDE.md`, `AGENTS.md`) viven en la raíz del repo, no aquí.
 

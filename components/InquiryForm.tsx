@@ -21,7 +21,7 @@ export function InquiryForm() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO(negocio): enviar a la dirección de J|S en cuanto exista.
+    // TODO(negocio): enviar a la dirección de JSD en cuanto exista.
     setSent(true);
   }
 

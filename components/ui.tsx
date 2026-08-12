@@ -74,9 +74,18 @@ export function LinkUnderline({
 }
 
 /**
- * Monograma J|S. La barra es un <span> de 1px, no el carácter "|":
- * su altura y separación se controlan al pixel y no dependen de la
- * métrica de la fuente. `tone` decide el color sobre claro u oscuro.
+ * Logotipo "Jessica S. Designs".
+ *
+ * PROVISIONAL — reproduce en texto la parte de palabra del logotipo que
+ * entregó la clienta (serif en versales), pero NO el monograma J+S
+ * entrelazado, que es un dibujo y necesita su SVG. Cuando llegue el
+ * archivo, esto se sustituye por la imagen.
+ *
+ * La línea "Wedding & Event Design & Styling" del logotipo NO se usa
+ * aquí por decisión del PM: en el nav satura, y el tagline ya vive en el
+ * hero y en el footer.
+ *
+ * `tone` decide el color sobre claro u oscuro.
  */
 export function Wordmark({
   size = "md",
@@ -86,24 +95,18 @@ export function Wordmark({
   tone?: "dark" | "light";
 }) {
   const scale = {
-    sm: { type: "text-[21px]", bar: "h-[19px]", gap: "gap-[5px]", sub: "text-[8px]" },
-    md: { type: "text-[24px]", bar: "h-[22px]", gap: "gap-[6px]", sub: "text-[9px]" },
-    lg: { type: "text-[27px]", bar: "h-[25px]", gap: "gap-[7px]", sub: "text-[10px]" },
+    sm: "text-[12px] tracking-[0.16em]",
+    md: "text-[14px] tracking-[0.18em]",
+    lg: "text-[15px] tracking-[0.2em]",
   }[size];
-  const bar = tone === "dark" ? "bg-ink" : "bg-bone";
 
   return (
-    <span className="flex flex-col items-center gap-[3px] font-display">
-      <span
-        className={`flex items-center font-medium leading-none ${scale.type} ${scale.gap}`}
-      >
-        J<span className={`inline-block w-px ${scale.bar} ${bar}`} />S
-      </span>
-      <span
-        className={`font-semibold tracking-[0.42em] indent-[0.42em] uppercase ${scale.sub}`}
-      >
-        Events
-      </span>
+    <span
+      className={`font-display font-medium whitespace-nowrap uppercase ${scale} ${
+        tone === "dark" ? "text-ink" : "text-bone"
+      }`}
+    >
+      Jessica S. Designs
     </span>
   );
 }

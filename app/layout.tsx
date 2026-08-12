@@ -13,7 +13,7 @@ const playfair = Playfair_Display({
 });
 
 const siteUrl = "https://jessicadesign.vercel.app";
-const title = "J|S Events | Hudson Valley Wedding & Event Design";
+const title = "Jessica S. Designs | Hudson Valley Wedding & Event Design";
 // Descripción alineada con el copy del hero: nombra la categoría, la
 // distinción diseñadora-no-planner, y los objetos concretos — que es lo
 // que una novia reconoce al escanear resultados de Google.
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title,
     description,
     url: "/",
-    siteName: "J|S Events",
+    siteName: "Jessica S. Designs",
     locale: "en_US",
     type: "website",
   },
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  name: "J|S Events",
+  name: "Jessica S. Designs",
   legalName: "J|S Events, Event Styling & Decorating Co. LLC",
   description,
   telephone: "+1-845-375-7820",

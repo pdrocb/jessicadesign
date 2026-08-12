@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/ui";
 import { inquiry, site } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Inquire | J|S Events",
+  title: "Inquire | Jessica S. Designs",
   description:
     "Tell us about your celebration. Every inquiry begins with a complimentary one-hour design consultation.",
 };

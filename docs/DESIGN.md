@@ -1,5 +1,5 @@
 ---
-name: J|S Events
+name: Jessica S. Designs
 description: Wedding and event design in the Hudson Valley — editorial restraint built around photography.
 colors:
   ink: "#141312"
@@ -143,7 +143,7 @@ components:
     padding: "44px 0"
 ---
 
-# Design System: J|S Events
+# Design System: Jessica S. Designs
 
 ## Overview
 
@@ -339,7 +339,9 @@ This is the third and final position, and the route matters because both alterna
 
 Contrast over photography, wherever it is unavoidable, is **measured against the actual pixels under the text** — sample the image, compose the overlay alpha, take the worst case. White linen and candlelight are the failure case in this library, and eyeballing a scrim is how you ship 1.6:1.
 
-The logotype follows the same discipline: the bar in `J|S` is a 1px `<span>`, not the `|` character, so its height and spacing are controlled to the pixel instead of inheriting a font metric.
+The logotype is the client's own (Aug 2026): an interlocking J+S monogram with **JESSICA S. DESIGNS** in serif caps laid across it at mid-height. **The navigation uses the mark without the tagline line that sits beneath it** — in a 53px row that third line collapses into noise, and the tagline already appears in the hero and the footer.
+
+**Currently provisional in code.** The monogram is a drawing and needs its SVG; until that file lands, `Wordmark` renders only the word portion in Playfair caps. The earlier `J|S` construction — a 1px `<span>` standing in for the `|` character — is gone with the name it belonged to.
 
 ## Components
 
@@ -425,5 +427,5 @@ The scheduling calendar of the legacy Wix site is deliberately **not** reproduce
 - **Don't** reach for the generic wedding-site vocabulary: hero carousels, vendor badges, script or handwritten typefaces, blush palettes, eucalyptus ornament, or "the day of your dreams" register.
 - **Don't** signal luxury by accumulation — gold, marble, glinting serifs, dramatic entrance animation. Here luxury is restraint.
 - **Don't** overcorrect into clinical minimalism either. This sells warmth and celebration, not a design-studio portfolio or a SaaS landing page. The warm neutrals and the generous line-heights are what keep it from going cold.
-- **Don't** imply J|S runs the event. The visual system should never borrow the vocabulary of planning tools — timelines, checklists, coordination language.
+- **Don't** imply JSD runs the event. The visual system should never borrow the vocabulary of planning tools — timelines, checklists, coordination language.
 - **Don't** publish a press or partner section until real logos and written permission exist.

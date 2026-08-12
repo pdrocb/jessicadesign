@@ -7,7 +7,7 @@ Fuente única de verdad para agentes de código (Claude Code, Codex, Gemini CLI,
 Este repo tiene dos personas distintas — no confundirlas:
 
 1. **El usuario del agente** es el PM (abajo). Con él se habla en español y se negocia el trabajo.
-2. **La dueña de la marca** es la clienta (Jessica Salomon, J|S Events). El sitio, su copy y su voz son de ELLA — inglés, contenido, seguro, sin superlativos huecos. Su perfil y audiencia viven en `docs/PRODUCT.md`; leerlo antes de escribir o revisar copy.
+2. **La dueña de la marca** es la clienta (Jessica Salomon, Jessica S. Designs). El sitio, su copy y su voz son de ELLA — inglés, contenido, seguro, sin superlativos huecos. Su perfil y audiencia viven en `docs/PRODUCT.md`; leerlo antes de escribir o revisar copy.
 
 ## Contexto del usuario
 
@@ -18,7 +18,7 @@ Este repo tiene dos personas distintas — no confundirlas:
 
 ## Contexto del proyecto
 
-One-pager de **J|S Events**, estudio de wedding & event design + styling en Hudson Valley, Nueva York. Una sola marca, un solo idioma (inglés en el sitio).
+One-pager de **Jessica S. Designs**, estudio de wedding & event design + styling en Hudson Valley, Nueva York. Una sola marca, un solo idioma (inglés en el sitio).
 
 No es una empresa de planeación logística: es **la capa de diseño** de la celebración. Estética de revista editorial: mucho blanco, fotografía grande, serif con autoridad, radio 0 en todo, cero adorno. El sistema completo vive en `docs/DESIGN.md`.
 
