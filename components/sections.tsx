@@ -18,6 +18,13 @@ export function Hero() {
       aria-label="Introduction"
       className="gutter relative shell pt-7 pb-10 md:pt-12 md:pb-16 lg:pt-18 lg:pb-24"
     >
+      {/* El titular se apoya en papel en los tres breakpoints, nunca sobre
+          una fotografía. Lo editorial del hero es el escalonado del
+          collage, no la superposición — el escalonado se conserva entero. */}
+      <h1 className="text-display-hero mx-auto mb-5 max-w-[14ch] text-center font-display font-medium text-ink md:mb-10 lg:mb-14">
+        The Art of the <em className="font-normal">Unforgettable</em>
+      </h1>
+
       <div className="grid grid-cols-1 items-start gap-[18px] md:grid-cols-[1fr_1.2fr] lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-7">
         {/* El collage empieza en tablet: mobile muestra solo la recepción. */}
         <Image
@@ -28,28 +35,15 @@ export function Hero() {
         />
 
         {/* Una sola instancia de la recepción — es el LCP en los tres
-            breakpoints, así que se precarga una vez y se reordena por CSS.
-
-            El H1 vive aquí en los dos casos, pero cambia de naturaleza:
-            en mobile es un título en flujo normal, encima de la lámina y
-            sobre papel; desde tablet se vuelve absoluto y `md:static` en
-            el contenedor lo ancla al hero completo para superponerlo al
-            collage. Un solo H1 en el documento, sin copias por breakpoint. */}
-        <div className="order-first flex flex-col gap-5 md:static md:order-none md:block">
-          <h1 className="text-display-hero text-center font-display font-medium text-ink md:pointer-events-none md:absolute md:inset-0 md:flex md:items-center md:justify-center md:text-shadow-[0_0_40px_rgba(250,248,243,0.6)] lg:pt-15">
-            <span className="md:max-w-[13ch] lg:max-w-[14ch]">
-              The Art of the <em className="font-normal">Unforgettable</em>
-            </span>
-          </h1>
-          <Image
-            src={images.heroReception}
-            alt="Wedding reception designed by J|S Events"
-            sizes="(min-width: 1536px) 505px, (min-width: 1200px) 36vw, (min-width: 768px) 55vw, 100vw"
-            priority
-            fetchPriority="high"
-            className="h-[420px] w-full object-cover md:h-[400px] lg:h-[560px]"
-          />
-        </div>
+            breakpoints. */}
+        <Image
+          src={images.heroReception}
+          alt="Wedding reception designed by J|S Events"
+          sizes="(min-width: 1536px) 505px, (min-width: 1200px) 36vw, (min-width: 768px) 55vw, 100vw"
+          priority
+          fetchPriority="high"
+          className="h-[420px] w-full object-cover md:h-[400px] lg:h-[560px]"
+        />
 
         <Image
           src={images.heroDetail}
