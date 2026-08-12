@@ -299,13 +299,15 @@ export function EditorialBreak() {
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
 
-      {/* 288px en los tres breakpoints — un solo valor porque así pasa
-          en todos. Es el doble que los 144px de Florale a propósito: un
-          degradado largo oscurece con suavidad, mientras que una banda
-          corta necesita más alfa y se ve como una barra pegada. */}
+      {/* La banda ENCOGE al crecer el viewport, al revés de lo que se
+          esperaría: el recorte de mobile cae sobre el mantel iluminado y
+          necesita más degradado, mientras que en desktop 224px sobre una
+          lámina de 640 bastan. Sigue siendo un degradado largo y suave —
+          una banda corta necesitaría más alfa y se vería como una barra
+          pegada al borde. */}
       <div
         aria-hidden
-        className="plate-scrim pointer-events-none absolute inset-x-0 bottom-0 h-72"
+        className="plate-scrim pointer-events-none absolute inset-x-0 bottom-0 h-72 md:h-64 lg:h-56"
       />
 
       <figcaption className="absolute inset-x-0 bottom-0">

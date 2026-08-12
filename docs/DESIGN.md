@@ -326,15 +326,17 @@ The full-bleed plate carries its caption **inside the image**, over a bottom scr
 | | value | why |
 |---|---|---|
 | colour | `--color-ink` | ours, not the reference's `#211b1b` — same role, our token |
-| stops | 85% at bottom, 55% at mid, 0 at top | the lightest pair that clears AA on the worst crop |
-| band | 288px, every breakpoint | one value that passes everywhere; double the reference's 144px on purpose |
+| stops | 80% at bottom, 50% at mid, 0 at top | **the floor** — at 75/45 the worst case falls to 4.33 and fails |
+| band | 288 mobile · 256 tablet · 224 desktop | shrinks as the viewport grows; see below |
 | text | `bone`, both lines | `on-dark-muted` measured 1.67:1 at 10px and was cut |
 
-Measured contrast: **6.93 desktop · 7.22 tablet · 5.71 mobile.**
+Measured contrast: **5.06 desktop · 5.74 tablet · 4.81 mobile.**
 
-**Mobile governs.** At 390×320 the `object-fit: cover` crop lands squarely on the brightest linen in the frame and the caption occupies 30% of the plate; desktop passed at settings where mobile measured 1.69:1. Any future change to this scrim is re-measured on mobile first.
+**Mobile governs, and the band shrinks upward.** At 390×320 the `object-fit: cover` crop lands squarely on the brightest linen in the frame and the caption occupies 30% of the plate; desktop passed at settings where mobile measured 1.69:1. Hence the inversion — the *smallest* viewport gets the *longest* gradient. Any future change here is re-measured on mobile first.
 
-**A long band beats a strong one.** 288px over a 320px plate reads as a slow darkening; the same contrast bought with a short band needs so much alpha that it reads as a bar stuck to the bottom edge.
+**A long band beats a strong one.** A gradient running 35–90% of the plate reads as a slow darkening; the same contrast bought with a short band needs so much alpha that it reads as a bar stuck to the bottom edge. When asked to lighten the scrim, lengthen the band before raising alpha.
+
+**The 10px label is what sets the floor.** The italic statement is large text and needs only 3:1 — it would survive alphas around 0.65/0.35. It is the uppercase location line, at 10px, that demands 4.5:1 and holds the whole scrim up. Moving that line off the plate is the only way to go meaningfully lighter.
 
 **This licenses one scrim, not a habit.** It exists for the single editorial plate. Elsewhere the older instinct still holds: reach for a scrim only when the composition genuinely requires type on an image, and never without measuring against the actual pixels — eyeballing one is how you ship 1.6:1.
 
