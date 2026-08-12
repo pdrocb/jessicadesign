@@ -14,8 +14,11 @@ const playfair = Playfair_Display({
 
 const siteUrl = "https://jessicadesign.vercel.app";
 const title = "J|S Events | Hudson Valley Wedding & Event Design";
+// Descripción alineada con el copy del hero: nombra la categoría, la
+// distinción diseñadora-no-planner, y los objetos concretos — que es lo
+// que una novia reconoce al escanear resultados de Google.
 const description =
-  "Wedding and event design + styling in the Hudson Valley, New York. We are the design layer of your celebration — every color, texture, and detail composed with intention.";
+  "Wedding and event design & styling in the Hudson Valley, New York. Not planning, not décor drop-off — the whole visual world of your day: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.";
 
 export const viewport: Viewport = {
   // El marfil de --color-paper, no blanco puro: el sistema no lleva

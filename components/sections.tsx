@@ -32,8 +32,13 @@ export function Hero() {
       {/* La itálica del hero va en tinta, no en rose-umber: itálica de
           color + botón sage sobre crema era la fórmula literal del hero
           de Florale (DESIGN.md, Italic Accent Word). */}
-      <h1 className="text-display-hero mx-auto max-w-[14ch] text-center font-display font-medium text-ink">
-        The Art of the <em className="font-normal">Unforgettable</em>
+      {/* El titular le habla al momento real de compra: la novia que trae
+          un Pinterest lleno y no sabe nombrar lo que quiere. El anterior
+          ("The Art of the Unforgettable") podía encabezar el sitio de
+          cualquier proveedor de bodas y no decía qué vende Jessica. */}
+      <h1 className="text-display-hero mx-auto max-w-[19ch] text-center font-display font-medium text-ink">
+        You know how it should <em className="font-normal">feel</em>. We design
+        the rest.
       </h1>
 
       {/* Ubicación y CTA van ANTES del collage: sin el solape, el hero
@@ -41,11 +46,15 @@ export function Hero() {
           portátil. Aquí aterriza sobre los 500px y el collage queda
           como la recompensa del scroll. */}
       <div className="mt-5 flex flex-col items-center gap-3.5 md:mt-7 md:gap-4 lg:mt-9 lg:gap-[18px]">
+        {/* Esta línea es la que nombra el negocio en claro. Antes solo
+            decía la ubicación, y el tagline vivía únicamente en el footer:
+            una visitante no sabía qué vendía Jessica hasta el segundo
+            scroll. Categoría primero, geografía después. */}
         <p className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
-          {site.location} &amp; Beyond
+          {site.tagline} · {site.location}
         </p>
         <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-          Begin Your Design
+          Start With a Conversation
         </ButtonPrimary>
       </div>
 
@@ -106,11 +115,17 @@ export function Manifesto() {
             A beautiful wedding is planned. An unforgettable one is{" "}
             <em>designed</em>.
           </p>
+          {/* Los objetos van nombrados uno por uno a propósito: la lista
+              DEMUESTRA el alcance, mientras que "every detail" solo lo
+              afirma. Y el "not décor dropped into a room" es la otra
+              mitad del posicionamiento — ni planner ni decoradora. */}
           <p className="text-body-md text-ink-muted lg:max-w-[520px] lg:text-body-lg">
-            We are the design layer of your celebration. Working hand in hand
-            with your planner, florist, and venue, we shape the look, feel, and
-            atmosphere of your day — every color, texture, and detail composed
-            with intention, so the moment feels unmistakably yours.
+            We are the design layer of your celebration — not the logistics,
+            and not décor dropped into a room. It’s the whole visual world:
+            tablescapes, linens, candles, florals, signage, stationery,
+            furniture, and every small thing that makes a space feel
+            considered. We work hand in hand with your planner, florist, and
+            venue so all of it arrives as one idea, unmistakably yours.
           </p>
         </div>
         <Image
@@ -325,7 +340,9 @@ export function About() {
             Jessica is the eye behind every J|S celebration. Her work begins
             with you — your story, your Pinterest board, the feeling you can’t
             quite put into words — and ends in a room your guests will talk
-            about for years. Details matter; she designs every one of them.
+            about for years. Details matter; she designs every one of them. And
+            she takes on a small number of celebrations each year, by choice:
+            fewer rooms, more of her in each one.
           </p>
           {/* Antes decía "Meet Jessica" y llevaba al bloque de inquiry:
               la etiqueta prometía una biografía que no existe. */}
@@ -430,15 +447,20 @@ export function Cta() {
       {/* El reveal va en el contenido, no en la sección: transformar la
           banda a sangre completa dejaría ver el fondo de atrás. */}
       <div data-reveal className="flex flex-col items-center gap-5 text-center md:gap-7 lg:gap-9">
-        <Eyebrow>Begin the Experience</Eyebrow>
+        {/* El cierre hace eco del hero a propósito: la página abre con
+            "You know how it should feel" y cierra pidiendo justo eso.
+            El mismo CTA en los dos extremos, y el "no obligation" para
+            quitarle peso al último clic. */}
+        <Eyebrow>Let’s Begin</Eyebrow>
         <h2 className="text-display-lg max-w-[16ch] font-display font-medium">
-          Your day, designed to be remembered.
+          Tell us how you want it to feel.
         </h2>
-        <p className="text-body-md text-ink-subtle">
-          Complimentary one-hour design consultation.
+        <p className="text-body-md max-w-[46ch] text-ink-subtle">
+          A complimentary hour together — your story, your inspiration, and
+          where the design could go. No obligation after it.
         </p>
         <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-          Inquire
+          Start With a Conversation
         </ButtonPrimary>
       </div>
     </section>

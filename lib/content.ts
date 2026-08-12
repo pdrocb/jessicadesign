@@ -67,7 +67,7 @@ export const services = [
     slug: "celebrations",
     name: "Celebrations",
     img: serviceCelebrations,
-    copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs — every milestone, thoughtfully styled.",
+    copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs — designed with the same care as a wedding.",
   },
   {
     numeral: "No. III",
@@ -81,7 +81,11 @@ export const services = [
     slug: "day-of-set-up",
     name: "Day-Of Set-Up",
     img: serviceDayOf,
-    copy: "Your vision, our hands — including the decor you made yourself. Our team sets up every detail on the day.",
+    // Antes abría con "including the decor you made yourself", que dejaba
+    // a J|S como manos de alquiler para montar el DIY ajeno — justo lo
+    // contrario del posicionamiento. El servicio es el mismo; ahora lidera
+    // el oficio de styling y el DIY va como inciso, no como titular.
+    copy: "The design is settled; now it has to land. Our team sets and styles every piece on site — including what you’ve gathered yourself — so the room arrives finished.",
   },
 ];
 
