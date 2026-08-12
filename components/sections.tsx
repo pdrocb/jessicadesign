@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { images, lookbook, quotes, services, site } from "@/lib/content";
+import { images, lookbook, process, quotes, services, site } from "@/lib/content";
 import {
   ButtonPrimary,
   Eyebrow,
@@ -36,7 +36,7 @@ export function Hero() {
         <p className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
           {site.location} &amp; Beyond
         </p>
-        <ButtonPrimary href="#inquire" className="w-full md:w-auto">
+        <ButtonPrimary href="/inquire" className="w-full md:w-auto">
           Begin Your Design
         </ButtonPrimary>
       </div>
@@ -160,6 +160,67 @@ export function Services() {
   );
 }
 
+/* ── Proceso ───────────────────────────────────────────────────────
+   Los seis pasos del brief de la clienta (PRODUCT.md). Sin tarjetas:
+   numeral, título y copy separados por hairlines, como la lista de
+   reglas de las FAQs. Desktop 3 col → tablet 2 → mobile 1.
+
+   El paso V (el mock-up presencial) lleva el fleurón — la única
+   ornamentación que permite el sistema, gastada en el único paso que
+   casi ningún competidor puede ofrecer. */
+export function Process() {
+  return (
+    <section
+      id="process"
+      aria-label="Our design process"
+      className="gutter section-y scroll-mt-28 border-t border-line bg-bone lg:py-30"
+    >
+      <div className="shell">
+        <div
+          data-reveal
+          className="flex flex-col gap-4 md:max-w-[62ch] md:gap-5"
+        >
+          <Eyebrow>{process.eyebrow}</Eyebrow>
+          <h2 className="text-heading-lg font-display font-medium">
+            {process.heading}
+          </h2>
+          <p className="text-body-md text-ink-muted lg:text-body-lg">
+            {process.intro}
+          </p>
+        </div>
+
+        <ol className="mt-9 grid grid-cols-1 gap-px border-t border-line-warm md:mt-12 md:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+          {process.steps.map((step, i) => (
+            <li
+              key={step.name}
+              data-reveal
+              style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
+              className="flex flex-col gap-2.5 border-b border-line-warm py-6 pr-0 md:py-8 md:pr-10 lg:py-10"
+            >
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-[13px] text-ink-subtle md:text-[14px]">
+                  {step.numeral}
+                </span>
+                {step.name === "The Mock-Up" && (
+                  <span aria-hidden className="font-display text-[15px] text-sage">
+                    ❋
+                  </span>
+                )}
+              </div>
+              <h3 className="text-heading-md font-display font-medium">
+                {step.name}
+              </h3>
+              <p className="text-body-sm max-w-[46ch] text-ink-subtle">
+                {step.copy}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 /* ── Break editorial ──────────────────────────────────────────────
    Lámina a sangre con su pie debajo, como una plancha de libro de
    fotografía. Sin scrim: la imagen no se toca, y el pie se lee sobre
@@ -213,7 +274,9 @@ export function About() {
             quite put into words — and ends in a room your guests will talk
             about for years. Details matter; she designs every one of them.
           </p>
-          <LinkUnderline href="#inquire">Meet Jessica</LinkUnderline>
+          {/* Antes decía "Meet Jessica" y llevaba al bloque de inquiry:
+              la etiqueta prometía una biografía que no existe. */}
+          <LinkUnderline href="/inquire">Work With Jessica</LinkUnderline>
         </div>
       </div>
     </section>
@@ -297,7 +360,6 @@ export function LookBook() {
 export function Cta() {
   return (
     <section
-      id="inquire"
       aria-label="Begin the experience"
       className="gutter section-y border-t border-line bg-cream lg:py-32"
     >
@@ -311,7 +373,7 @@ export function Cta() {
         <p className="text-body-md text-ink-subtle">
           Complimentary one-hour design consultation.
         </p>
-        <ButtonPrimary href={site.phoneHref} className="w-full md:w-auto">
+        <ButtonPrimary href="/inquire" className="w-full md:w-auto">
           Inquire
         </ButtonPrimary>
       </div>
@@ -326,7 +388,7 @@ export function SiteFooter() {
     { label: "Look Book", href: "#look-book" },
     { label: "Luxury Picnics", href: "#expertise" },
     { label: "Blog", href: "#" },
-    { label: "Inquire", href: "#inquire" },
+    { label: "Inquire", href: "/inquire" },
   ];
 
   return (

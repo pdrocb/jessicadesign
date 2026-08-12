@@ -8,6 +8,7 @@ import {
   Hero,
   LookBook,
   Manifesto,
+  Process,
   Services,
   SiteFooter,
   Testimonials,
@@ -22,6 +23,7 @@ export default function Page() {
         <Hero />
         <Manifesto />
         <Services />
+        <Process />
         <EditorialBreak />
         <About />
         <Testimonials />

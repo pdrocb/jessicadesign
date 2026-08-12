@@ -367,7 +367,20 @@ One open at a time. Trigger is a full-width button: lowercase roman numeral in `
 
 ### Inputs
 
-**Not yet designed.** The inquiry form does not exist. When it does, it inherits: square corners, hairline strokes, `label` type for field labels, and focus handled by the system focus ring rather than a colored border.
+Square corners, no fills, and **a single hairline under each field** rather than a box. A boxed input is a form; an underlined one is a line on paper — the difference is the whole register of this page.
+
+- **Field label:** `label-sm` uppercase in `ink-subtle`, above the control. Every field is labelled; no placeholder-as-label.
+- **Control:** transparent ground, `border-bottom: 1px` in `line-warm`, `body-lg` type in `ink`, 44px minimum height. On focus the rule thickens to `sage` — the accent's one job in the form, and the only place it appears outside a button.
+- **Optional fields** carry a lowercase `(optional)` beside the label in `ink-faint`; required fields are unmarked. Marking the exception rather than the rule keeps eight asterisks off the page.
+- **Select:** the same underline; the native control, restyled — never a custom dropdown.
+- **Error:** the rule turns `rose-umber` and the message sits beneath in `body-sm` `rose-umber`, naming the problem and the fix. Rose is the system's only alarm colour, and it is deliberately quiet — this form never scolds.
+- **Success:** the form is replaced in place by a Playfair confirmation at `heading-lg`; no toast, no modal.
+
+### The inquiry page is its own room
+
+`/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries **row 1 of the navigation only** — the logotype, which is the single way back — and drops the section links and the `Inquire` button, since the visitor has arrived. One exit, identical in concept at 390, 834 and 1440; a conversion surface should not offer four lateral escapes, but it must never trap.
+
+The scheduling calendar of the legacy Wix site is deliberately **not** reproduced. Times get negotiated in the reply; a public calendar promises an availability nobody is maintaining.
 
 ## Do's and Don'ts
 

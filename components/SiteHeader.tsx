@@ -57,7 +57,7 @@ export function SiteHeader() {
           </span>
         </Link>
         <div className="flex justify-end">
-          <ButtonOutline href="#inquire">Inquire</ButtonOutline>
+          <ButtonOutline href="/inquire">Inquire</ButtonOutline>
         </div>
       </div>
 

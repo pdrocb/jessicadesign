@@ -72,6 +72,50 @@ export const services = [
   },
 ];
 
+/**
+ * Proceso de diseño confirmado por la clienta (PRODUCT.md, ago 2026).
+ * El mock-up presencial es la prueba diferenciadora: casi ningún
+ * competidor lo ofrece — no diluirlo entre los demás pasos.
+ */
+export const process = {
+  eyebrow: "The Process",
+  heading: "How a room becomes yours.",
+  intro:
+    "Design is the work, and the work has a shape. From the first conversation to the last candle lit, here is how we get there together.",
+  steps: [
+    {
+      numeral: "No. I",
+      name: "The Concept",
+      copy: "We start with your story, your inspiration, and the feeling you want the day to hold — and shape it into a direction.",
+    },
+    {
+      numeral: "No. II",
+      name: "Your Design Deck",
+      copy: "A custom deck: palette, textures, tablescapes, florals, stationery, signage. The whole world of the day, on paper.",
+    },
+    {
+      numeral: "No. III",
+      name: "Sourcing",
+      copy: "Every piece selected and secured — linens, candles, china, furniture, florals fresh or silk. Nothing left to chance.",
+    },
+    {
+      numeral: "No. IV",
+      name: "Floor Plans",
+      copy: "When the room calls for it, we map it: how the space flows, where the eye lands, how your guests move through the night.",
+    },
+    {
+      numeral: "No. V",
+      name: "The Mock-Up",
+      copy: "We build a table in person, before the day. You see it, touch it, change your mind — while changing it still costs nothing.",
+    },
+    {
+      numeral: "No. VI",
+      name: "Styling the Day",
+      copy: "We set every detail ourselves, on site, so the room your guests walk into is the one you were promised.",
+    },
+  ],
+} as const;
+
 export const quotes = [
   {
     text: "Truly more beautiful than I could have ever imagined. She is patient, responsive, and has great design ideas — I would work with Jess again in a heartbeat.",
@@ -93,6 +137,48 @@ export const lookbook = [
   { img: heroTablescape, alt: "Luxury picnic" },
   { img: heroDetail, alt: "Ceremony design" },
 ];
+
+/**
+ * Formulario de inquiry (`/inquire`). Los campos replican el formulario
+ * vigente de jessicasalomondesigns.com/contact SIN el calendario de
+ * auto-agendado: el horario se acuerda en la respuesta.
+ *
+ * `required: false` se marca en la UI con "(optional)" — se señala la
+ * excepción, no la regla, para no llenar la página de asteriscos.
+ */
+export const inquiry = {
+  eyebrow: "Inquire",
+  heading: "Tell us about your celebration.",
+  intro:
+    "A few details to start. We reply personally, and the first conversation is a complimentary hour — your story, your inspiration, and the feeling you want the day to hold.",
+  submit: "Send Your Inquiry",
+  successHeading: "Thank you — your inquiry is on its way.",
+  successBody:
+    "We read every one personally and reply within a few days to arrange your complimentary consultation.",
+  fields: [
+    { name: "name", label: "First & Last Name", type: "text", required: true, autoComplete: "name" },
+    { name: "email", label: "Email", type: "email", required: true, autoComplete: "email" },
+    {
+      name: "celebration",
+      label: "Type of Celebration",
+      type: "select",
+      required: true,
+      options: [
+        "Wedding",
+        "Celebration — birthday, shower, sweet sixteen, quinceañera, mitzvah",
+        "Luxury Picnic",
+        "Day-Of Set-Up",
+        "Something else",
+      ],
+    },
+    { name: "phone", label: "Contact Number", type: "tel", required: true, autoComplete: "tel" },
+    { name: "date", label: "Date of the Event", type: "date", required: false },
+    { name: "venue", label: "Name & Location of Venue", type: "text", required: false },
+    { name: "guests", label: "How Many Guests", type: "number", required: false },
+    { name: "pinterest", label: "Pinterest Board — share the link", type: "url", required: false },
+    { name: "vision", label: "Share Your Vision", type: "textarea", required: false },
+  ],
+} as const;
 
 export const faqs = [
   {
