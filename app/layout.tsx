@@ -18,7 +18,10 @@ const description =
   "Wedding and event design + styling in the Hudson Valley, New York. We are the design layer of your celebration — every color, texture, and detail composed with intention.";
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  // El marfil de --color-paper, no blanco puro: el sistema no lleva
+  // blanco puro en ninguna parte (DESIGN.md §Colors), y la barra del
+  // navegador móvil es superficie del sitio como cualquier otra.
+  themeColor: "#fefbf6",
 };
 
 export const metadata: Metadata = {
@@ -44,7 +47,8 @@ const jsonLd = {
   legalName: "J|S Events, Event Styling & Decorating Co. LLC",
   description,
   telephone: "+1-845-375-7820",
-  priceRange: "$$$",
+  // Sin `priceRange`: no hay precios ni mínimos publicados y el sitio no
+  // debe insinuar rangos (PRODUCT.md). "$$$" lo insinuaba en Google.
   address: {
     "@type": "PostalAddress",
     addressRegion: "NY",

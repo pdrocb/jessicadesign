@@ -32,12 +32,15 @@ export const site = {
 /**
  * Los anclas van con `/` delante a propósito: el nav vive también en
  * `/inquire`, y un `#look-book` suelto ahí no lleva a ninguna parte.
+ *
+ * No hay "Blog": el enlace existía apuntando a `#` y no llevaba a
+ * ninguna parte. Vuelve cuando haya blog.
  */
 export const navItems = [
   { label: "Home", href: "/" },
   { label: "Look Book", href: "/#look-book" },
-  { label: "Luxury Picnics", href: "/#expertise" },
-  { label: "Blog", href: "#" },
+  { label: "Luxury Picnics", href: "/#luxury-picnics" },
+  { label: "The Process", href: "/#process" },
 ];
 
 export const images = {
@@ -49,27 +52,33 @@ export const images = {
   jessica,
 };
 
+/** `slug` es el ancla de cada servicio: el nav enlaza a la tarjeta, no
+ *  a la sección entera, para que la etiqueta cumpla lo que promete. */
 export const services = [
   {
     numeral: "No. I",
+    slug: "weddings",
     name: "Weddings",
     img: serviceWeddings,
     copy: "Full design & styling, from concept to reveal — the complete visual world of your wedding day.",
   },
   {
     numeral: "No. II",
+    slug: "celebrations",
     name: "Celebrations",
     img: serviceCelebrations,
     copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs — every milestone, thoughtfully styled.",
   },
   {
     numeral: "No. III",
+    slug: "luxury-picnics",
     name: "Luxury Picnics",
     img: servicePicnics,
     copy: "Curated open-air experiences, styled to the last napkin and glass.",
   },
   {
     numeral: "No. IV",
+    slug: "day-of-set-up",
     name: "Day-Of Set-Up",
     img: serviceDayOf,
     copy: "Your vision, our hands — including the decor you made yourself. Our team sets up every detail on the day.",

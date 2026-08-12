@@ -123,7 +123,7 @@ export function Services() {
     <section
       id="expertise"
       aria-label="Expertise"
-      className="gutter section-y shell border-t border-line"
+      className="gutter section-y shell scroll-mt-28 border-t border-line"
     >
       <div data-reveal className="mb-7 flex flex-col gap-2 md:mb-11 md:flex-row md:items-baseline md:justify-between lg:mb-16">
         <h2 className="text-heading-lg font-display font-medium">Expertise</h2>
@@ -135,10 +135,11 @@ export function Services() {
         {services.map((svc, i) => (
           <article
             key={svc.name}
+            id={svc.slug}
             data-reveal
             // Escalonado de 80ms entre tarjetas (DESIGN.md §Motion).
             style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-            className="flex flex-col gap-3"
+            className="flex scroll-mt-28 flex-col gap-3"
           >
             <Image
               src={svc.img}
@@ -329,12 +330,17 @@ export function Testimonials() {
    Grid full-bleed con gap 8 (§6). Enlaza a la galería, aún por diseñar. */
 export function LookBook() {
   return (
-    <section id="look-book" aria-label="Look book" className="section-y">
-      <div data-reveal className="gutter shell mb-7 flex items-baseline justify-between lg:mb-14">
+    <section
+      id="look-book"
+      aria-label="Look book"
+      className="section-y scroll-mt-28"
+    >
+      {/* Sin "View All": enlazaba a la sección donde ya estaba. Vuelve
+          cuando exista la galería completa. */}
+      <div data-reveal className="gutter shell mb-7 lg:mb-14">
         <h2 className="text-heading-lg font-display font-medium">
           The Look Book
         </h2>
-        <LinkUnderline href="#look-book">View All</LinkUnderline>
       </div>
       <div className="grid grid-cols-2 gap-2 px-2 lg:grid-cols-4">
         {lookbook.map((shot, i) => (
@@ -385,9 +391,9 @@ export function Cta() {
 export function SiteFooter() {
   const footerNav = [
     { label: "Home", href: "/" },
-    { label: "Look Book", href: "#look-book" },
-    { label: "Luxury Picnics", href: "#expertise" },
-    { label: "Blog", href: "#" },
+    { label: "Look Book", href: "/#look-book" },
+    { label: "Luxury Picnics", href: "/#luxury-picnics" },
+    { label: "The Process", href: "/#process" },
     { label: "Inquire", href: "/inquire" },
   ];
 
