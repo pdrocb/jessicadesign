@@ -360,7 +360,8 @@ This reuses the `collapsed` flag the header already keeps; there is no second ob
 - **Shape:** square (`0px`), no exceptions — Florale's pills stay Florale's.
 - **Primary:** `sage` fill, `bone` text, `label` type, padding `18px 56px`. Full width below 768px. *(Recolored from `ink` in the Aug 2026 recalibration — the one place the palette's warmth meets the one action that matters.)*
 - **Primary hover:** deepens to `sage-deep`, 180ms. No lift, no scale, no shadow.
-- **Outline (nav CTA):** 1px `ink` border, transparent fill, `label-sm`. Hover fills to `sage` with `bone` text. Its visible box is **32px** so it does not dominate a 53px nav row; the touch target reaches **44px** through an `::after` that extends the hit area 6px above and below. Visual size and touch surface are not the same rectangle, and forcing them to be is what makes a small control look bloated.
+- **Nav CTA:** `sage` fill, `bone` text — the same treatment as the primary button, so the whole site speaks one language: green is the action. It was an outlined button until Aug 2026; filling it removed the question of which control was the real ask.
+- **Nav CTA sizing:** 34px visible on mobile, growing to **44px from `lg`** with `label` type and wider padding. The original 32px existed "so it does not dominate a 53px nav row" — and that row no longer exists. With the logotype at 84px the row measures 104px and had 70px of slack, so the constraint that justified a small button had quietly expired. On mobile the visible box stays at 34px and the touch target reaches 44px through an `::after` extension: visual size and touch surface are not the same rectangle, and forcing them to be is what bloats a small control in a narrow row.
 
 ### Links
 
@@ -376,6 +377,14 @@ Two rows, and the rules here are stricter than anywhere else in the system.
 - **Collapse:** past the hero, row 2 collapses and **only returns when the visitor scrolls back above the threshold** — not on any upward scroll mid-page. The threshold is a 1px sentinel the hero places 120px before its own end, watched by an `IntersectionObserver`. There is no scroll listener.
 - **Mechanics:** the collapse animates `grid-template-rows: 1fr → 0fr`, not a fixed `max-height`, because the row is a different height at every breakpoint. The bottom hairline lives inside the clipped child so it disappears with the row instead of stranding a line under the logo. Collapsed, the row carries `inert` — no tabbing to an invisible link.
 - **Motion:** 420ms `cubic-bezier(0.22, 0.61, 0.36, 1)` on geometry, 260ms on opacity. Instant under `prefers-reduced-motion`.
+
+### The mobile menu appears only once the links leave
+
+Below `lg`, a hamburger fades into the **left** cell of row 1 — the cell that was always empty, so the logotype keeps its centre — and it appears **only while row 2 is collapsed**. While the links are on screen, a control that repeats them is noise. Three hairlines fold into an X on open, on the system curve.
+
+It opens a full-screen panel, not a drawer: `paper` ground, the four links at `heading-lg` in Playfair separated by hairlines, and the **conversion pinned to the bottom** — the primary CTA at full width with the phone number beneath it, for the visitor who would rather call than write. A menu that lists destinations without offering the one action the page exists for wastes its own real estate.
+
+Mechanics worth keeping: the panel is a child of the header, so row 1 carries `relative z-10` to stay above it — otherwise the panel covers the hamburger at exactly the moment it becomes the close button. Opening locks the page behind it, `Escape` closes, tapping any link closes, and the panel un-collapsing (scrolling back to the top) closes it too. Closed, it carries `hidden`, so nothing inside is tabbable.
 
 ### Cards
 

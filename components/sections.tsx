@@ -344,9 +344,9 @@ export function About() {
             she takes on a small number of celebrations each year, by choice:
             fewer rooms, more of her in each one.
           </p>
-          {/* Antes decía "Meet Jessica" y llevaba al bloque de inquiry:
-              la etiqueta prometía una biografía que no existe. */}
-          <LinkUnderline href="/inquire">Work With Jessica</LinkUnderline>
+          {/* "Work With Jessica" sonaba a contrato. En su biografía el
+              registro tiene que ser el suyo, no el de una transacción. */}
+          <LinkUnderline href="/inquire">Say Hello to Jessica</LinkUnderline>
         </div>
       </div>
     </section>

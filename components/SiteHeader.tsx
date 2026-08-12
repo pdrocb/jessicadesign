@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { navItems, site } from "@/lib/content";
-import { ButtonOutline, Wordmark } from "@/components/ui";
+import { ButtonOutline, ButtonPrimary, Wordmark } from "@/components/ui";
 
 /**
  * Nav editorial de dos filas (handoff §3).
@@ -19,7 +19,27 @@ import { ButtonOutline, Wordmark } from "@/components/ui";
  */
 export function SiteHeader() {
   const [collapsed, setCollapsed] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  // Con el panel abierto, la página de atrás no debe hacer scroll.
+  // Escape lo cierra: es la salida que espera cualquiera.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.documentElement.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  // Si la fila 2 vuelve a aparecer, el panel sobra: los links ya están.
+  useEffect(() => {
+    if (!collapsed) setMenuOpen(false);
+  }, [collapsed]);
 
   useEffect(() => {
     // Fuera del home no hay centinela: la fila 2 se queda visible, que es
@@ -43,8 +63,47 @@ export function SiteHeader() {
     <header className="sticky top-0 z-(--z-nav) bg-paper">
       {/* En mobile el padding baja a 4px porque el logo y el CTA ya miden
           44px por accesibilidad: la fila mantiene los ~52px del handoff. */}
-      <div className="gutter grid grid-cols-[1fr_auto_1fr] items-center border-b border-line py-1 md:py-[9px] lg:pt-[10px]">
-        <div />
+      {/* `relative z-10` mantiene la fila 1 por encima del panel: el panel
+          es hijo del header, así que sin esto taparía a sus hermanos y la
+          hamburguesa desaparecería justo cuando sirve de botón de cierre. */}
+      <div className="gutter relative z-10 grid grid-cols-[1fr_auto_1fr] items-center border-b border-line bg-paper py-1 md:py-[9px] lg:pt-[10px]">
+        {/* La hamburguesa solo existe en mobile Y con la fila 2 colapsada:
+            mientras los links están a la vista, un control que los repite
+            es ruido. Ocupa la celda izquierda que ya estaba vacía, así
+            que no mueve el logotipo de su centro. */}
+        <div className="flex justify-start lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className={`-ml-2 grid h-11 w-11 place-items-center transition-opacity duration-[260ms] ease-(--ease-geometry) ${
+              collapsed ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+          >
+            <span aria-hidden className="relative block h-[11px] w-[22px]">
+              {/* Tres hairlines; al abrir, la de en medio se desvanece y
+                  las otras dos giran a una X. Misma curva que el nav. */}
+              <span
+                className={`absolute inset-x-0 top-0 h-px bg-ink transition-transform duration-[260ms] ease-(--ease-geometry) ${
+                  menuOpen ? "translate-y-[5px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`absolute inset-x-0 top-[5px] h-px bg-ink transition-opacity duration-[160ms] ${
+                  menuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`absolute inset-x-0 top-[10px] h-px bg-ink transition-transform duration-[260ms] ease-(--ease-geometry) ${
+                  menuOpen ? "-translate-y-[5px] -rotate-45" : ""
+                }`}
+              />
+            </span>
+          </button>
+        </div>
+        <div className="hidden lg:block" />
         <Link
           href="/"
           aria-label={`${site.name} — home`}
@@ -119,6 +178,51 @@ export function SiteHeader() {
               );
             })}
           </nav>
+        </div>
+      </div>
+
+      {/* Panel a pantalla completa, por debajo de la fila 1 en z para que
+          la hamburguesa siga a la vista y sirva de cierre en su mismo
+          sitio. `hidden` cuando está cerrado: nada que tabular. */}
+      <div
+        id="mobile-menu"
+        hidden={!menuOpen}
+        className="fixed inset-0 z-0 flex flex-col bg-paper lg:hidden"
+      >
+        <nav
+          aria-label="Mobile"
+          className="gutter flex flex-1 flex-col justify-center gap-1 pt-24"
+        >
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+              aria-current={item.href === pathname ? "page" : undefined}
+              className="text-heading-lg border-b border-line py-4 font-display font-medium transition-colors duration-[180ms] hover:text-ink-subtle"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* El cierre del panel es la conversión, no un link más: el CTA a
+            ancho completo y el teléfono debajo, para quien prefiere
+            llamar antes que escribir. */}
+        <div className="gutter flex flex-col gap-4 pb-10">
+          <ButtonPrimary
+            href="/inquire"
+            className="w-full"
+            onClick={() => setMenuOpen(false)}
+          >
+            Start With a Conversation
+          </ButtonPrimary>
+          <a
+            href={site.phoneHref}
+            className="text-label-sm py-2 text-center font-medium tracking-[0.28em] text-ink-subtle uppercase"
+          >
+            {site.phone}
+          </a>
         </div>
       </div>
     </header>

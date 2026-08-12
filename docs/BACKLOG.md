@@ -12,7 +12,6 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 ## Pendientes de la fase impeccable
 
 - **Escala tipográfica definitiva** — ¿escala modular o valores curados? Los actuales son interpolación anclada sobre los valores del handoff.
-- **Menú mobile completo (overlay).** El diseño original mostraba una hamburguesa en mobile que no se implementó: todos los links del nav ya son alcanzables en la fila 2, y un control muerto es peor que ninguno. Si el overlay se diseña, la hamburguesa vuelve con él.
 - **Sistema de motion** — reveals al scroll, transiciones de página, hover en imágenes.
 - **Páginas internas** — Look Book, Luxury Picnics, Blog. Hoy los links del nav apuntan a anclas de la home o a `#`.
 - **Dirección de fotografía** — color vs. monocromo, ratios oficiales, tratamiento. El prototipo tenía un toggle global de monocromo (`grayscale(1) contrast(1.02)`) que no se implementó por no tener decisión.

@@ -26,10 +26,12 @@ export function ButtonPrimary({
   href,
   children,
   className = "",
-}: Props & { href: string }) {
+  onClick,
+}: Props & { href: string; onClick?: () => void }) {
   return (
     <a
       href={href}
+      onClick={onClick}
       className={`text-label inline-block bg-sage px-14 py-[18px] text-center font-medium text-bone uppercase transition-colors duration-[180ms] hover:bg-sage-deep ${className}`}
     >
       {children}
@@ -37,7 +39,15 @@ export function ButtonPrimary({
   );
 }
 
-/** CTA secundario del nav: borde 1px, fondo transparente. */
+/**
+ * CTA del nav. Va relleno en sage, igual que el botón primario: un solo
+ * idioma en todo el sitio — verde es la acción.
+ *
+ * Crece a 44px en desktop. Los 32px originales existían "para no dominar
+ * una fila de 53px", y esa fila ya no existe: con el logotipo a 84px la
+ * fila mide 104 y sobraban 70px de holgura. En móvil se queda como
+ * estaba, donde el tamaño ya era el correcto.
+ */
 export function ButtonOutline({
   href,
   children,
@@ -46,13 +56,16 @@ export function ButtonOutline({
   return (
     <a
       href={href}
-      // La caja visible mide 32px para no dominar una fila de 53; el área
-      // táctil llega a 44px con un ::after que la extiende 6px arriba y
-      // abajo. Tamaño visual y superficie de toque no son el mismo
-      // rectángulo — forzarlos a serlo es lo que engorda el botón.
-      // La extensión se mantiene en todos los breakpoints: las tablets
-      // también son táctiles, y en desktop un target indulgente no estorba.
-      className={`text-label-sm relative inline-flex items-center border border-ink px-4 py-[8px] font-medium uppercase transition-colors duration-[180ms] after:absolute after:inset-x-0 after:-top-1.5 after:-bottom-1.5 after:content-[''] hover:border-sage hover:bg-sage hover:text-bone md:px-5 lg:px-6 lg:py-[9px] ${className}`}
+      // En móvil la caja visible mide 34px y el área táctil llega a 44 con
+      // un ::after que la extiende arriba y abajo: tamaño visual y
+      // superficie de toque no tienen por qué ser el mismo rectángulo, y
+      // forzarlos a serlo es lo que engorda el botón en una fila estrecha.
+      // Desde `lg` la caja ya mide 44 por sí sola y el ::after sobra, pero
+      // se deja: no estorba y evita un segundo juego de reglas.
+      // El py móvil es 10px y no 8: al pasar de contorno a relleno se
+      // perdieron los 2px del borde, y con 8px el área táctil caía a 42.
+      // Los 44 no se negocian.
+      className={`text-label-sm relative inline-flex items-center bg-sage px-4 py-[10px] font-medium text-bone uppercase transition-colors duration-[180ms] after:absolute after:inset-x-0 after:-top-1.5 after:-bottom-1.5 after:content-[''] hover:bg-sage-deep md:px-5 lg:px-8 lg:py-[14px] lg:text-label ${className}`}
     >
       {children}
     </a>
