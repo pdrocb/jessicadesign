@@ -10,7 +10,11 @@
 import heroTablescape from "@/assets/hero-01-tablescape.jpg";
 import heroReception from "@/assets/hero-02-reception.jpg";
 import heroDetail from "@/assets/hero-03-detail.jpg";
+import heroTerrace from "@/assets/hero-04-terrace.jpg";
 import jessica from "@/assets/jessica-salomon.jpg";
+import lookbookGoldenHour from "@/assets/lookbook-golden-hour.jpg";
+import lookbookMenuSuite from "@/assets/lookbook-menu-suite.jpg";
+import lookbookReception from "@/assets/lookbook-reception.jpg";
 import manifesto01 from "@/assets/manifesto-01.jpg";
 import manifesto02 from "@/assets/manifesto-02.jpg";
 import serviceCelebrations from "@/assets/service-celebrations.jpg";
@@ -50,6 +54,7 @@ export const images = {
   heroTablescape,
   heroReception,
   heroDetail,
+  heroTerrace,
   manifesto01,
   manifesto02,
   jessica,
@@ -204,15 +209,15 @@ export const quotes = [
  * cuanto lleguen las de la clienta.
  */
 export const lookbook = [
-  { cover: manifesto01, shape: "wide", title: "Bridal Details", alt: "Flat lay of bridal shoes, rings and calligraphed envelopes" },
+  { cover: lookbookReception, shape: "wide", title: "Ceremony & Reception", alt: "Round table set with gold chargers and menu cards, ceremony chairs behind it in a brick loft" },
   { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
 
   { cover: serviceDayOf, shape: "square", title: "Loft Dinner", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
-  { cover: serviceCelebrations, shape: "square", title: "After Hours", alt: "Polaroids, coupe glasses and a disco ball, in black and white" },
+  { cover: lookbookGoldenHour, shape: "square", title: "Golden Hour Table", alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light" },
   { cover: servicePicnics, shape: "square", title: "Citrus Picnic", alt: "Low picnic table with lemon-print china, rattan chargers and cushions" },
 
   { cover: heroDetail, shape: "tall", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
-  { cover: manifesto02, shape: "wide", title: "Stationery Suite", alt: "Invitation suite styled with florals and a silver tray" },
+  { cover: lookbookMenuSuite, shape: "wide", title: "Stationery Suite", alt: "Hand-lettered menu card on a lilac napkin over a botanical plate" },
 ] as const;
 
 /**

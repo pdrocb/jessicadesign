@@ -82,8 +82,8 @@ export function Hero() {
             columna ya es de ancho completo. Desde `md` vuelve al rail. */}
         <figure className="m-0 flex flex-col gap-3 lg:gap-3.5">
           <Image
-            src={images.serviceWeddings}
-            alt="Farm table reception at golden hour, set with taper candles and gold vessels"
+            src={images.heroTerrace}
+            alt="Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign"
             sizes="(min-width: 1200px) 55vw, 100vw"
             priority
             fetchPriority="high"
@@ -96,7 +96,7 @@ export function Hero() {
             className="-mx-(--gutter) aspect-[5/4] w-[calc(100%_+_var(--gutter)_*_2)] max-w-none object-cover md:mx-0 md:aspect-[4/3] md:w-full md:max-w-full"
           />
           <figcaption className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-left">
-            Farm table reception · Hudson Valley, NY
+            Terrace welcome dinner · Hudson Valley, NY
           </figcaption>
         </figure>
       </div>
