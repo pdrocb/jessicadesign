@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { InquiryForm } from "@/components/InquiryForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Eyebrow } from "@/components/ui";
-import { inquiry, site } from "@/lib/content";
+import { inquiry } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Inquire | Jessica S. Designs",
@@ -38,19 +38,14 @@ export default function InquirePage() {
             </p>
           </div>
 
+          {/* Sin salida al teléfono a propósito (petición de la clienta,
+              ago 2026): esta pantalla existe para que el formulario sea
+              el único camino, y una escapatoria a "mejor te llamo"
+              compite con eso. El teléfono se sigue viendo en el nav, el
+              menú móvil y el footer — solo no aquí. */}
           <div className="mt-10 md:mt-14">
             <InquiryForm />
           </div>
-
-          <p className="text-body-md mt-10 border-t border-line pt-6 text-ink-subtle md:mt-14">
-            Prefer to talk?{" "}
-            <a
-              href={site.phoneHref}
-              className="border-b border-ink pb-px transition-colors duration-[180ms] hover:text-ink-subtle"
-            >
-              {site.phone}
-            </a>
-          </p>
         </div>
       </main>
     </>
