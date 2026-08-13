@@ -252,7 +252,7 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 |---|---|---|---|
 | `--gutter` | 20px | 32px | 48px |
 | `--section-y` | 56px | 80px | 110px |
-| Hero collage | 1 photograph | collage of 2 | collage of 3 |
+| Hero | stacked, photo after text | stacked | 0.9fr text · 1.1fr photo |
 | Services | 1 column | 2 columns | 4 columns |
 | Manifesto | stacked, photo last | 150 / 1fr | 200 / 1fr / 200 |
 | Silk Florals | stacked, 1 photo | 1fr / 0.8fr | 1fr / 0.7fr / 0.7fr, 2nd photo +80px |
@@ -265,17 +265,29 @@ The governing rule is **one column fewer per breakpoint down**, never a reflow i
 
 ### A section's shape argues for its content
 
-Silk Florals is text-led with two photographs at **different altitudes**, borrowing the hero collage's stagger rather than the Manifesto's symmetric flanking. That is not decoration: Manifesto and About are both photo-and-text splits already, and the page reaches this point having just run two grids back to back (Expertise at 4 columns, Process at 3). A third grid would have made the page read as a stack of grids, and a third split would have made the section read as one more paragraph. The stagger is what tells a scrolling visitor that this is a different kind of claim.
+Silk Florals is text-led with two photographs at **different altitudes**, staggered rather than flanking symmetrically like the Manifesto. That is not decoration: Manifesto and About are both photo-and-text splits already, and the page reaches this point having just run two grids back to back (Expertise at 4 columns, Process at 3). A third grid would have made the page read as a stack of grids, and a third split would have made the section read as one more paragraph. The stagger is what tells a scrolling visitor that this is a different kind of claim.
 
 It also belongs nowhere else: the four Expertise entries are *occasions*, and silk is a *material*. Filing it as a fifth card would have demoted a growing line to a footnote and orphaned it in a four-column grid.
 
-### The hero orders message before proof
+### The hero is split, and the whole of it fits above the fold
 
-Headline → location → CTA → collage, at every breakpoint. The headline never sits on a photograph.
+Two columns at `lg`, **0.9fr text / 1.1fr photograph**; stacked below that, text first. Inside the text column: eyebrow → headline → lede → primary CTA with an underlined secondary link. The headline never sits on a photograph.
 
-This order is load-bearing, not stylistic. The original composition overlapped the headline on the collage, and that overlap was quietly doing two jobs: it looked editorial, and it compressed roughly 250px of height. Lifting the headline onto paper for contrast cost that compression and pushed the CTA off the fold — measured at 1144px on a 1440×900 screen. Shrinking the headline and the collage could not recover it without gutting both.
+This replaced a centred headline over a three-image collage in Aug 2026, at the client's request, taking the skeleton her two reference sites share — [nyflorale.com](https://nyflorale.com) and [theclementineee.com](https://theclementineee.com), both of which run eyebrow → headline with an accented word → lede → two CTAs beside a bleeding photograph. **Where the references disagree, we take the side that is already ours:**
 
-Moving location and CTA above the collage recovers it without gutting anything: the collage holds its full 560px, and the CTA lands at **464px on desktop, 367 on tablet, 309 on mobile** — inside the fold even on a laptop with browser chrome. The collage becomes the reward for scrolling rather than a gate in front of the ask, and the nav's persistent `Inquire` covers everyone who scrolls past.
+| | Florale | The Clementine | Here |
+|---|---|---|---|
+| Column ratio | 1 : 1 | 0.92 : 1.08 | **0.9 : 1.1** — the symmetry is Florale's signature; asymmetry gives the photograph the weight it earns |
+| Caption | inside the image, over a `0.70/0.25` scrim | below, on paper | **below** — that scrim is the one we measured, shipped, and then removed |
+| Secondary CTA | ghost button | text link with an arrow | **underlined link**, the system's own |
+| Accent in the headline | coloured italic | highlight span | **ink italic** — coloured italic beside a green button on a warm ground is Florale's hero verbatim |
+| Shape | pill buttons | pill buttons | **radius zero** |
+
+The split buys back what the centred version spent on height: **the entire hero clears the fold at 1440×900** (692px tall, CTA bottom at 750px), and the CTA lands at 544px on tablet and 491px on mobile. The photograph is no longer a reward for scrolling — it arrives with the sentence, which is what "let the imagery do the talking" actually asks for.
+
+**The three-image collage is gone with it.** It was the most editorial gesture on the page and it does not survive a split hero at any size worth having. Removing it also thinned a page that already carried the editorial plate, the Look Book, and photographs in Manifesto, Expertise, Silk Florals, and About. It is one revert away in the history if the page ever feels bare without it.
+
+On mobile the photograph bleeds to both edges while its caption stays on the rail. `max-w-none` is required there: `next/image` ships its own `max-width:100%`, which silently caps the negative-margin width and leaves the image shifted rather than bled.
 
 **Touch targets are 44px minimum on mobile, and that rule outranks any height in the original handoff.** Where the two collide — the second nav row was specified at 37px — the target wins and the row grows to 45px. Padding lives on the anchor; the active-state underline lives on an inner span so it hugs the text instead of the edge of the tap area.
 
@@ -315,7 +327,7 @@ The one `box-shadow` in the entire codebase is not elevation. The primary button
 
 **Radius is zero everywhere, and there is deliberately no radius scale to reach for** — buttons, images, cards, inputs, the dark band. The only `rounded` token is `none: 0px`, and it exists so components can reference the decision explicitly rather than omit the property by accident.
 
-The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero collage is the one exception, using fixed pixel heights with deliberate vertical offsets so the three images sit at different altitudes.
+The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero photograph adds a fifth: **5/4** on mobile, **4/3** from `md`.
 
 ### The uncaptioned plate
 

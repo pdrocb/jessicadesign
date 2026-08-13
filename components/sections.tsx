@@ -17,73 +17,79 @@ import {
 } from "@/components/ui";
 
 /* ── Hero ──────────────────────────────────────────────────────────
-   Collage de 3 imágenes en desktop, 2 en tablet, 1 en mobile (§4).
-   El H1 se superpone al collage en desktop/tablet; en mobile va en
-   blanco sobre la foto, que lleva su propio gradiente para contraste. */
+   Hero partido: texto a la izquierda, una sola fotografía grande a la
+   derecha. Es el esqueleto que comparten las dos referencias que pidió
+   la clienta (Florale y The Clementine), resuelto con nuestras piezas.
+
+   Dónde nos separamos de cada una, a propósito:
+   · Proporción 0.9/1.1 y no 1:1 — la simetría de columnas iguales es la
+     firma de Florale; la asimetría da más peso a la foto, que es lo que
+     vende, y de paso nos aleja.
+   · El pie va DEBAJO de la lámina (como Clementine) y no dentro sobre un
+     scrim (como Florale): ese scrim es justo el que medimos, probamos y
+     descartamos en la lámina editorial.
+   · CTA secundario en link subrayado, ni botón fantasma ni flecha.
+   · Itálica en tinta, radio 0, marfil: itálica de color + botón verde
+     sobre crema era la fórmula literal de Florale.
+
+   El collage de tres fotos se retiró con este cambio (ver DESIGN.md):
+   en un hero partido no cabe, y la página ya tenía tres secciones de
+   fotografía más. Vive en el historial si hay que traerlo de vuelta. */
 export function Hero() {
   return (
     <section
       aria-label="Introduction"
-      className="gutter relative shell pt-7 pb-10 md:pt-12 md:pb-16 lg:pt-18 lg:pb-24"
+      className="gutter relative shell pt-8 pb-12 md:pt-12 md:pb-16 lg:pt-14 lg:pb-20"
     >
-      {/* El titular se apoya en papel en los tres breakpoints, nunca sobre
-          una fotografía. Lo editorial del hero es el escalonado del
-          collage, no la superposición — el escalonado se conserva entero. */}
-      {/* La itálica del hero va en tinta, no en rose-umber: itálica de
-          color + botón sage sobre crema era la fórmula literal del hero
-          de Florale (DESIGN.md, Italic Accent Word). */}
-      {/* El titular le habla al momento real de compra: la novia que trae
-          un Pinterest lleno y no sabe nombrar lo que quiere. El anterior
-          ("The Art of the Unforgettable") podía encabezar el sitio de
-          cualquier proveedor de bodas y no decía qué vende Jessica. */}
-      <h1 className="text-display-hero mx-auto max-w-[19ch] text-center font-display font-medium text-ink">
-        You know how it should <em className="font-normal">feel</em>. We design
-        the rest.
-      </h1>
+      <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <div className="flex flex-col gap-5 md:gap-6 lg:gap-7">
+          {/* El eyebrow es quien nombra el negocio en claro: sin esta
+              línea, una visitante no sabía qué vendía Jessica hasta el
+              segundo scroll. Categoría primero, geografía después. */}
+          <p className="text-label-sm font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
+            {site.tagline} · {site.location}
+          </p>
 
-      {/* Ubicación y CTA van ANTES del collage: sin el solape, el hero
-          creció 250px y el botón caía fuera del pliegue en cualquier
-          portátil. Aquí aterriza sobre los 500px y el collage queda
-          como la recompensa del scroll. */}
-      <div className="mt-5 flex flex-col items-center gap-3.5 md:mt-7 md:gap-4 lg:mt-9 lg:gap-[18px]">
-        {/* Esta línea es la que nombra el negocio en claro. Antes solo
-            decía la ubicación, y el tagline vivía únicamente en el footer:
-            una visitante no sabía qué vendía Jessica hasta el segundo
-            scroll. Categoría primero, geografía después. */}
-        <p className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
-          {site.tagline} · {site.location}
-        </p>
-        <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-          Start With a Conversation
-        </ButtonPrimary>
-      </div>
+          <h1 className="text-display-hero max-w-[15ch] font-display font-medium text-ink">
+            You know how it should <em className="font-normal">feel</em>. We
+            design the rest.
+          </h1>
 
-      <div className="mt-8 grid grid-cols-1 items-start gap-[18px] md:mt-12 md:grid-cols-[1fr_1.2fr] lg:mt-16 lg:grid-cols-[1fr_1.15fr_1fr] lg:gap-7">
-        {/* El collage empieza en tablet: mobile muestra solo la recepción. */}
-        <Image
-          src={images.heroTablescape}
-          alt="Styled wedding tablescape"
-          sizes="(min-width: 1536px) 440px, (min-width: 1200px) 30vw, 40vw"
-          className="hidden h-[300px] w-full object-cover md:mt-14 md:block lg:mt-18 lg:h-[440px]"
-        />
+          <p className="text-body-md max-w-[44ch] text-ink-muted lg:text-body-lg">
+            We shape the look and feel of the whole celebration, then style
+            every piece of it ourselves, on the day.
+          </p>
 
-        {/* Una sola instancia de la recepción — es el LCP en los tres
-            breakpoints. */}
-        <Image
-          src={images.heroReception}
-          alt="Wedding reception designed by Jessica S. Designs"
-          sizes="(min-width: 1536px) 505px, (min-width: 1200px) 36vw, (min-width: 768px) 55vw, 100vw"
-          priority
-          fetchPriority="high"
-          className="h-[420px] w-full object-cover md:h-[400px] lg:h-[560px]"
-        />
+          <div className="mt-1 flex flex-col gap-4 md:flex-row md:items-center md:gap-9">
+            <ButtonPrimary href="/inquire" className="w-full md:w-auto">
+              Start With a Conversation
+            </ButtonPrimary>
+            <LinkUnderline href="/#look-book">See the Work</LinkUnderline>
+          </div>
+        </div>
 
-        <Image
-          src={images.heroDetail}
-          alt="Event styling detail"
-          sizes="(min-width: 1536px) 440px, 30vw"
-          className="hidden h-[440px] w-full object-cover lg:mt-[110px] lg:block"
-        />
+        {/* En mobile la lámina sangra a los dos bordes: el gesto editorial
+            que ambas referencias usan, y que aquí no cuesta nada porque la
+            columna ya es de ancho completo. Desde `md` vuelve al rail. */}
+        <figure className="m-0 flex flex-col gap-3 lg:gap-3.5">
+          <Image
+            src={images.heroReception}
+            alt="Wedding reception designed by Jessica S. Designs"
+            sizes="(min-width: 1200px) 55vw, 100vw"
+            priority
+            fetchPriority="high"
+            // Los guiones bajos son obligatorios: Tailwind los convierte en
+            // espacios, y `calc` sin espacios alrededor del + es CSS
+            // inválido — se ignoraba y la foto quedaba corrida a la izquierda.
+            // `max-w-none` es imprescindible: next/image trae
+            // `max-width:100%` propio y sin desactivarlo capaba el calc al
+            // ancho del contenedor, dejando la foto corrida en vez de sangrada.
+            className="-mx-(--gutter) aspect-[5/4] w-[calc(100%_+_var(--gutter)_*_2)] max-w-none object-cover md:mx-0 md:aspect-[4/3] md:w-full md:max-w-full"
+          />
+          <figcaption className="text-label-sm font-medium tracking-[0.28em] text-ink-subtle uppercase">
+            Reception design · Hudson Valley, NY
+          </figcaption>
+        </figure>
       </div>
 
       {/* Umbral del colapso del nav (handoff §3): 120px antes del final
@@ -304,9 +310,11 @@ export function SilkFlorals() {
 export function EditorialBreak() {
   return (
     <div data-reveal>
+      {/* Antes repetía la foto del hero; con el hero partido esa lámina
+          quedaba dos veces en la misma página. */}
       <Image
-        src={images.heroReception}
-        alt="Full wedding reception design"
+        src={images.heroDetail}
+        alt="Event styling detail"
         sizes="100vw"
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
