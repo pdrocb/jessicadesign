@@ -428,31 +428,32 @@ export function LookBook() {
           The Look Book
         </h2>
       </div>
-      {/* Mosaico de 12 columnas: `wide` toma 7 en 4/3 y `tall` toma 5 en
-          4/5, alternados y con las filas espejeadas — lo orgánico sale de
-          esa alternancia, no de alturas al azar. `items-start` deja que
-          cada celda termine a su altura: es justo el escalonado que se
-          busca, y forzar filas parejas lo aplanaría.
-          En mobile una sola columna a ancho completo, cada foto con su
-          proporción: en un look book la imagen es el producto. */}
-      <div className="grid grid-cols-1 gap-x-3 gap-y-9 px-2 md:grid-cols-12 md:items-start md:gap-x-4 lg:gap-y-12">
+      {/* Mosaico de 12 columnas con el reparto de Florale: `wide` toma 8
+          en 3/2 y `tall` toma 4 en 3/4, alternados y con las filas
+          espejeadas. El 8/4 es lo que hace que la chica se lea CHICA —
+          con un 7/5 las dos celdas quedaban casi del mismo tamaño y no
+          había contraste, solo dos fotos enormes.
+          Va sobre el rail (`gutter shell`) y no a sangre como antes: el
+          full-bleed inflaba todo un 6% extra.
+          `items-start` deja que cada celda termine a su altura. */}
+      <div className="gutter shell grid grid-cols-1 gap-x-3 gap-y-9 md:grid-cols-12 md:items-start md:gap-x-4 lg:gap-y-12">
         {lookbook.map((album, i) => (
           <article
             key={album.title}
             data-reveal
             style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-            className={album.shape === "wide" ? "md:col-span-7" : "md:col-span-5"}
+            className={album.shape === "wide" ? "md:col-span-8" : "md:col-span-4"}
           >
             <Image
               src={album.cover}
               alt={album.alt}
               sizes={
                 album.shape === "wide"
-                  ? "(min-width: 768px) 58vw, 100vw"
-                  : "(min-width: 768px) 42vw, 100vw"
+                  ? "(min-width: 768px) 64vw, 100vw"
+                  : "(min-width: 768px) 32vw, 100vw"
               }
               className={`w-full object-cover ${
-                album.shape === "wide" ? "aspect-[4/3]" : "aspect-[4/5]"
+                album.shape === "wide" ? "aspect-[3/2]" : "aspect-[3/4]"
               }`}
             />
             {/* Label y no Playfair a propósito: cuatro títulos serif bajo

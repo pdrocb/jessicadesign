@@ -408,15 +408,17 @@ Look Book albums follow the same discipline: a cover photograph and its title 14
 
 ### The Look Book is a mosaic, not a grid of equals
 
-Twelve columns from `md`. Each album declares a `shape`: **`wide` takes 7 columns at 4/3, `tall` takes 5 at 4/5**, and the rows are mirrored — wide·tall, then tall·wide. The organic feel comes from that alternation, not from random heights; `items-start` lets each cell end where its ratio puts it, and the resulting stagger is the point. Forcing rows to equal height would flatten it back into the grid of identical cards it replaced.
+Twelve columns from `md`, on the page rail like every other section. Each album declares a `shape`: **`wide` takes 8 columns at 3/2, `tall` takes 4 at 3/4**, and the rows are mirrored — wide·tall, then tall·wide. This is Florale's split, and the 8/4 is the load-bearing part: a first pass at 7/5 produced cells of 824px and 584px, only a 30% difference, so nothing read as large or small — just two big photographs side by side. At 8/4 the small cell is **49% of the wide one's width**, and the contrast is the composition.
 
-**The shapes are assigned by crop tolerance, not by taste.** All four source photographs are portrait (1000×1333, 1200×1800), so a landscape cell costs real height. The wide cells therefore go to the flat lays, which survive being cropped short, and the tall cells to the couple and the barrel, whose subjects would be decapitated in a 4/3. Any new album gets its `shape` chosen the same way — look at the original before picking.
+`items-start` lets each cell end where its ratio puts it. At these ratios the two land within 11px of each other anyway, so the rows read level while staying independent.
+
+**The shapes are assigned by crop tolerance, not by taste.** All four source photographs are portrait (1000×1333, 1200×1800), so a landscape cell costs real height. The wide cells therefore go to the flat lays, which survive being cropped short, and the tall cells to the couple and the barrel, whose subjects would be decapitated in a 3/2. Any new album gets its `shape` chosen the same way — look at the original before picking.
 
 Below `md` the mosaic collapses to **one full-width column** with every ratio preserved, rather than the two it used before: in a look book the photograph is the product, and half a phone screen does not sell it.
 
 **Two rows on desktop, and that is a ceiling, not a starting point** (PM call, Aug 2026). Four albums fill the mirrored pattern exactly. Florale runs seven cells across three rows; here that would turn a curated look book into a contact sheet, and the section stops being a selection the moment it tries to be a catalogue. When better photographs arrive they **replace** what is here — they do not extend the grid.
 
-That caps what to ask the client for: **four covers, and their shapes matter.** Two should crop comfortably to landscape 4/3 for the wide cells, two should be vertical for the 5-column cells. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
+That caps what to ask the client for: **four covers, and their shapes matter.** Two should crop comfortably to landscape 3/2 for the wide cells, two should be vertical for the 4-column cells. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 
