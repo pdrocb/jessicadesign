@@ -428,18 +428,32 @@ export function LookBook() {
           The Look Book
         </h2>
       </div>
-      <div className="grid grid-cols-2 gap-x-2 gap-y-7 px-2 lg:grid-cols-4 lg:gap-y-9">
+      {/* Mosaico de 12 columnas: `wide` toma 7 en 4/3 y `tall` toma 5 en
+          4/5, alternados y con las filas espejeadas — lo orgánico sale de
+          esa alternancia, no de alturas al azar. `items-start` deja que
+          cada celda termine a su altura: es justo el escalonado que se
+          busca, y forzar filas parejas lo aplanaría.
+          En mobile una sola columna a ancho completo, cada foto con su
+          proporción: en un look book la imagen es el producto. */}
+      <div className="grid grid-cols-1 gap-x-3 gap-y-9 px-2 md:grid-cols-12 md:items-start md:gap-x-4 lg:gap-y-12">
         {lookbook.map((album, i) => (
           <article
             key={album.title}
             data-reveal
             style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+            className={album.shape === "wide" ? "md:col-span-7" : "md:col-span-5"}
           >
             <Image
               src={album.cover}
               alt={album.alt}
-              sizes="(min-width: 1200px) 25vw, 50vw"
-              className="aspect-[4/5] w-full object-cover"
+              sizes={
+                album.shape === "wide"
+                  ? "(min-width: 768px) 58vw, 100vw"
+                  : "(min-width: 768px) 42vw, 100vw"
+              }
+              className={`w-full object-cover ${
+                album.shape === "wide" ? "aspect-[4/3]" : "aspect-[4/5]"
+              }`}
             />
             {/* Label y no Playfair a propósito: cuatro títulos serif bajo
                 la retícula competirían con el h2 de la sección. En

@@ -181,12 +181,23 @@ export const quotes = [
  * dos `manifesto-*` son bodegones de papelería. Fiarse de la imagen, no
  * del nombre.
  */
+/**
+ * `shape` arma el mosaico: `wide` ocupa 7 de 12 columnas en 4/3, `tall`
+ * ocupa 5 en 4/5. Alternándolos y espejeando las filas, la retícula se
+ * lee orgánica sin ser un masonry aleatorio.
+ *
+ * El reparto NO es estético, es de recorte: las cuatro fotos originales
+ * son verticales (1000×1333 y 1200×1800), así que las celdas anchas se
+ * las quedan los bodegones —un flat lay aguanta que le corten alto— y
+ * las verticales se quedan con la pareja y el barril, cuyos sujetos se
+ * decapitarían en un 4/3.
+ */
 export const lookbook = [
-  { cover: manifesto01, title: "Bridal Details", alt: "Flat lay of bridal shoes, rings and calligraphed envelopes" },
-  { cover: manifesto02, title: "Stationery Suite", alt: "Invitation suite styled with florals and a silver tray" },
-  { cover: heroTablescape, title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
-  { cover: heroDetail, title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
-];
+  { cover: manifesto01, shape: "wide", title: "Bridal Details", alt: "Flat lay of bridal shoes, rings and calligraphed envelopes" },
+  { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
+  { cover: heroDetail, shape: "tall", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
+  { cover: manifesto02, shape: "wide", title: "Stationery Suite", alt: "Invitation suite styled with florals and a silver tray" },
+] as const;
 
 /**
  * Formulario de inquiry (`/inquire`). Los campos replican el formulario

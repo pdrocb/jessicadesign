@@ -259,7 +259,7 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 | Manifesto | stacked, photo last | 150 / 1fr | 200 / 1fr / 200 |
 | Silk Florals | stacked, 1 photo | 1fr / 0.8fr | 1fr / 0.7fr / 0.7fr, 2nd photo +80px |
 | Testimonials, FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
-| Look Book | 2 columns | 2 columns | 4 columns |
+| Look Book | 1 column, ratios kept | 12-col mosaic | 12-col mosaic |
 | Editorial break | 320px tall | 420px | 640px |
 | Buttons | **full width** | inline | inline |
 
@@ -404,7 +404,17 @@ Mechanics worth keeping: the panel is a child of the header, so row 1 carries `r
 
 There are no cards. Service entries are a photograph, a roman numeral in Playfair, a title, and copy — stacked in a column with no container, no border, and no background. The grid does the grouping.
 
-Look Book albums follow the same discipline: a cover photograph at 4/5 and its title 14px below, left-aligned to the image's own edge — not to the page rail, because the grid runs nearly full-bleed at 8px. **The title is `label`, not Playfair**: four serif headings under a photo grid would compete with the section's own `heading-lg`, and uppercase tracked type reads as the plate label it is. Titles sit in `ink-subtle` so the photographs stay the loudest thing in the section.
+Look Book albums follow the same discipline: a cover photograph and its title 14px below, left-aligned to the image's own edge — not to the page rail, because the grid runs nearly full-bleed at 8px. **The title is `label`, not Playfair**: four serif headings under a photo grid would compete with the section's own `heading-lg`, and uppercase tracked type reads as the plate label it is. Titles sit in `ink-subtle` so the photographs stay the loudest thing in the section.
+
+### The Look Book is a mosaic, not a grid of equals
+
+Twelve columns from `md`. Each album declares a `shape`: **`wide` takes 7 columns at 4/3, `tall` takes 5 at 4/5**, and the rows are mirrored — wide·tall, then tall·wide. The organic feel comes from that alternation, not from random heights; `items-start` lets each cell end where its ratio puts it, and the resulting stagger is the point. Forcing rows to equal height would flatten it back into the grid of identical cards it replaced.
+
+**The shapes are assigned by crop tolerance, not by taste.** All four source photographs are portrait (1000×1333, 1200×1800), so a landscape cell costs real height. The wide cells therefore go to the flat lays, which survive being cropped short, and the tall cells to the couple and the barrel, whose subjects would be decapitated in a 4/3. Any new album gets its `shape` chosen the same way — look at the original before picking.
+
+Below `md` the mosaic collapses to **one full-width column** with every ratio preserved, rather than the two it used before: in a look book the photograph is the product, and half a phone screen does not sell it.
+
+Four albums is the floor for this composition to read as composed. It will read better at six, once the client supplies more work.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 
