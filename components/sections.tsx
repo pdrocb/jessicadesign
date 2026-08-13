@@ -82,8 +82,8 @@ export function Hero() {
             columna ya es de ancho completo. Desde `md` vuelve al rail. */}
         <figure className="m-0 flex flex-col gap-3 lg:gap-3.5">
           <Image
-            src={images.heroTerrace}
-            alt="Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign"
+            src={images.heroTapers}
+            alt="Long garden table set with white hydrangeas, taper candles and gold vessels at golden hour"
             sizes="(min-width: 1200px) 55vw, 100vw"
             priority
             fetchPriority="high"

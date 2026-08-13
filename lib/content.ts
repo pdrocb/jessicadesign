@@ -11,10 +11,10 @@ import heroTablescape from "@/assets/hero-01-tablescape.jpg";
 import heroReception from "@/assets/hero-02-reception.jpg";
 import heroDetail from "@/assets/hero-03-detail.jpg";
 import heroTerrace from "@/assets/hero-04-terrace.jpg";
+import heroTapers from "@/assets/hero-05-tapers.jpg";
 import jessica from "@/assets/jessica-salomon.jpg";
 import lookbookGoldenHour from "@/assets/lookbook-golden-hour.jpg";
 import lookbookMenuSuite from "@/assets/lookbook-menu-suite.jpg";
-import lookbookReception from "@/assets/lookbook-reception.jpg";
 import manifesto01 from "@/assets/manifesto-01.jpg";
 import manifesto02 from "@/assets/manifesto-02.jpg";
 import serviceCelebrations from "@/assets/service-celebrations.jpg";
@@ -55,6 +55,7 @@ export const images = {
   heroReception,
   heroDetail,
   heroTerrace,
+  heroTapers,
   manifesto01,
   manifesto02,
   jessica,
@@ -209,7 +210,7 @@ export const quotes = [
  * cuanto lleguen las de la clienta.
  */
 export const lookbook = [
-  { cover: lookbookReception, shape: "wide", title: "Ceremony & Reception", alt: "Round table set with gold chargers and menu cards, ceremony chairs behind it in a brick loft" },
+  { cover: heroTerrace, shape: "wide", title: "Terrace Welcome Dinner", alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign" },
   { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
 
   { cover: serviceDayOf, shape: "square", title: "Loft Dinner", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
