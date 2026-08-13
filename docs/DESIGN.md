@@ -416,11 +416,13 @@ Twelve columns from `md`, on the page rail like every other section. Each album 
 
 Below `md` the mosaic collapses to **one full-width column** with every ratio preserved, rather than the two it used before: in a look book the photograph is the product, and half a phone screen does not sell it.
 
-**Three rows: wide·tall, tall·wide, then three squares.** The third row is Florale's own closing move — three 1:1 cells at 4 columns each — and it earns its place by breaking the two-cell rhythm before the eye starts predicting it. Seven cells is the ceiling; past that a curated look book becomes a contact sheet.
+**Three rows: wide·tall, three squares, tall·wide.** The squares sit **in the middle**, not at the end, so the section opens and closes on a large photograph and the rhythm breaks where the eye is starting to predict it. The third row is Florale's own closing move — three 1:1 cells at 4 columns each — and it earns its place by breaking the two-cell rhythm before the eye starts predicting it. Seven cells is the ceiling; past that a curated look book becomes a contact sheet.
 
 That fixes what to ask the client for: **seven covers, and their shapes matter.** Two crop to landscape 3/2 for the wide cells, two stay vertical at 3/4, three survive a square crop. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
 
-**Titles align across a row even when the photographs do not.** Cells stretch to the row height by default, and the title carries `mt-auto` so it anchors to the bottom of its cell rather than trailing its own image. Without it a 594px cell and a 583px cell put their labels eleven pixels apart, which reads as a mistake rather than as a stagger.
+**Everything in a row ends on the same line — photographs included.** Two mechanisms, and both are needed. The title carries `mt-auto`, so it anchors to the bottom of its cell instead of trailing its own image. And the aspect ratio lives on a **wrapper**, with the photograph inside it as `fill`.
+
+That second part is the load-bearing one, and it took three attempts. A normal `<img>` with `w-full` contributes its **natural** height while the row is being measured, so a 1200×1800 source at 437px wide demanded 656px and stretched the row before flex could shrink it — and neither `min-h-0` nor an explicit `h-0` prevented that. An absolutely-positioned `fill` image contributes nothing at all, which lets the wide cell alone decide the row height and the tall cell inherit it through `md:aspect-auto md:flex-1`. Verified identical to the pixel across all three rows.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 

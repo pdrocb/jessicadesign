@@ -423,9 +423,20 @@ const SPAN = {
   square: "md:col-span-4",
 } as const;
 
+/* Proporción del CONTENEDOR, no de la imagen: la foto va con `fill`, o
+   sea en posición absoluta, y por eso no aporta nada al cálculo de la
+   fila. Ese es el punto.
+
+   La celda ANCHA fija la altura de su fila; la ALTA la hereda
+   (`md:aspect-auto md:flex-1`) para que las dos fotos terminen en la
+   misma línea. Con la imagen en flujo normal esto no funcionaba: un
+   <img> con `w-full` aporta su alto NATURAL al medir la fila, así que
+   una foto de 1200×1800 pedía 656px y estiraba la fila antes de que el
+   flex pudiera encogerla — ni `h-0` ni `min-h-0` lo evitaban.
+   Los cuadrados van solos en su fila y miden lo mismo entre sí. */
 const RATIO = {
   wide: "aspect-[3/2]",
-  tall: "aspect-[3/4]",
+  tall: "aspect-[3/4] md:aspect-auto md:min-h-0 md:flex-1",
   square: "aspect-square",
 } as const;
 
@@ -463,16 +474,19 @@ export function LookBook() {
             // misma fila quedan alineados aunque las fotos difieran 11px.
             className={`flex flex-col ${SPAN[album.shape]}`}
           >
-            <Image
-              src={album.cover}
-              alt={album.alt}
-              sizes={
-                album.shape === "wide"
-                  ? "(min-width: 768px) 64vw, 100vw"
-                  : "(min-width: 768px) 32vw, 100vw"
-              }
-              className={`w-full object-cover ${RATIO[album.shape]}`}
-            />
+            <div className={`relative w-full ${RATIO[album.shape]}`}>
+              <Image
+                src={album.cover}
+                alt={album.alt}
+                fill
+                sizes={
+                  album.shape === "wide"
+                    ? "(min-width: 768px) 64vw, 100vw"
+                    : "(min-width: 768px) 32vw, 100vw"
+                }
+                className="object-cover"
+              />
+            </div>
             {/* Label y no Playfair a propósito: siete títulos serif bajo
                 la retícula competirían con el h2 de la sección. En
                 mayúsculas tracked se leen como el pie de una plancha. */}
