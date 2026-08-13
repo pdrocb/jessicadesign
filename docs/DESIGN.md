@@ -416,9 +416,11 @@ Twelve columns from `md`, on the page rail like every other section. Each album 
 
 Below `md` the mosaic collapses to **one full-width column** with every ratio preserved, rather than the two it used before: in a look book the photograph is the product, and half a phone screen does not sell it.
 
-**Two rows on desktop, and that is a ceiling, not a starting point** (PM call, Aug 2026). Four albums fill the mirrored pattern exactly. Florale runs seven cells across three rows; here that would turn a curated look book into a contact sheet, and the section stops being a selection the moment it tries to be a catalogue. When better photographs arrive they **replace** what is here — they do not extend the grid.
+**Three rows: wide·tall, tall·wide, then three squares.** The third row is Florale's own closing move — three 1:1 cells at 4 columns each — and it earns its place by breaking the two-cell rhythm before the eye starts predicting it. Seven cells is the ceiling; past that a curated look book becomes a contact sheet.
 
-That caps what to ask the client for: **four covers, and their shapes matter.** Two should crop comfortably to landscape 3/2 for the wide cells, two should be vertical for the 4-column cells. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
+That fixes what to ask the client for: **seven covers, and their shapes matter.** Two crop to landscape 3/2 for the wide cells, two stay vertical at 3/4, three survive a square crop. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
+
+**Titles align across a row even when the photographs do not.** Cells stretch to the row height by default, and the title carries `mt-auto` so it anchors to the bottom of its cell rather than trailing its own image. Without it a 594px cell and a 583px cell put their labels eleven pixels apart, which reads as a mistake rather than as a stagger.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 

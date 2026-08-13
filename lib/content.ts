@@ -53,6 +53,7 @@ export const images = {
   manifesto01,
   manifesto02,
   jessica,
+  serviceWeddings,
 };
 
 /** `slug` es el ancla de cada servicio: el nav enlaza a la tarjeta, no
@@ -193,10 +194,16 @@ export const quotes = [
  * decapitarían en un 4/3.
  */
 export const lookbook = [
+  // Fila 1 y 2, espejeadas
   { cover: manifesto01, shape: "wide", title: "Bridal Details", alt: "Flat lay of bridal shoes, rings and calligraphed envelopes" },
   { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
   { cover: heroDetail, shape: "tall", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
   { cover: manifesto02, shape: "wide", title: "Stationery Suite", alt: "Invitation suite styled with florals and a silver tray" },
+  // Fila 3: tres cuadrados. PROVISIONAL — estas tres fotos se repiten de
+  // la sección Expertise; se cambian cuando lleguen las de la clienta.
+  { cover: serviceDayOf, shape: "square", title: "Loft Dinner", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
+  { cover: serviceCelebrations, shape: "square", title: "After Hours", alt: "Polaroids, coupe glasses and a disco ball, in black and white" },
+  { cover: servicePicnics, shape: "square", title: "Citrus Picnic", alt: "Low picnic table with lemon-print china, rattan chargers and cushions" },
 ] as const;
 
 /**

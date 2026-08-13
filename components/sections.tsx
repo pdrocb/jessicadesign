@@ -82,8 +82,8 @@ export function Hero() {
             columna ya es de ancho completo. Desde `md` vuelve al rail. */}
         <figure className="m-0 flex flex-col gap-3 lg:gap-3.5">
           <Image
-            src={images.heroReception}
-            alt="Wedding reception designed by Jessica S. Designs"
+            src={images.serviceWeddings}
+            alt="Farm table reception at golden hour, set with taper candles and gold vessels"
             sizes="(min-width: 1200px) 55vw, 100vw"
             priority
             fetchPriority="high"
@@ -96,7 +96,7 @@ export function Hero() {
             className="-mx-(--gutter) aspect-[5/4] w-[calc(100%_+_var(--gutter)_*_2)] max-w-none object-cover md:mx-0 md:aspect-[4/3] md:w-full md:max-w-full"
           />
           <figcaption className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-left">
-            Reception design · Hudson Valley, NY
+            Farm table reception · Hudson Valley, NY
           </figcaption>
         </figure>
       </div>
@@ -319,11 +319,12 @@ export function SilkFlorals() {
 export function EditorialBreak() {
   return (
     <div data-reveal>
-      {/* Antes repetía la foto del hero; con el hero partido esa lámina
-          quedaba dos veces en la misma página. */}
+      {/* La lámina se queda con `heroReception`: es la imagen de banda que
+          la marca ya tenía y no se cambia. Cuando el hero se partió, el
+          hero cedió y tomó otra foto — no al revés. */}
       <Image
-        src={images.heroDetail}
-        alt="Event styling detail"
+        src={images.heroReception}
+        alt="Full wedding reception design"
         sizes="100vw"
         className="h-80 w-full object-cover md:h-[420px] lg:h-[640px]"
       />
@@ -414,6 +415,20 @@ export function Testimonials() {
 
 /* ── Look Book ────────────────────────────────────────────────────
    Grid full-bleed con gap 8 (§6). Enlaza a la galería, aún por diseñar. */
+/* Las tres formas del mosaico. Tabla y no ternarios encadenados: con
+   `wide`, `tall` y `square` un `? :` anidado se vuelve ilegible. */
+const SPAN = {
+  wide: "md:col-span-8",
+  tall: "md:col-span-4",
+  square: "md:col-span-4",
+} as const;
+
+const RATIO = {
+  wide: "aspect-[3/2]",
+  tall: "aspect-[3/4]",
+  square: "aspect-square",
+} as const;
+
 export function LookBook() {
   return (
     <section
@@ -436,13 +451,17 @@ export function LookBook() {
           Va sobre el rail (`gutter shell`) y no a sangre como antes: el
           full-bleed inflaba todo un 6% extra.
           `items-start` deja que cada celda termine a su altura. */}
-      <div className="gutter shell grid grid-cols-1 gap-x-3 gap-y-9 md:grid-cols-12 md:items-start md:gap-x-4 lg:gap-y-12">
+      <div className="gutter shell grid grid-cols-1 gap-x-3 gap-y-9 md:grid-cols-12 md:gap-x-4 lg:gap-y-12">
         {lookbook.map((album, i) => (
           <article
             key={album.title}
             data-reveal
             style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-            className={album.shape === "wide" ? "md:col-span-8" : "md:col-span-4"}
+            // `flex flex-col` + `mt-auto` en el título: las celdas de una
+            // fila estiran a la altura de la más alta (stretch por
+            // defecto) y el título se ancla abajo, así los rótulos de una
+            // misma fila quedan alineados aunque las fotos difieran 11px.
+            className={`flex flex-col ${SPAN[album.shape]}`}
           >
             <Image
               src={album.cover}
@@ -452,14 +471,12 @@ export function LookBook() {
                   ? "(min-width: 768px) 64vw, 100vw"
                   : "(min-width: 768px) 32vw, 100vw"
               }
-              className={`w-full object-cover ${
-                album.shape === "wide" ? "aspect-[3/2]" : "aspect-[3/4]"
-              }`}
+              className={`w-full object-cover ${RATIO[album.shape]}`}
             />
-            {/* Label y no Playfair a propósito: cuatro títulos serif bajo
+            {/* Label y no Playfair a propósito: siete títulos serif bajo
                 la retícula competirían con el h2 de la sección. En
                 mayúsculas tracked se leen como el pie de una plancha. */}
-            <h3 className="text-label mt-3.5 font-medium text-ink-subtle uppercase lg:mt-4">
+            <h3 className="text-label mt-auto pt-3.5 font-medium text-ink-subtle uppercase lg:pt-4">
               {album.title}
             </h3>
           </article>
