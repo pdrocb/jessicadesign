@@ -128,32 +128,32 @@ export const process = {
     {
       numeral: "No. I",
       name: "The Concept",
-      copy: "We start with your story, your inspiration, and the feeling you want the day to hold, and shape it into a direction.",
+      copy: "We begin with your story, your inspiration, and how you want your guests to feel. Together, those ideas become a design direction that is entirely your own.",
     },
     {
       numeral: "No. II",
       name: "Your Design Deck",
-      copy: "A custom deck: palette, textures, tablescapes, florals, stationery, signage. The day as it will look, on paper.",
+      copy: "Your custom design presentation covers the color palette, textures, tablescapes, floral direction, stationery, signage, and styling details. It lets you see how the celebration will come together long before the day arrives.",
     },
     {
       numeral: "No. III",
       name: "Sourcing",
-      copy: "We select and secure every piece, from linens and candles to china, furniture, and florals fresh or silk.",
+      copy: "We select and source the candles, tabletop details, furniture, and décor for your celebration. We also define the floral direction, whether fresh, silk, or a blend of both, so everything feels like part of the same design.",
     },
     {
       numeral: "No. IV",
       name: "Floor Plans",
-      copy: "When the room calls for it, we map it: how the space flows, where the eye lands, how your guests move through the night.",
+      copy: "When the design calls for it, we map how guests move through the space, where the focal points are, and how the room feels from every angle.",
     },
     {
       numeral: "No. V",
       name: "The Mock-Up",
-      copy: "We build a table in person, before the day. You see it, touch it, and change your mind while changing it still costs nothing.",
+      copy: "We build your tablescape in person before your wedding or celebration. You can see it, experience it, and refine every detail before anything is finalized.",
     },
     {
       numeral: "No. VI",
       name: "Styling the Day",
-      copy: "We set every detail ourselves, on site, so the room your guests walk into is the one you were promised.",
+      copy: "On the day, we style every design element on site. We place each candle, bloom, and finishing touch so the room your guests enter matches the design you approved. No surprises. No guesswork.",
     },
   ],
 } as const;
