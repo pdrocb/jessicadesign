@@ -15,6 +15,7 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 - **Sistema de motion** — reveals al scroll, transiciones de página, hover en imágenes.
 - **Páginas internas** — Look Book, Luxury Picnics, Blog. Hoy los links del nav apuntan a anclas de la home o a `#`.
 - **Dirección de fotografía** — color vs. monocromo, ratios oficiales, tratamiento. El prototipo tenía un toggle global de monocromo (`grayscale(1) contrast(1.02)`) que no se implementó por no tener decisión.
+- **Pedirle a la clienta las fotos del Look Book.** Son **cuatro**, no más: el mosaico son dos filas en desktop y esa es la altura máxima acordada (PM, ago 2026). Dos deben recortar bien a **4/3 apaisado** (celdas anchas) y dos ser **verticales** (celdas de 5 columnas). Las actuales son las provisionales del Wix, todas verticales y repetidas en otras secciones. Faltan también los **nombres reales de álbum** — hoy son descriptivos.
 - **Estados de foco definitivos.** Hoy es provisional: `outline: 1px solid currentColor`.
 - **Logotipo** — pendiente pedirle a su diseñador una **versión horizontal** (monograma a la izquierda, nombre a la derecha). El lockup apilado que entregó no cabe legible en una barra de nav; hoy se resuelve encogiéndolo al colapsar el nav, que es un parche. Falta además el favicon.
 - **"As Featured In"** — solo se publica con logos reales y permiso.

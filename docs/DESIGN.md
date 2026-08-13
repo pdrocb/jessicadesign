@@ -414,7 +414,9 @@ Twelve columns from `md`. Each album declares a `shape`: **`wide` takes 7 column
 
 Below `md` the mosaic collapses to **one full-width column** with every ratio preserved, rather than the two it used before: in a look book the photograph is the product, and half a phone screen does not sell it.
 
-Four albums is the floor for this composition to read as composed. It will read better at six, once the client supplies more work.
+**Two rows on desktop, and that is a ceiling, not a starting point** (PM call, Aug 2026). Four albums fill the mirrored pattern exactly. Florale runs seven cells across three rows; here that would turn a curated look book into a contact sheet, and the section stops being a selection the moment it tries to be a catalogue. When better photographs arrive they **replace** what is here — they do not extend the grid.
+
+That caps what to ask the client for: **four covers, and their shapes matter.** Two should crop comfortably to landscape 4/3 for the wide cells, two should be vertical for the 5-column cells. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 
