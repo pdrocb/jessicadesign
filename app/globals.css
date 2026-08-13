@@ -65,11 +65,18 @@
   --text-quote-italic: clamp(18px, 0.76vw + 15px, 26px); /* 18 → 26 */
   --text-quote-italic--line-height: 1.6;
 
-  --text-body-lg: 15px;
-  --text-body-lg--line-height: 1.9;
+  /* Los tres escalones se reparten por ROL, no por sección: `body-lg`
+     es toda la prosa corrida y `body-md` todo el copy de tarjeta dentro
+     de una retícula. Antes la prosa larga usaba los tres indistintamente
+     — un paso del Process a 13.5 y el Manifesto a 15, siendo lo mismo.
 
-  --text-body-md: 14px;
-  --text-body-md--line-height: 1.85;
+     El interlineado BAJA al subir el cuerpo: 1.9 sobre 18px daban 34px
+     entre líneas y el párrafo se deshilachaba. */
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.7;
+
+  --text-body-md: 15px;
+  --text-body-md--line-height: 1.75;
 
   --text-body-sm: 13.5px;
   --text-body-sm--line-height: 1.75;

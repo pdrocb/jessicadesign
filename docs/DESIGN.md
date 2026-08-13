@@ -63,14 +63,14 @@ typography:
     fontStyle: "italic"
   body-lg:
     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
-    fontSize: "15px"
+    fontSize: "18px"
     fontWeight: 400
-    lineHeight: 1.9
+    lineHeight: 1.7
   body-md:
     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
-    fontSize: "14px"
+    fontSize: "15px"
     fontWeight: 400
-    lineHeight: 1.85
+    lineHeight: 1.75
   body-sm:
     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
     fontSize: "13.5px"
@@ -225,7 +225,9 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
 - **quote-xl** (400, 26→40px, 1.45): the manifesto statement. The loosest line-height in the system; it is meant to be read slowly.
 - **quote-md** (400, 17→21px, 1.6): testimonials, in typographic quotes.
 - **quote-italic** (400 italic, 18→26px, 1.6): supporting lines over photography and beside portraits.
-- **body-lg / body-md / body-sm** (400, 15 / 14 / 13.5px, 1.9 / 1.85 / 1.75): long copy, secondary copy, card copy. Note the line-height rises as size rises.
+- **body-lg / body-md / body-sm** (400, 18 / 15 / 13.5px, 1.7 / 1.75 / 1.75): **the steps split by role, not by section.** `body-lg` is every stretch of running prose — the hero lede, Manifesto, Silk Florals, About, FAQ answers, the closing line. `body-md` is card copy inside a grid: the four Expertise entries, the six Process steps. `body-sm` is reserved for meta.
+
+  Until Aug 2026 long prose used all three interchangeably — a Process step at 13.5px next to the Manifesto at 15px, both running prose — and the page read smaller than it was. The sizes went up with the split, and **the line-height came down as they did**: 1.9 over 18px puts 34px between lines and the paragraph frays. Card copy keeps the looser 1.75 because its columns are narrow, around 30–42 characters, where the extra air helps.
 - **label / label-sm / label-xs** (500, 11 / 10 / 9px, tracking .30 / .26 / .30em, uppercase): eyebrows, buttons, navigation, footer, logo subline.
 
 ### Named Rules

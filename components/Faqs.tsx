@@ -66,7 +66,7 @@ export function Faqs() {
                 {isOpen && (
                   <p
                     id={`faq-panel-${i}`}
-                    className="text-body-md max-w-[60ch] px-1 pb-6 pl-9 text-ink-muted"
+                    className="text-body-lg max-w-[60ch] px-1 pb-6 pl-9 text-ink-muted"
                   >
                     {faq.a}
                   </p>

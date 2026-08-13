@@ -46,8 +46,11 @@ export function Hero() {
           {/* El eyebrow es quien nombra el negocio en claro: sin esta
               línea, una visitante no sabía qué vendía Jessica hasta el
               segundo scroll. Categoría primero, geografía después. */}
+          {/* Sin la ubicación: el pie de la foto ya dice "Hudson Valley,
+              NY" a unos centímetros, y repetirlo en el eyebrow sonaba a
+              relleno. */}
           <p className="text-label-sm font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
-            {site.tagline} · {site.location}
+            {site.tagline}
           </p>
 
           <h1 className="text-display-hero max-w-[15ch] font-display font-medium text-ink">
@@ -55,16 +58,22 @@ export function Hero() {
             design the rest.
           </h1>
 
-          <p className="text-body-md max-w-[44ch] text-ink-muted lg:text-body-lg">
+          <p className="text-body-lg max-w-[44ch] text-ink-muted">
             We shape the look and feel of the whole celebration, then style
             every piece of it ourselves, on the day.
           </p>
 
-          <div className="mt-1 flex flex-col gap-4 md:flex-row md:items-center md:gap-9">
+          {/* `!self-center` es necesario: LinkUnderline trae `self-start`
+              propio, que ganaba al `items-center` del contenedor y dejaba
+              el link pegado arriba en vez de alineado con el texto del
+              botón. En mobile el mismo `items-center` lo centra. */}
+          <div className="mt-1 flex flex-col items-center gap-4 md:flex-row md:gap-9">
             <ButtonPrimary href="/inquire" className="w-full md:w-auto">
               Start With a Conversation
             </ButtonPrimary>
-            <LinkUnderline href="/#look-book">See the Work</LinkUnderline>
+            <LinkUnderline href="/#look-book" className="!self-center">
+              See the Work
+            </LinkUnderline>
           </div>
         </div>
 
@@ -86,7 +95,7 @@ export function Hero() {
             // ancho del contenedor, dejando la foto corrida en vez de sangrada.
             className="-mx-(--gutter) aspect-[5/4] w-[calc(100%_+_var(--gutter)_*_2)] max-w-none object-cover md:mx-0 md:aspect-[4/3] md:w-full md:max-w-full"
           />
-          <figcaption className="text-label-sm font-medium tracking-[0.28em] text-ink-subtle uppercase">
+          <figcaption className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-left">
             Reception design · Hudson Valley, NY
           </figcaption>
         </figure>
@@ -125,7 +134,7 @@ export function Manifesto() {
               DEMUESTRA el alcance, mientras que "every detail" solo lo
               afirma. Y el "not décor dropped into a room" es la otra
               mitad del posicionamiento — ni planner ni decoradora. */}
-          <p className="text-body-md text-ink-muted lg:max-w-[520px] lg:text-body-lg">
+          <p className="text-body-lg text-ink-muted lg:max-w-[520px]">
             We design the way your celebration looks and feels. That covers
             tablescapes, linens, candles, florals, signage, stationery,
             furniture, and every small thing that makes a space feel
@@ -182,7 +191,7 @@ export function Services() {
             <h3 className="text-heading-md font-display font-medium">
               {svc.name}
             </h3>
-            <p className="text-body-sm text-ink-subtle">{svc.copy}</p>
+            <p className="text-body-md text-ink-subtle">{svc.copy}</p>
           </article>
         ))}
       </div>
@@ -214,7 +223,7 @@ export function Process() {
           <h2 className="text-heading-lg font-display font-medium">
             {process.heading}
           </h2>
-          <p className="text-body-md text-ink-muted lg:text-body-lg">
+          <p className="text-body-lg text-ink-muted">
             {process.intro}
           </p>
         </div>
@@ -240,7 +249,7 @@ export function Process() {
               <h3 className="text-heading-md font-display font-medium">
                 {step.name}
               </h3>
-              <p className="text-body-sm max-w-[46ch] text-ink-subtle">
+              <p className="text-body-md max-w-[46ch] text-ink-subtle">
                 {step.copy}
               </p>
             </li>
@@ -275,7 +284,7 @@ export function SilkFlorals() {
           <p className="text-quote-xl font-display font-normal lg:max-w-[16ch]">
             {silkFlorals.statement}
           </p>
-          <p className="text-body-md max-w-[52ch] text-ink-muted lg:text-body-lg">
+          <p className="text-body-lg max-w-[52ch] text-ink-muted">
             {silkFlorals.copy}
           </p>
         </div>
@@ -344,7 +353,7 @@ export function About() {
           </p>
           {/* Tope de medida: con el rail a 1536 esta columna llega a ~76ch,
               por encima del límite cómodo de lectura. */}
-          <p className="text-body-md max-w-[66ch] text-ink-muted lg:text-body-lg">
+          <p className="text-body-lg max-w-[66ch] text-ink-muted">
             Jessica is the eye behind every JSD celebration. Her work begins
             with your story, your Pinterest board, and the feeling you can’t
             quite put into words. It ends in a room your guests will talk
@@ -463,7 +472,7 @@ export function Cta() {
         <h2 className="text-display-lg max-w-[16ch] font-display font-medium">
           Tell us how you want it to feel.
         </h2>
-        <p className="text-body-md max-w-[46ch] text-ink-subtle">
+        <p className="text-body-lg max-w-[46ch] text-ink-subtle">
           A complimentary hour together, and no obligation after it.
         </p>
         <ButtonPrimary href="/inquire" className="w-full md:w-auto">
