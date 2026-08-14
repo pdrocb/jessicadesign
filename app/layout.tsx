@@ -1,14 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Karla } from "next/font/google";
 import "./globals.css";
 
-// Helvetica Neue es de sistema — no se descarga nada para el cuerpo.
-// Solo Playfair viaja por la red (handoff §2.1).
-const playfair = Playfair_Display({
-  weight: ["400", "500", "600"],
+// La pareja aprobada por la clienta se aloja localmente en el build por
+// `next/font`: Cormorant lleva la voz editorial y Karla la lectura/UI.
+const cormorant = Cormorant_Garamond({
+  weight: "variable",
   style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-playfair",
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const karla = Karla({
+  weight: "variable",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-karla",
   display: "swap",
 });
 
@@ -72,7 +80,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={playfair.variable}>
+    <html lang="en" className={`${cormorant.variable} ${karla.variable}`}>
       <body>
         {children}
         <script

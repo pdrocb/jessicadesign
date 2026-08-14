@@ -4,7 +4,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import {
   About,
   Cta,
-  EditorialBreak,
   Hero,
   LookBook,
   Manifesto,
@@ -20,16 +19,15 @@ export default function Page() {
     <>
       <RevealObserver />
       <SiteHeader />
-      <main>
+      <main className="pt-20 md:pt-22 lg:pt-24">
         <Hero />
         <Manifesto />
         <Services />
+        <LookBook />
         <Process />
         <SilkFlorals />
-        <EditorialBreak />
         <About />
         <Testimonials />
-        <LookBook />
         <Faqs />
         <Cta />
       </main>

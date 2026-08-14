@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   images,
   lookbook,
+  lookbookIntro,
   process,
   quotes,
   services,
@@ -15,34 +16,20 @@ import {
   LinkUnderline,
   Wordmark,
 } from "@/components/ui";
+import { TestimonialRail } from "@/components/TestimonialRail";
 
 /* ── Hero ──────────────────────────────────────────────────────────
-   Hero partido: texto a la izquierda, una sola fotografía grande a la
-   derecha. Es el esqueleto que comparten las dos referencias que pidió
-   la clienta (Florale y The Clementine), resuelto con nuestras piezas.
-
-   Dónde nos separamos de cada una, a propósito:
-   · Proporción 0.9/1.1 y no 1:1 — la simetría de columnas iguales es la
-     firma de Florale; la asimetría da más peso a la foto, que es lo que
-     vende, y de paso nos aleja.
-   · El pie va DEBAJO de la lámina (como Clementine) y no dentro sobre un
-     scrim (como Florale): ese scrim es justo el que medimos, probamos y
-     descartamos en la lámina editorial.
-   · CTA secundario en link subrayado, ni botón fantasma ni flecha.
-   · Itálica en tinta, radio 0, marfil: itálica de color + botón verde
-     sobre crema era la fórmula literal de Florale.
-
-   El collage de tres fotos se retiró con este cambio (ver DESIGN.md):
-   en un hero partido no cabe, y la página ya tenía tres secciones de
-   fotografía más. Vive en el historial si hay que traerlo de vuelta. */
+   La geometría replica a Florale: apilado hasta 1439px y split 1:1 desde
+   1440px. La identidad no se replica: tipografía, color, botones, copy y
+   pie de foto siguen perteneciendo al sistema de Jessica. */
 export function Hero() {
   return (
     <section
       aria-label="Introduction"
-      className="gutter relative shell pt-8 pb-12 md:pt-12 md:pb-16 lg:pt-14 lg:pb-20"
+      className="gutter bg-paper pt-8 pb-4 md:py-16 wide:py-20"
     >
-      <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-        <div className="flex flex-col gap-5 md:gap-6 lg:gap-7">
+      <div className="shell grid gap-7 md:gap-12 wide:grid-cols-2 wide:items-center wide:gap-16">
+        <div className="flex max-w-[560px] flex-col gap-5 md:max-w-[80%] md:gap-6 wide:min-h-[520px] wide:max-w-none wide:justify-center wide:gap-7">
           {/* El eyebrow es quien nombra el negocio en claro: sin esta
               línea, una visitante no sabía qué vendía Jessica hasta el
               segundo scroll. Categoría primero, geografía después. */}
@@ -53,101 +40,111 @@ export function Hero() {
             {site.tagline}
           </p>
 
-          <h1 className="text-display-hero max-w-[15ch] font-display font-medium text-ink">
-            You know how it should <em className="font-normal">feel</em>. We
-            design the rest.
+          <h1 className="text-display-hero max-w-none font-display font-medium leading-[1.1] tracking-[0.005em] text-ink md:max-w-[15ch] md:leading-[1.04] md:tracking-normal">
+            <span className="block">You know how</span>
+            <span className="block md:inline wide:block">
+              it should <em className="font-normal">feel</em>.
+            </span>{" "}
+            <span className="block md:inline wide:block">
+              We design the rest.
+            </span>
           </h1>
 
-          <p className="text-body-lg max-w-[44ch] text-ink-muted">
+          <p className="text-body-lg mt-1 max-w-[44ch] text-ink-muted md:mt-0">
             We shape the look and feel of the whole celebration, then style
             every piece of it ourselves, on the day.
           </p>
 
-          {/* `!self-center` es necesario: LinkUnderline trae `self-start`
-              propio, que ganaba al `items-center` del contenedor y dejaba
-              el link pegado arriba en vez de alineado con el texto del
-              botón. En mobile el mismo `items-center` lo centra. */}
-          <div className="mt-1 flex flex-col items-center gap-4 md:flex-row md:gap-9">
-            <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-              Start With a Conversation
-            </ButtonPrimary>
+          <div className="mt-1 flex items-center gap-9">
+            <div id="hero-primary-cta" className="w-full md:w-auto">
+              <ButtonPrimary href="/inquire" className="w-full md:w-auto">
+                Start With a Conversation
+              </ButtonPrimary>
+            </div>
+            <div className="hidden md:block">
+              <LinkUnderline href="/#look-book" className="!self-center">
+                See the Work
+              </LinkUnderline>
+            </div>
+          </div>
+        </div>
+
+        <figure className="m-0 flex flex-col gap-3">
+          <div className="relative -mx-(--gutter) aspect-square w-[calc(100%_+_var(--gutter)_*_2)] max-w-none md:mx-0 md:aspect-[16/10] md:w-full wide:aspect-square">
+            <Image
+              src={images.heroTapers}
+              alt="Long garden table set with white hydrangeas, taper candles and gold vessels at golden hour"
+              sizes="(min-width: 1440px) 50vw, 100vw"
+              priority
+              fetchPriority="high"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-left">
+            Terrace welcome dinner · Hudson Valley, NY
+          </figcaption>
+          <div className="flex justify-center md:hidden">
             <LinkUnderline href="/#look-book" className="!self-center">
               See the Work
             </LinkUnderline>
           </div>
-        </div>
-
-        {/* En mobile la lámina sangra a los dos bordes: el gesto editorial
-            que ambas referencias usan, y que aquí no cuesta nada porque la
-            columna ya es de ancho completo. Desde `md` vuelve al rail. */}
-        <figure className="m-0 flex flex-col gap-3 lg:gap-3.5">
-          <Image
-            src={images.heroTapers}
-            alt="Long garden table set with white hydrangeas, taper candles and gold vessels at golden hour"
-            sizes="(min-width: 1200px) 55vw, 100vw"
-            priority
-            fetchPriority="high"
-            // Los guiones bajos son obligatorios: Tailwind los convierte en
-            // espacios, y `calc` sin espacios alrededor del + es CSS
-            // inválido — se ignoraba y la foto quedaba corrida a la izquierda.
-            // `max-w-none` es imprescindible: next/image trae
-            // `max-width:100%` propio y sin desactivarlo capaba el calc al
-            // ancho del contenedor, dejando la foto corrida en vez de sangrada.
-            className="-mx-(--gutter) aspect-[5/4] w-[calc(100%_+_var(--gutter)_*_2)] max-w-none object-cover md:mx-0 md:aspect-[4/3] md:w-full md:max-w-full"
-          />
-          <figcaption className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-left">
-            Terrace welcome dinner · Hudson Valley, NY
-          </figcaption>
         </figure>
       </div>
-
-      {/* Umbral del colapso del nav (handoff §3): 120px antes del final
-          del hero. SiteHeader lo observa por id. */}
-      <div id="nav-threshold" aria-hidden className="absolute inset-x-0 bottom-[120px] h-px" />
     </section>
   );
 }
 
 /* ── Manifiesto ────────────────────────────────────────────────────
-   Desktop 200/1fr/200 con las dos fotos flanqueando; tablet suelta la
-   foto derecha; mobile apila con la imagen al final (§4). */
+   Composición editorial asimétrica: una fotografía ancla la izquierda,
+   el texto avanza hacia el centro y una segunda pieza, menor y más baja,
+   cierra a la derecha. En móvil vuelve a una lectura lineal. */
 export function Manifesto() {
   return (
     <section
       aria-label="Our philosophy"
       className="gutter section-y border-t border-line bg-bone lg:py-30"
     >
-      <div className="shell grid items-center gap-6 md:grid-cols-[150px_1fr] md:gap-10 lg:grid-cols-[200px_1fr_200px] lg:gap-16">
-        <Image
-          src={images.manifesto01}
-          alt="Reception detail"
-          sizes="(min-width: 1200px) 200px, (min-width: 768px) 150px, 100vw"
-          className="order-2 aspect-[4/3] w-full object-cover md:order-none md:aspect-[3/4]"
-        />
-        <div data-reveal className="flex flex-col gap-5 md:gap-6 lg:items-center lg:gap-8 lg:text-center">
+      <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-8 md:gap-y-10 lg:gap-x-12 lg:gap-y-12">
+        <div
+          data-reveal
+          className="flex flex-col gap-5 md:col-span-8 md:col-start-5 md:gap-6 lg:col-span-6 lg:col-start-4 lg:pt-4"
+        >
           <Eyebrow>Our Philosophy</Eyebrow>
-          <p className="text-quote-xl font-display font-normal lg:max-w-[22ch]">
-            A beautiful wedding is planned. An unforgettable one is{" "}
-            <em>designed</em>.
-          </p>
-          {/* Los objetos van nombrados uno por uno a propósito: la lista
-              DEMUESTRA el alcance, mientras que "every detail" solo lo
-              afirma. Y el "not décor dropped into a room" es la otra
-              mitad del posicionamiento — ni planner ni decoradora. */}
-          <p className="text-body-lg text-ink-muted lg:max-w-[520px]">
-            We design the way your celebration looks and feels. That covers
-            tablescapes, linens, candles, florals, signage, stationery,
-            furniture, and every small thing that makes a space feel
-            considered. Your planner keeps the day running and your florist
-            brings the flowers. We make sure all of it arrives as one idea,
-            unmistakably yours.
+          <p className="text-quote-xl max-w-[22ch] font-display font-normal">
+            An unforgettable celebration is designed to be <em>felt</em>.
           </p>
         </div>
+
+        <div
+          data-reveal
+          className="text-body-lg flex flex-col gap-5 text-ink-muted md:col-span-7 md:col-start-6 lg:col-span-5 lg:col-start-5 lg:max-w-[520px]"
+        >
+          <p>
+            We shape how your celebration looks, feels, and comes together.
+            From tablescapes and candlelight to florals, stationery, signage,
+            furniture, and the smallest finishing details, every element is
+            thoughtfully considered.
+          </p>
+          <p>
+            We look at the celebration as a whole, making sure each piece works
+            together to create a space that feels cohesive, intentional, and
+            distinctly yours.
+          </p>
+        </div>
+
+        <Image
+          src={images.manifesto01}
+          alt="Candlelit reception table beneath suspended greenery"
+          sizes="(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 100vw"
+          className="aspect-[4/3] w-full object-cover md:col-span-4 md:col-start-1 md:row-start-2 md:aspect-[3/4] lg:col-span-3 lg:row-start-1 lg:row-end-3 lg:mt-20"
+        />
+
         <Image
           src={images.manifesto02}
           alt="Tablescape detail"
-          sizes="200px"
-          className="hidden aspect-[3/4] w-full object-cover lg:mt-20 lg:block"
+          sizes="25vw"
+          className="hidden aspect-[3/4] w-full object-cover lg:col-span-3 lg:col-start-10 lg:row-start-2 lg:-mt-24 lg:block xl:-mt-32"
         />
       </div>
     </section>
@@ -155,7 +152,9 @@ export function Manifesto() {
 }
 
 /* ── Expertise ─────────────────────────────────────────────────────
-   4 col → 2 col → 1 col apilada (§4). */
+   La información repetida necesita una retícula compacta: 4 col →
+   2 col → 1 col. El gesto editorial vive en el encabezado, donde el
+   texto de apoyo se desplaza al extremo derecho. */
 export function Services() {
   return (
     <section
@@ -163,11 +162,16 @@ export function Services() {
       aria-label="Expertise"
       className="gutter section-y shell scroll-mt-28 border-t border-line"
     >
-      <div data-reveal className="mb-7 flex flex-col gap-2 md:mb-11 md:flex-row md:items-baseline md:justify-between lg:mb-16">
-        <h2 className="text-heading-lg font-display font-medium">Expertise</h2>
-        <div className="text-label-sm font-medium tracking-[0.3em] text-ink-subtle uppercase md:text-label">
-          Design · Styling · Execution
+      <div data-reveal className="mb-8 md:mb-12 lg:mb-14">
+        <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
+          <h2 className="text-heading-lg font-display font-medium">Expertise</h2>
+          <div className="text-label-sm font-medium tracking-[0.3em] text-ink-subtle uppercase md:text-label">
+            Design · Styling · Execution
+          </div>
         </div>
+        <p className="text-body-lg mt-6 max-w-[42ch] text-ink-muted md:mt-8 md:ml-auto md:text-right">
+          Four ways to bring a clear, cohesive design vision to life.
+        </p>
       </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-7">
         {services.map((svc, i) => (
@@ -177,14 +181,16 @@ export function Services() {
             data-reveal
             // Escalonado de 80ms entre tarjetas (DESIGN.md §Motion).
             style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-            className="flex scroll-mt-28 flex-col gap-3"
+            className="group flex scroll-mt-28 flex-col gap-3"
           >
-            <Image
-              src={svc.img}
-              alt={svc.name}
-              sizes="(min-width: 1536px) 340px, (min-width: 1200px) 25vw, (min-width: 768px) 50vw, 100vw"
-              className="mb-1 aspect-[4/5] w-full object-cover md:aspect-[3/4] lg:mb-2"
-            />
+            <div className="mb-1 overflow-hidden lg:mb-2">
+              <Image
+                src={svc.img}
+                alt={svc.name}
+                sizes="(min-width: 1536px) 340px, (min-width: 1200px) 25vw, (min-width: 768px) 50vw, 100vw"
+                className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03] md:aspect-[3/4]"
+              />
+            </div>
             <div className="font-display text-[13px] text-ink-subtle md:text-[14px] lg:text-[15px]">
               {svc.numeral}
             </div>
@@ -201,8 +207,8 @@ export function Services() {
 
 /* ── Proceso ───────────────────────────────────────────────────────
    Los seis pasos del brief de la clienta (PRODUCT.md). Sin tarjetas:
-   numeral, título y copy separados por hairlines, como la lista de
-   reglas de las FAQs. Desktop 3 col → tablet 2 → mobile 1.
+   numeral, título y copy separados por hairlines. Desktop 3 col →
+   tablet 2 → mobile 1; la retícula compacta facilita escanear el método.
 
    El paso V (el mock-up presencial) lleva el fleurón — la única
    ornamentación que permite el sistema, gastada en el único paso que
@@ -212,13 +218,10 @@ export function Process() {
     <section
       id="process"
       aria-label="Our design process"
-      className="gutter section-y scroll-mt-28 border-t border-line bg-bone lg:py-30"
+      className="gutter section-y scroll-mt-28 border-t border-line bg-paper lg:py-24"
     >
       <div className="shell">
-        <div
-          data-reveal
-          className="flex flex-col gap-4 md:max-w-[62ch] md:gap-5"
-        >
+        <div data-reveal className="flex flex-col gap-4 md:max-w-[62ch] md:gap-5">
           <Eyebrow>{process.eyebrow}</Eyebrow>
           <h2 className="text-heading-lg font-display font-medium">
             {process.heading}
@@ -228,13 +231,13 @@ export function Process() {
           </p>
         </div>
 
-        <ol className="mt-9 grid grid-cols-1 gap-px border-t border-line-warm md:mt-12 md:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+        <ol className="mt-9 grid grid-cols-1 gap-px border-t border-line-warm md:mt-12 md:grid-cols-2 lg:grid-cols-3">
           {process.steps.map((step, i) => (
             <li
               key={step.name}
               data-reveal
               style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
-              className="flex flex-col gap-2.5 border-b border-line-warm py-6 pr-0 md:py-8 md:pr-10 lg:py-10"
+              className="flex flex-col gap-2.5 border-b border-line-warm py-6 pr-0 md:py-8 md:pr-10"
             >
               <div className="flex items-baseline gap-3">
                 <span className="font-display text-[13px] text-ink-subtle md:text-[14px]">
@@ -276,10 +279,10 @@ export function SilkFlorals() {
     <section
       id="silk-florals"
       aria-label="Silk florals"
-      className="gutter section-y scroll-mt-28 border-t border-line lg:py-30"
+      className="gutter section-y scroll-mt-28 border-t border-line bg-bone lg:py-30"
     >
       <div className="shell grid items-start gap-8 md:grid-cols-[1fr_0.8fr] md:gap-12 lg:grid-cols-[1fr_0.7fr_0.7fr] lg:gap-16">
-        <div data-reveal className="flex flex-col gap-5 md:gap-6 lg:gap-7">
+        <div data-reveal className="flex flex-col gap-5 md:self-center md:gap-6 lg:gap-7">
           <Eyebrow>{silkFlorals.eyebrow}</Eyebrow>
           <p className="text-quote-xl font-display font-normal lg:max-w-[16ch]">
             {silkFlorals.statement}
@@ -287,6 +290,11 @@ export function SilkFlorals() {
           <p className="text-body-lg max-w-[52ch] text-ink-muted">
             {silkFlorals.copy}
           </p>
+          <div className="mt-1">
+            <ButtonPrimary href="/inquire" className="w-full md:w-auto">
+              Start With a Conversation
+            </ButtonPrimary>
+          </div>
         </div>
 
         <Image
@@ -335,15 +343,21 @@ export function EditorialBreak() {
 /* ── About ─────────────────────────────────────────────────────── */
 export function About() {
   return (
-    <section aria-label="About Jessica Salomon" className="gutter section-y lg:py-30">
-      <div className="shell grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-22">
+    <section
+      aria-label="About Jessica Salomon"
+      className="gutter section-y bg-paper lg:py-30"
+    >
+      <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
         <Image
           src={images.jessica}
           alt="Jessica Salomon, owner and lead stylist"
-          sizes="(min-width: 1536px) 610px, (min-width: 1200px) 40vw, 100vw"
-          className="w-full object-cover"
+          sizes="(min-width: 1200px) 42vw, (min-width: 768px) 42vw, 100vw"
+          className="w-full object-cover md:col-span-5"
         />
-        <div data-reveal className="flex flex-col gap-5 lg:gap-6">
+        <div
+          data-reveal
+          className="flex flex-col gap-5 md:col-span-7 md:mt-14 lg:col-span-6 lg:col-start-7 lg:mt-24 lg:gap-6"
+        >
           <Eyebrow>The Designer</Eyebrow>
           <h2 className="text-display-md font-display font-medium">
             Jessica Salomon
@@ -362,9 +376,17 @@ export function About() {
             she takes on a small number of celebrations each year, by choice:
             fewer rooms, more of her in each one.
           </p>
-          {/* "Work With Jessica" sonaba a contrato. En su biografía el
-              registro tiene que ser el suyo, no el de una transacción. */}
-          <LinkUnderline href="/inquire">Say Hello to Jessica</LinkUnderline>
+          {/* Firma de autor, no CTA: cierra la biografía identificando el
+              rol y a la persona detrás del trabajo. La jerarquía viene de
+              Clementine; tipografía y color permanecen en el sistema JSD. */}
+          <footer className="mt-3 flex flex-col gap-2">
+            <p className="text-label font-medium tracking-[0.28em] text-ink-subtle uppercase">
+              Founder &amp; Creative Director
+            </p>
+            <p className="text-heading-md font-display font-medium text-ink">
+              Jessica Salomon
+            </p>
+          </footer>
         </div>
       </div>
     </section>
@@ -372,41 +394,56 @@ export function About() {
 }
 
 /* ── Testimonios ──────────────────────────────────────────────────
-   Encabezado sticky en desktop; apilado en tablet y mobile (§4).
-   Vive sobre --petal (recalibración ago 2026): el rosa de sus flores
-   como atmósfera — las citas se leen luminosas, no solemnes. */
+   Desktop deja las tres voces visibles en cards 6 / 3 / 3. Tablet y
+   mobile usan un rail infinito nativo: el contenido se compacta sin
+   convertir una pieza de lectura en autoplay. */
 export function Testimonials() {
   return (
     <section
       aria-label="Testimonials"
-      className="gutter section-y bg-petal lg:py-30"
+      className="gutter section-y bg-petal lg:py-24"
     >
-      <div className="shell grid items-start gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
-        <div data-reveal className="flex flex-col gap-3.5 lg:sticky lg:top-16 lg:gap-6">
+      <div className="shell">
+        <header
+          data-reveal
+          className="flex flex-col gap-3.5 border-b border-petal-line pb-8 md:pb-10 lg:gap-6"
+        >
           <div className="text-label-sm font-medium tracking-[0.34em] text-rose-umber uppercase md:text-label">
             Kind Words
           </div>
           <h2 className="text-display-md font-display font-normal">
             In their <em className="text-rose-umber">own</em> words
           </h2>
-          <div aria-hidden className="hidden h-px w-12 bg-petal-line md:block" />
-        </div>
-        <div className="flex flex-col">
-          {quotes.map((q, i) => (
-            <figure
-              key={q.who}
-              data-reveal
-              style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-              className="flex flex-col gap-3 border-b border-petal-line py-[26px] md:gap-3.5 md:py-8 lg:gap-[18px] lg:py-11"
-            >
-              <blockquote className="text-quote-md max-w-[62ch] font-display text-ink">
-                “{q.text}”
-              </blockquote>
-              <figcaption className="text-label-xs font-medium tracking-[0.3em] text-rose-umber uppercase md:text-label-sm md:tracking-[0.3em]">
-                {q.who}
-              </figcaption>
-            </figure>
-          ))}
+        </header>
+
+        <div className="mt-8 md:mt-10 lg:mt-12">
+          <TestimonialRail items={quotes} label="Client testimonials" />
+
+          <div className="hidden lg:grid lg:grid-cols-12 lg:gap-5 xl:gap-6">
+            {quotes.map((q, i) => (
+              <figure
+                key={q.who}
+                data-reveal
+                style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+                className={`flex min-h-[340px] flex-col justify-between border border-petal-line bg-paper p-8 xl:p-10 ${
+                  i === 0 ? "lg:col-span-6" : "lg:col-span-3"
+                }`}
+              >
+                <blockquote
+                  className={`${
+                    i === 0
+                      ? "text-quote-xl max-w-[36ch]"
+                      : "text-quote-md max-w-[62ch]"
+                  } font-display text-ink`}
+                >
+                  “{q.text}”
+                </blockquote>
+                <figcaption className="text-label-xs mt-8 font-medium tracking-[0.3em] text-rose-umber uppercase md:text-label-sm">
+                  {q.who}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -414,29 +451,17 @@ export function Testimonials() {
 }
 
 /* ── Look Book ────────────────────────────────────────────────────
-   Grid full-bleed con gap 8 (§6). Enlaza a la galería, aún por diseñar. */
-/* Las tres formas del mosaico. Tabla y no ternarios encadenados: con
-   `wide`, `tall` y `square` un `? :` anidado se vuelve ilegible. */
+   Réplica estructural del Portfolio de Florale: encabezado escalonado y
+   mosaico 1 → 6 → 12 columnas. La identidad y los captions son Jessica. */
 const SPAN = {
-  wide: "md:col-span-8",
-  tall: "md:col-span-4",
-  square: "md:col-span-4",
+  wide: "md:col-span-6 lg:col-span-8",
+  tall: "md:col-span-3 lg:col-span-4",
+  square: "md:col-span-2 lg:col-span-4",
 } as const;
 
-/* Proporción del CONTENEDOR, no de la imagen: la foto va con `fill`, o
-   sea en posición absoluta, y por eso no aporta nada al cálculo de la
-   fila. Ese es el punto.
-
-   La celda ANCHA fija la altura de su fila; la ALTA la hereda
-   (`md:aspect-auto md:flex-1`) para que las dos fotos terminen en la
-   misma línea. Con la imagen en flujo normal esto no funcionaba: un
-   <img> con `w-full` aporta su alto NATURAL al medir la fila, así que
-   una foto de 1200×1800 pedía 656px y estiraba la fila antes de que el
-   flex pudiera encogerla — ni `h-0` ni `min-h-0` lo evitaban.
-   Los cuadrados van solos en su fila y miden lo mismo entre sí. */
 const RATIO = {
   wide: "aspect-[3/2]",
-  tall: "aspect-[3/4] md:aspect-auto md:min-h-0 md:flex-1",
+  tall: "aspect-[3/4] lg:aspect-auto lg:min-h-0 lg:flex-1",
   square: "aspect-square",
 } as const;
 
@@ -445,56 +470,56 @@ export function LookBook() {
     <section
       id="look-book"
       aria-label="Look book"
-      className="section-y scroll-mt-28"
+      className="w-full scroll-mt-28 bg-bone px-6 pt-20 pb-16 md:px-8 md:pt-22 md:pb-18 lg:px-12 lg:pt-28 lg:pb-24"
     >
-      {/* Sin "View All": enlazaba a la sección donde ya estaba. Vuelve
-          cuando exista la galería completa. */}
-      <div data-reveal className="gutter shell mb-7 lg:mb-14">
-        <h2 className="text-heading-lg font-display font-medium">
-          The Look Book
-        </h2>
-      </div>
-      {/* Mosaico de 12 columnas con el reparto de Florale: `wide` toma 8
-          en 3/2 y `tall` toma 4 en 3/4, alternados y con las filas
-          espejeadas. El 8/4 es lo que hace que la chica se lea CHICA —
-          con un 7/5 las dos celdas quedaban casi del mismo tamaño y no
-          había contraste, solo dos fotos enormes.
-          Va sobre el rail (`gutter shell`) y no a sangre como antes: el
-          full-bleed inflaba todo un 6% extra.
-          `items-start` deja que cada celda termine a su altura. */}
-      <div className="gutter shell grid grid-cols-1 gap-x-3 gap-y-9 md:grid-cols-12 md:gap-x-4 lg:gap-y-12">
-        {lookbook.map((album, i) => (
-          <article
-            key={album.title}
-            data-reveal
-            style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-            // `flex flex-col` + `mt-auto` en el título: las celdas de una
-            // fila estiran a la altura de la más alta (stretch por
-            // defecto) y el título se ancla abajo, así los rótulos de una
-            // misma fila quedan alineados aunque las fotos difieran 11px.
-            className={`flex flex-col ${SPAN[album.shape]}`}
-          >
-            <div className={`relative w-full ${RATIO[album.shape]}`}>
-              <Image
-                src={album.cover}
-                alt={album.alt}
-                fill
-                sizes={
-                  album.shape === "wide"
-                    ? "(min-width: 768px) 64vw, 100vw"
-                    : "(min-width: 768px) 32vw, 100vw"
-                }
-                className="object-cover"
-              />
-            </div>
-            {/* Label y no Playfair a propósito: siete títulos serif bajo
-                la retícula competirían con el h2 de la sección. En
-                mayúsculas tracked se leen como el pie de una plancha. */}
-            <h3 className="text-label mt-auto pt-3.5 font-medium text-ink-subtle uppercase lg:pt-4">
-              {album.title}
-            </h3>
-          </article>
-        ))}
+      <div className="shell">
+        <header data-reveal className="flex flex-col gap-6">
+          <Eyebrow>{lookbookIntro.eyebrow}</Eyebrow>
+          <h2 className="text-heading-lg max-w-[640px] font-display font-medium wide:max-w-[640px] xl:max-w-[70%]">
+            {lookbookIntro.heading}
+          </h2>
+        </header>
+
+        <div data-reveal className="mt-8 flex justify-start md:justify-end">
+          <p className="text-body-lg max-w-none text-left text-ink-muted md:max-w-[70%] md:text-right lg:max-w-[60%] wide:max-w-[40%]">
+            {lookbookIntro.description}
+          </p>
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
+          {lookbook.map((album, i) => (
+            <article
+              key={album.title}
+              data-reveal
+              style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+              className={`group flex flex-col ${SPAN[album.shape]} ${
+                i === 3 ? "md:hidden lg:flex" : ""
+              }`}
+            >
+              <div className={`relative w-full overflow-hidden ${RATIO[album.shape]}`}>
+                <Image
+                  src={album.cover}
+                  alt={album.alt}
+                  fill
+                  sizes={
+                    album.shape === "wide"
+                      ? "(max-width: 1024px) 100vw, 66vw"
+                      : album.shape === "tall"
+                        ? "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        : "(max-width: 768px) 100vw, 33vw"
+                  }
+                  className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
+                />
+              </div>
+              <div className="flex items-start justify-between gap-3 px-2 pt-3.5 text-[9px] leading-[1.4] font-medium tracking-[0.14em] text-ink-subtle uppercase md:text-[10px] md:tracking-[0.16em] lg:pt-4 wide:tracking-[0.18em]">
+                <h3 className="shrink-0 whitespace-nowrap">{album.title}</h3>
+                {"meta" in album && album.meta ? (
+                  <p className="whitespace-nowrap text-right">{album.meta}</p>
+                ) : null}
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -12,9 +12,8 @@ export const metadata: Metadata = {
 
 /**
  * Pantalla propia del inquiry (DESIGN.md §"The inquiry page is its own
- * room"): full-screen en los tres breakpoints, con el nav completo —
- * fuera del home no hay centinela, así que la fila 2 no colapsa y el
- * visitante siempre tiene por dónde volver. No se reproduce el
+ * room"): full-screen en los tres breakpoints, con la misma barra fija
+ * del home y sus rutas root-relative para que siempre haya regreso. No se reproduce el
  * calendario de auto-agendado del Wix: el horario se acuerda al
  * responder.
  *
@@ -26,7 +25,7 @@ export default function InquirePage() {
   return (
     <>
       <SiteHeader />
-      <main className="gutter section-y">
+      <main className="gutter section-y pt-[calc(var(--section-y)_+_80px)] md:pt-[calc(var(--section-y)_+_88px)] lg:pt-[calc(var(--section-y)_+_96px)]">
         <div className="mx-auto flex w-full max-w-[900px] flex-col">
           <div className="flex flex-col gap-4 md:gap-5">
             <Eyebrow>{inquiry.eyebrow}</Eyebrow>

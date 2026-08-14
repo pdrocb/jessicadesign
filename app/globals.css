@@ -9,6 +9,10 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 @theme inline {
+  /* Florale cambia el hero a split únicamente en 1440px. Es un token de
+     layout; no altera la escala tipográfica ni la identidad de Jessica. */
+  --breakpoint-wide: 90rem;
+
   /* ── Color (DESIGN.md §Colors, recalibración ago 2026) ──────────
      Escalera de fondos fija: paper → bone → petal → cream → ink (footer).
      Cada fondo tintado aparece UNA vez. Acentos cosechados de la foto:
@@ -32,9 +36,11 @@
   --color-line-dark: #33302c; /* divisores sobre oscuro */
   --color-on-dark-muted: #c9c2b4; /* contacto en footer */
 
-  /* ── Familias (handoff §2.1) ───────────────────────────────────── */
-  --font-display: var(--font-playfair), Georgia, serif;
-  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* ── Familias (handoff §2.1) ─────────────────────────────────────
+     Pareja solicitada por la clienta: Cormorant para la voz editorial,
+     Karla para lectura y controles. Ambas se autohospedan vía next/font. */
+  --font-display: var(--font-cormorant), Garamond, Georgia, serif;
+  --font-body: var(--font-karla), Arial, sans-serif;
 
   /* ── Escala tipográfica (handoff §2.2 + §4) ──────────────────────
      Interpolación anclada: cada token vale exactamente su tamaño

@@ -34,7 +34,7 @@ Para tocar X, lee/edita Y primero — no explores a ciegas:
 | --------------------------------- | ---------------------------------------------- |
 | Copy/textos y fotos del sitio     | `lib/content.ts`                               |
 | Diseño / tokens / escala          | `docs/DESIGN.md` · `app/globals.css`           |
-| Nav de dos filas y su colapso     | `components/SiteHeader.tsx`                    |
+| Nav de una fila y menú móvil      | `components/SiteHeader.tsx`                    |
 | Secciones de la home              | `components/sections.tsx`                      |
 | Acordeón de FAQs                  | `components/Faqs.tsx`                          |
 | Primitivas (botones, links, logo) | `components/ui.tsx`                            |
@@ -90,6 +90,11 @@ Reglas nacidas de incidentes reales. Cada una lleva su caso de origen.
 - **Todo el CSS base va dentro de `@layer base`, sin excepción.** El CSS sin capa gana sobre TODAS las capas de Tailwind, incluida `utilities`. Con el bloque base sin envolver, `a { color: inherit }` derrotaba a `text-bone` y el CTA primario salía ink sobre ink — texto invisible. Los links del footer se salvaban por casualidad, porque heredaban `bone` del footer. Si una utilidad de color "no hace nada" sobre un elemento, sospechar de esto antes que del token. (Origen: CTAs del hero y del cierre, ago 2026.)
 - **`w-full` en un elemento absoluto dentro de una caja con padding desborda.** Resuelve contra el padding-box pero arranca en el content-box: usar `inset-x-0`. (Origen: centinela del nav, ago 2026.)
 - **Un H1 por página, también entre breakpoints.** No duplicar el H1 con `hidden`/`md:hidden`: cambiar el ancla de posición (`relative` → `md:static`) para que un solo H1 sirva a mobile y desktop. (Origen: hero, ago 2026.)
+- **Florale es referencia de layout, no de identidad visual.** Cuando la clienta pida replicar su hero o navbar, copiar composición, breakpoints y comportamiento, pero conservar tipografía, colores, radios, copy y controles de Jessica. El lockup real puede reducirse aunque pierda legibilidad si la clienta prioriza una barra delgada; no sustituirlo ni importar los tokens de Florale. (Origen: réplica del hero/nav de Florale, ago 2026.)
+- **El H1 del hero necesita respirar más en móvil.** La composición de tres líneas usa `line-height: 1.10`, tracking `0.005em` y 4px extra antes del lede; desde tablet vuelve al token compacto. No aplicar el `1.04` de desktop sin ajuste en teléfono. (Origen: revisión responsive del hero Florale, ago 2026.)
+- **La pareja tipográfica de marca es Cormorant Garamond + Karla.** Cormorant lleva títulos, citas e itálicas; Karla lleva cuerpo, navegación, labels, botones y formularios. No volver a Playfair/Helvetica ni extender la serif a texto operativo: la clienta rechazó esa combinación por sentirse genérica. (Origen: feedback tipográfico de la clienta, ago 2026.)
+- **La clienta prefiere ritmo orgánico, pero la asimetría tiene que ganarse el espacio.** Florale y Simplicity in Mind son referencia para encabezados, fotografía y secciones narrativas: alternar alineaciones, jerarquías, densidad y fondos entre bandas. Dos secciones contiguas con funciones distintas deben tener un rompimiento tonal intencionado. En información repetida y extensa, como Expertise o Process, conservar retículas compactas y regulares; desplazar tarjetas solo para “desacomodar” se percibe vacío, no artístico. En móvil, cualquier offset vuelve al orden lineal del DOM. (Origen: revisión de suavidad, layout y ritmo tonal con la clienta, ago 2026.)
+- **En Philosophy, el copy separa alcance y síntesis.** La enumeración de elementos termina en un primer párrafo; la lectura de la celebración como un todo abre el segundo. La imagen secundaria puede ir escalonada, pero debe subir aproximadamente una cuarta parte de su altura hacia el título; anclarla al inicio del párrafo deja un vacío dominante que la clienta rechaza. (Origen: ajuste de ritmo de Philosophy, ago 2026.)
 
 ## Documentación
 
@@ -110,3 +115,13 @@ Reglas nacidas de incidentes reales. Cada una lleva su caso de origen.
 - **No laziness** — ir al root cause, no workarounds.
 - **Minimal impact** — no tocar lo que no hay que tocar.
 - **Demand elegance (balanceado)** — para cambios no triviales, pausar y preguntar "¿hay una forma más elegante?".
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

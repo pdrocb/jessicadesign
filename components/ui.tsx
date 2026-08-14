@@ -105,11 +105,10 @@ export function LinkUnderline({
  *
  * El alto manda: el lockup es apilado (1.35:1) y son sus proporciones,
  * no el ancho, las que fijan si "JESSICA S. DESIGNS" se lee. En el asset
- * las versales ocupan el 13.7% del alto, así que hacen falta ~80px de
- * logo para que lleguen a los 11px del token `label`; por debajo de ~70
- * el nombre se vuelve una mancha. Quien pone el alto es el llamador —
- * en el nav cambia al colapsar. Arreglo real pendiente: versión
- * horizontal del logotipo.
+ * las versales ocupan el 13.7% del alto, así que harían falta ~80px para
+ * igualar el token `label`. El nav lo usa deliberadamente más pequeño:
+ * la clienta priorizó una sola barra delgada aun con esa pérdida de
+ * legibilidad. Una versión horizontal sigue siendo la mejora real.
  *
  * `width`/`height` fijan la relación de aspecto y el srcset apuntando al
  * uso MÁS GRANDE; el alto real lo decide `className`.

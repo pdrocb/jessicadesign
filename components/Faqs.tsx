@@ -6,7 +6,7 @@ import { Eyebrow } from "@/components/ui";
 
 /**
  * Acordeón de FAQs (handoff §5): una abierta a la vez, signo + / − en
- * Playfair, numerales romanos en minúscula, respuesta a 60ch máximo.
+ * Cormorant, numerales romanos en minúscula, respuesta a 60ch máximo.
  *
  * En desktop el encabezado ocupa la columna izquierda y todas las
  * preguntas quedan juntas a la derecha; tablet y mobile apilan.
@@ -27,8 +27,7 @@ export function Faqs() {
           </h2>
           <div aria-hidden className="hidden h-px w-12 bg-ink-faint md:block" />
           <p className="font-display text-[16px] leading-relaxed text-ink-subtle italic lg:text-[17px]">
-            Everything else, over a glass of something, in your complimentary
-            consultation.
+            A few details to know before we begin.
           </p>
         </div>
 

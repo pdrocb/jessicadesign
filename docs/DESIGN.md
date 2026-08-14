@@ -21,75 +21,75 @@ colors:
   sage-deep: "#3c4536"
 typography:
   display-hero:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(40px, 3.81vw + 25.14px, 80px)"
     fontWeight: 500
     lineHeight: 1.04
   display-lg:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(32px, 3.05vw + 20.1px, 64px)"
     fontWeight: 500
     lineHeight: 1.15
   display-md:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(32px, 2.29vw + 23.1px, 56px)"
     fontWeight: 400
     lineHeight: 1.15
   heading-lg:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(30px, 1.33vw + 24.8px, 44px)"
     fontWeight: 500
     lineHeight: 1.2
   heading-md:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(21px, 0.29vw + 19.9px, 24px)"
     fontWeight: 500
     lineHeight: 1.3
   quote-xl:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(26px, 1.33vw + 20.8px, 40px)"
     fontWeight: 400
     lineHeight: 1.45
   quote-md:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(17px, 0.38vw + 15.5px, 21px)"
     fontWeight: 400
     lineHeight: 1.6
   quote-italic:
-    fontFamily: "Playfair Display, Georgia, serif"
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(18px, 0.76vw + 15px, 26px)"
     fontWeight: 400
     lineHeight: 1.6
     fontStyle: "italic"
   body-lg:
-    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontFamily: "Karla, Arial, sans-serif"
     fontSize: "18px"
     fontWeight: 400
     lineHeight: 1.7
   body-md:
-    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontFamily: "Karla, Arial, sans-serif"
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.75
   body-sm:
-    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontFamily: "Karla, Arial, sans-serif"
     fontSize: "13.5px"
     fontWeight: 400
     lineHeight: 1.75
   label:
-    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontFamily: "Karla, Arial, sans-serif"
     fontSize: "11px"
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: "0.3em"
   label-sm:
-    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontFamily: "Karla, Arial, sans-serif"
     fontSize: "10px"
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: "0.26em"
   label-xs:
-    fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif"
+    fontFamily: "Karla, Arial, sans-serif"
     fontSize: "9px"
     fontWeight: 500
     lineHeight: 1.4
@@ -198,10 +198,10 @@ Twelve warm neutrals running from a near-black umber to ivory, plus the Aug 2026
 
 ## Typography
 
-**Display Font:** Playfair Display (fallback `Georgia, serif`), weights 400/500/600 plus 400 italic.
-**Body Font:** Helvetica Neue (fallback `Helvetica, Arial, sans-serif`), system-resident — nothing but Playfair crosses the network.
+**Display Font:** Cormorant Garamond (fallback `Garamond, Georgia, serif`), variable weight with normal and italic styles.
+**Body Font:** Karla (fallback `Arial, sans-serif`), variable weight with normal and italic styles. Both families are self-hosted at build time by `next/font`.
 
-**Character:** A high-contrast transitional serif doing all the talking, against a neutral grotesque that never raises its voice. The serif carries emotion and scale; the grotesque handles anything operational — navigation, labels, body copy, the footer. The pairing works because the roles never blur: no serif buttons, no grotesque headlines.
+**Character:** A romantic, high-contrast Garalde serif carries the editorial voice against a warm humanist sans that keeps the site approachable. Cormorant handles emotion and scale; Karla handles anything operational — navigation, labels, body copy, forms and the footer. The pairing works because the roles never blur: no serif buttons, no sans-serif headlines.
 
 ### The scale is anchored, not fluid-by-eye
 
@@ -232,9 +232,9 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
 
 ### Named Rules
 
-**The Italic Accent Word Rule** *(Aug 2026)*. A display headline may set **at most one word or phrase** in Playfair italic, optionally in `rose-umber` — the vintage inflection the client asked for. One per headline, never in body copy, never in labels. Two italic words in one headline is a costume. **Exception: the hero's italic stays `ink`.** A colored italic word beside the sage button on a warm ground is Florale's hero formula verbatim (PM call, Aug 2026); rose-umber in display type is reserved for headlines further down the page, where the echo dissolves.
+**The Italic Accent Word Rule** *(Aug 2026)*. A display headline may set **at most one word or phrase** in Cormorant italic, optionally in `rose-umber` — the vintage inflection the client asked for. One per headline, never in body copy, never in labels. Two italic words in one headline is a costume. **Exception: the hero's italic stays `ink`.** A colored italic word beside the sage button on a warm ground is Florale's hero formula verbatim (PM call, Aug 2026); rose-umber in display type is reserved for headlines further down the page, where the echo dissolves.
 
-**The Fleuron Rule** *(Aug 2026)*. The system permits a single ornament glyph — the fleuron `❋`, set in Playfair at `sage` or `ink-subtle` — as a section divider in place of a hairline. At most one per page. It is the only ornament the system will ever allow; it earns its place by being typographic, not decorative clip-art.
+**The Fleuron Rule** *(Aug 2026)*. The system permits a single ornament glyph — the fleuron `❋`, set in Cormorant at `sage` or `ink-subtle` — as a section divider in place of a hairline. At most one per page. It is the only ornament the system will ever allow; it earns its place by being typographic, not decorative clip-art.
 
 **The Medium-Not-Light Rule.** Every uppercase label sits at weight **500**, never 400. In tall caps with wide tracking, 400 goes anemic and the whole page reads cheap. This is the single most load-bearing typographic rule in the system.
 
@@ -254,44 +254,52 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 |---|---|---|---|
 | `--gutter` | 20px | 32px | 48px |
 | `--section-y` | 56px | 80px | 110px |
-| Hero | stacked, photo after text | stacked | 0.9fr text · 1.1fr photo |
-| Services | 1 column | 2 columns | 4 columns |
-| Manifesto | stacked, photo last | 150 / 1fr | 200 / 1fr / 200 |
+| Hero | stacked, square full-bleed photo | stacked, 16:10 photo | stacked until 1439; 1fr · 1fr at ≥1440 |
+| Expertise | 1 column | 2 equal columns | 4 equal columns; supporting copy aligned right |
+| Manifesto | text, body, photo | 4-col photo + offset text | 3-col photo / 6-col text / 3-col detail, staggered |
+| Process | 1 ordered column | 2 ordered columns | compact 3 × 2 matrix |
 | Silk Florals | stacked, 1 photo | 1fr / 0.8fr | 1fr / 0.7fr / 0.7fr, 2nd photo +80px |
-| Testimonials, FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
-| Look Book | 1 column, ratios kept | 12-col mosaic | 12-col mosaic |
-| Editorial break | 320px tall | 420px | 640px |
+| Founder | stacked | 5 / 7, copy lowered | 5 / 6, copy lowered further |
+| Testimonials | stacked, lead quote first | stacked, lead quote first | 4 / 8, secondary quotes share one inset |
+| FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
+| Look Book | 1 column, ratios kept | 6-col Florale mosaic | 12-col Florale mosaic |
 | Buttons | **full width** | inline | inline |
 
-The governing rule is **one column fewer per breakpoint down**, never a reflow into a different concept.
+The governing rule is **one column fewer per breakpoint down**, never a reflow into a different concept. At mobile, every deliberate desktop offset collapses back into DOM order; asymmetry may change emphasis, never reading logic.
 
 ### A section's shape argues for its content
 
-Silk Florals is text-led with two photographs at **different altitudes**, staggered rather than flanking symmetrically like the Manifesto. That is not decoration: Manifesto and About are both photo-and-text splits already, and the page reaches this point having just run two grids back to back (Expertise at 4 columns, Process at 3). A third grid would have made the page read as a stack of grids, and a third split would have made the section read as one more paragraph. The stagger is what tells a scrolling visitor that this is a different kind of claim.
+The page is not a stack of interchangeable section templates. Its reading sequence is **Hero → Philosophy → Expertise → Look Book → Process → Silk Florals → Founder → Testimonials → FAQ → CTA**. The Look Book arrives immediately after the service promise so photography proves the claim before the page asks the visitor to study the method.
 
-It also belongs nowhere else: the four Expertise entries are *occasions*, and silk is a *material*. Filing it as a fifth card would have demoted a growing line to a footnote and orphaned it in a four-column grid.
+Section boundaries must remain visible even when adjacent bands use restrained typography. Expertise inherits `paper`, Look Book uses the slightly deeper `bone`, and Process returns to `paper`. Farther down, Silk Florals uses `bone` between Process and the `paper` Founder section. This alternating tonal rhythm separates service, proof, method, product and biography without introducing decorative dividers.
 
-### The hero is split, and the whole of it fits above the fold
+**The Controlled Asymmetry Rule** *(Aug 2026)*. Organic does not mean random, and asymmetry must earn its whitespace. Narrative and image-led compositions can use a dominant anchor, counterweight and intentional breathing room: Philosophy uses a large photograph against a smaller pale detail; Founder lowers its biography beside the portrait; Testimonials lets one voice lead. Repeated, copy-heavy information stays compact: Expertise uses four equivalent columns and Process uses a 3 × 2 matrix. Rhythm comes from changing alignment and density between sections, not from offsetting every card.
 
-Two columns at `lg`, **0.9fr text / 1.1fr photograph**; stacked below that, text first. Inside the text column: eyebrow → headline → lede → primary CTA with an underlined secondary link. The headline never sits on a photograph.
+Philosophy no longer flanks a centred paragraph with matching miniatures. Its title begins toward the centre-left, its body advances one grid column, the candlelit table anchors the opposite side and the stationery detail enters later and lower. The imbalance expresses the claim — a room composed as a whole — without changing copy or semantic order.
 
-This replaced a centred headline over a three-image collage in Aug 2026, at the client's request, taking the skeleton her two reference sites share — [nyflorale.com](https://nyflorale.com) and [theclementineee.com](https://theclementineee.com), both of which run eyebrow → headline with an accented word → lede → two CTAs beside a bleeding photograph. **Where the references disagree, we take the side that is already ours:**
+Expertise presents four equivalent cards at desktop, two at tablet and one at mobile. Its editorial gesture belongs above the grid: the heading and service label share one line, while one short supporting sentence sits below at the far right. The compact card rhythm keeps the service information easy to compare and avoids decorative empty space.
 
-| | Florale | The Clementine | Here |
-|---|---|---|---|
-| Column ratio | 1 : 1 | 0.92 : 1.08 | **0.9 : 1.1** — the symmetry is Florale's signature; asymmetry gives the photograph the weight it earns |
-| Caption | inside the image, over a `0.70/0.25` scrim | below, on paper | **below** — that scrim is the one we measured, shipped, and then removed |
-| Secondary CTA | ghost button | text link with an arrow | **underlined link**, the system's own |
-| Accent in the headline | coloured italic | highlight span | **ink italic** — coloured italic beside a green button on a warm ground is Florale's hero verbatim |
-| Shape | pill buttons | pill buttons | **radius zero** |
+Process keeps its six-step order in a compact 3 × 2 desktop matrix, 2-column tablet layout and single mobile sequence. Numerals and hairlines preserve recognition without stretching the section for decorative offsets.
 
-The split buys back what the centred version spent on height: **the entire hero clears the fold at 1440×900** (692px tall, CTA bottom at 750px), and the CTA lands at 544px on tablet and 491px on mobile. The photograph is no longer a reward for scrolling — it arrives with the sentence, which is what "let the imagery do the talking" actually asks for.
+Silk Florals remains text-led with two photographs at **different altitudes**. It already carried the staggered gesture the client preferred, so the broader recomposition changes its surrounding rhythm rather than redesigning it.
 
-**The three-image collage is gone with it.** It was the most editorial gesture on the page and it does not survive a split hero at any size worth having. Removing it also thinned a page that already carried the editorial plate, the Look Book, and photographs in Manifesto, Expertise, Silk Florals, and About. It is one revert away in the history if the page ever feels bare without it.
+Silk Florals also belongs nowhere else: the four Expertise entries are *occasions*, and silk is a *material*. Filing it as a fifth service would have demoted a growing line to a footnote.
+
+Silk Florals closes its text column with the primary `Start With a Conversation` CTA. The product copy explicitly invites an inquiry, so the action belongs beside that invitation instead of requiring the visitor to find the navigation or wait for the closing section. It is full-width on mobile and intrinsic-width from tablet onward. The text column remains top-aligned in the mobile stack, then centers vertically against the photographic composition from tablet upward; its internal text alignment remains left for editorial continuity.
+
+### The hero follows Florale's responsive composition
+
+The layout is stacked from mobile through 1439px and changes to an equal **1fr / 1fr split at 1440px** (`wide`). Inside the text column: eyebrow → headline → lede → primary CTA with an underlined secondary link. The photograph is square and full-bleed on mobile, 16:10 on tablet and square again in the desktop split. The headline never sits on a photograph.
+
+This is a layout reference, not an identity reference. Jessica keeps her Cormorant/Karla pairing, ivory and sage palette, square controls, copy, image and caption treatment. The caption remains below the photograph rather than moving onto Florale's scrim. On mobile the primary CTA stays above the photograph and the secondary link moves below it; from tablet both actions sit with the text.
+
+At mobile size the three-line headline needs slightly more room than the global display token: `1.10` line-height, `0.005em` tracking and 4px of additional separation before the lede. From tablet upward it returns to the system's `1.04` line-height and normal tracking. This keeps the compact editorial scale without making the phone composition feel compressed.
+
+**The three-image collage is gone with it.** It was the most editorial gesture on the page and it does not survive a split hero at any size worth having. Removing it also thinned a page that already carries the Look Book and photographs in Manifesto, Expertise, Silk Florals, and About. It is one revert away in the history if the page ever feels bare without it.
 
 On mobile the photograph bleeds to both edges while its caption stays on the rail. `max-w-none` is required there: `next/image` ships its own `max-width:100%`, which silently caps the negative-margin width and leaves the image shifted rather than bled.
 
-**Touch targets are 44px minimum on mobile, and that rule outranks any height in the original handoff.** Where the two collide — the second nav row was specified at 37px — the target wins and the row grows to 45px. Padding lives on the anchor; the active-state underline lives on an inner span so it hugs the text instead of the edge of the tap area.
+**Touch targets are 44px minimum on mobile, and that rule outranks any height in the original handoff.** Visual size and interactive area may differ, as on the compact nav CTA, but the hit target never drops below the floor.
 
 ## Motion
 
@@ -329,11 +337,15 @@ The one `box-shadow` in the entire codebase is not elevation. The primary button
 
 **Radius is zero everywhere, and there is deliberately no radius scale to reach for** — buttons, images, cards, inputs, the dark band. The only `rounded` token is `none: 0px`, and it exists so components can reference the decision explicitly rather than omit the property by accident.
 
-The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid, in three canonical ratios: **3/4** (service cards), **4/5** (look book, and service cards on mobile), **4/3** (manifesto on mobile). The hero photograph adds a fifth: **5/4** on mobile, **4/3** from `md`.
+The form language is rectangles and hairlines. Photographs are hard-cropped with `object-fit: cover`, either full-bleed or locked to the grid. The recurring portrait ratios are **3/4** and **4/5**; wide editorial anchors use **3/2**, **16/9** or **16/10** according to their grid span. Ratios are assigned by subject and hierarchy rather than forcing every service into one card shape.
 
 ### The uncaptioned plate
 
-**The editorial plate is a photograph and nothing else.** No scrim, no caption over it, no caption under it — the full width, the full height, and the visitor's attention undivided. It is the one moment in the page where the interface stops talking.
+The full-width editorial plate was removed from the page composition in Aug 2026 to test a tighter transition from Silk Florals into About. Its component and asset remain available for an immediate visual comparison or reversal.
+
+### The founder story closes with authorship, not conversion
+
+About retains its portrait, `The Designer` eyebrow, name, italic experience line and biography. The portrait leads at 5/12 while the text begins lower in the adjacent column, breaking the generic top-aligned bio split without any overlap. It no longer ends with an inquiry CTA. Instead, a signature block closes the column: **`Founder & Creative Director`** in the system label, with **Jessica Salomon** immediately below in `heading-md` Cormorant. Conversion remains available in the fixed navigation and the dedicated closing CTA.
 
 This is the third and final position, and the route matters because both alternatives were built and measured:
 
@@ -357,15 +369,13 @@ The logotype is the client's own (Aug 2026): an interlocking J+S monogram with *
 
 The delivered artwork was a white-ground JPEG; the shipped assets are cropped to the ink and have that white converted to alpha, so the mark sits on ivory without a box. A `-light` file carries the bone version for the footer, because a bitmap cannot be recoloured in CSS.
 
-### The logotype shrinks with the nav
+### The logotype is deliberately compact in the nav
 
 **The lockup is stacked, roughly 1.35∶1 — it is not a nav-shaped mark.** Its wordmark occupies 13.7% of the mark's height, so the logo must stand about **80px tall for "JESSICA S. DESIGNS" to reach the 11px of the `label` token**. Below ~70px the name stops being read and becomes a grey smudge across the monogram. At the 60px that a slim row wants, it measured 8.2px: present, illegible.
 
-Rather than choose between a legible mark and a slim header, the logo **rides the nav's existing collapse**. It arrives at full height — 70px on mobile, 80 at `lg`, 84 at `xl` — and shrinks to 46/54/60 at the same moment row 2 collapses, on the same 420ms `--ease-geometry` curve. Scrolling back above the threshold restores it. The visitor meets the brand at a size where it can be read, and gets the compact header for the rest of the page.
+The client prioritised the slim one-row composition over wordmark legibility (Aug 2026). The mark therefore stays at **44px on mobile, 48px on tablet and 52px on desktop**, with no scroll-dependent resizing. This is an explicit product trade-off, not an accidental undersizing.
 
-This reuses the `collapsed` flag the header already keeps; there is no second observer and no scroll listener. Under `prefers-reduced-motion` the change is instant, via the global rule.
-
-**The real fix is still a horizontal lockup** — monogram left, name right — which the client's designer can produce. Until it exists, the height dance is the honest workaround, not the intended end state.
+**A horizontal lockup would still improve the result** — monogram left, name right — but the current implementation does not wait for one.
 
 ## Components
 
@@ -382,57 +392,45 @@ This reuses the `collapsed` flag the header already keeps; there is no second ob
 - **Underline link:** `label` type with a 1px `ink` bottom border on an inner span, 4px below the text. Hover moves the text to `ink-subtle`; the rule stays. Never add a second underline on hover.
 - **Text link on dark:** `bone` → `ink-faint` on hover.
 
-### Navigation — the signature component
+### Navigation — one fixed row
 
-Two rows, and the rules here are stricter than anywhere else in the system.
+The Florale composition is now the structural reference: one fixed row, **80px on mobile, 88px on tablet and 96px on desktop**, with the compact Jessica mark at left. From `md` (768px), the three destination links and `Inquire` CTA sit at right. `Home` is omitted because the logo already provides that route. The row never collapses and the old hero sentinel no longer exists.
 
-- **Row 1** (`1fr auto 1fr`): empty / centered logotype / `Inquire` outline button. It never moves.
-- **Row 2:** the four section links, centred at every breakpoint via `justify-center-safe`. The `safe` keyword matters: on a narrow phone the links no longer fit, and a plain `center` inside an `overflow-x: auto` row pushes the first item past the left edge where scrolling cannot reach it. `safe` degrades to left alignment exactly when that would happen — verified centred at 390, falling back and still scrollable at 320.
-- **Collapse:** past the hero, row 2 collapses and **only returns when the visitor scrolls back above the threshold** — not on any upward scroll mid-page. The threshold is a 1px sentinel the hero places 120px before its own end, watched by an `IntersectionObserver`. There is no scroll listener.
-- **Mechanics:** the collapse animates `grid-template-rows: 1fr → 0fr`, not a fixed `max-height`, because the row is a different height at every breakpoint. The bottom hairline lives inside the clipped child so it disappears with the row instead of stranding a line under the logo. Collapsed, the row carries `inert` — no tabbing to an invisible link.
-- **Motion:** 420ms `cubic-bezier(0.22, 0.61, 0.36, 1)` on geometry, 260ms on opacity. Instant under `prefers-reduced-motion`.
+Below `md`, the hamburger is visible from the first frame. It opens a native full-screen `<dialog>` on `paper`: mark and close control at top, the three Cormorant links centred vertically, and the primary CTA plus phone at the bottom. Native dialog semantics provide modal focus, Escape and focus return; opening also locks document scroll and every destination closes the menu.
 
-### The mobile menu appears only once the links leave
-
-Below `lg`, a hamburger fades into the **left** cell of row 1 — the cell that was always empty, so the logotype keeps its centre — and it appears **only while row 2 is collapsed**. While the links are on screen, a control that repeats them is noise. Three hairlines fold into an X on open, on the system curve.
-
-It opens a full-screen panel, not a drawer: `paper` ground, the four links at `heading-lg` in Playfair separated by hairlines, and the **conversion pinned to the bottom** — the primary CTA at full width with the phone number beneath it, for the visitor who would rather call than write. A menu that lists destinations without offering the one action the page exists for wastes its own real estate.
-
-Mechanics worth keeping: the panel is a child of the header, so row 1 carries `relative z-10` to stay above it — otherwise the panel covers the hamburger at exactly the moment it becomes the close button. Opening locks the page behind it, `Escape` closes, tapping any link closes, and the panel un-collapsing (scrolling back to the top) closes it too. Closed, it carries `hidden`, so nothing inside is tabbable.
+Once the hero's primary CTA has passed above the viewport, a compact `Inquire` action appears beside the hamburger. This uses an `IntersectionObserver` on the CTA, not a scroll listener, and disappears again when the visitor returns to it. The behavior comes from Florale; its treatment remains Jessica's filled sage control.
 
 ### Cards
 
-There are no cards. Service entries are a photograph, a roman numeral in Playfair, a title, and copy — stacked in a column with no container, no border, and no background. The grid does the grouping.
+There are no cards. Service entries are a photograph, a roman numeral in Cormorant, a title, and copy — stacked with no container, border or background. Their unequal column spans establish hierarchy; Weddings is the visual entry point, not one interchangeable tile among four.
 
-Look Book albums follow the same discipline: a cover photograph and its title 14px below, left-aligned to the image's own edge — not to the page rail, because the grid runs nearly full-bleed at 8px. **The title is `label`, not Playfair**: four serif headings under a photo grid would compete with the section's own `heading-lg`, and uppercase tracked type reads as the plate label it is. Titles sit in `ink-subtle` so the photographs stay the loudest thing in the section.
+Look Book albums follow the same discipline: a cover photograph and a two-ended caption 14px below, inset 8px from both image edges. The event or couple aligns left and the venue or location aligns right, following Florale's gallery pattern; entries awaiting final metadata temporarily keep only their left label. Both ends remain on one line: 9px/`.14em` on mobile, 10px/`.16em` from tablet and `.18em` on wide screens. This tighter tracking is deliberate because venue names carry more information than the previous single label. Captions sit in `ink-subtle` so the photographs stay the loudest thing in the section.
 
-### The Look Book is a mosaic, not a grid of equals
+Expertise and Look Book share Florale's restrained image hover: the photograph scales to `1.03` inside an overflow-hidden frame over `700ms ease-out`. The card, caption and surrounding grid never move. The transform is wrapped in `motion-safe`, so reduced-motion users receive the static composition.
 
-Twelve columns from `md`, on the page rail like every other section. Each album declares a `shape`: **`wide` takes 8 columns at 3/2, `tall` takes 4 at 3/4**, and the rows are mirrored — wide·tall, then tall·wide. This is Florale's split, and the 8/4 is the load-bearing part: a first pass at 7/5 produced cells of 824px and 584px, only a 30% difference, so nothing read as large or small — just two big photographs side by side. At 8/4 the small cell is **49% of the wide one's width**, and the contrast is the composition.
+### The Look Book mirrors Florale's Portfolio composition
 
-`items-start` lets each cell end where its ratio puts it. At these ratios the two land within 11px of each other anyway, so the rows read level while staying independent.
+The section header follows the same reading order as Florale: eyebrow and display heading at left, followed by a separate description row that aligns left on mobile and right from tablet. Its spacing is also literal: 80/88/112px above, 64/72/96px below, 32px from heading group to description and another 32px into the mosaic.
+
+The gallery moves through the same structural breakpoints: one column on mobile, six columns on tablet and twelve on desktop, always with a 16px gap. Desktop runs landscape·portrait (`8/4`), portrait·landscape (`4/8`), then three squares (`4/4/4`). Tablet runs one full-width landscape, the two portraits at half-width and three squares in thirds; matching Florale, the second landscape is hidden only at this intermediate breakpoint. Mobile restores all seven images in one column with their original 3:2, 3:4 and 1:1 shapes.
 
 **The shapes are assigned by crop tolerance, not by taste.** All four source photographs are portrait (1000×1333, 1200×1800), so a landscape cell costs real height. The wide cells therefore go to the flat lays, which survive being cropped short, and the tall cells to the couple and the barrel, whose subjects would be decapitated in a 3/2. Any new album gets its `shape` chosen the same way — look at the original before picking.
 
-Below `md` the mosaic collapses to **one full-width column** with every ratio preserved, rather than the two it used before: in a look book the photograph is the product, and half a phone screen does not sell it.
-
-**Three rows: wide·tall, three squares, tall·wide.** The squares sit **in the middle**, not at the end, so the section opens and closes on a large photograph and the rhythm breaks where the eye is starting to predict it. The third row is Florale's own closing move — three 1:1 cells at 4 columns each — and it earns its place by breaking the two-cell rhythm before the eye starts predicting it. Seven cells is the ceiling; past that a curated look book becomes a contact sheet.
+Unlike Florale, **all text stays below each photograph**. There is no scrim, gradient or over-image caption: Jessica's uppercase plate label remains left-aligned 14–16px below its image. This is the one intentional difference requested by the client.
 
 That fixes what to ask the client for: **seven covers, and their shapes matter.** Two crop to landscape 3/2 for the wide cells, two stay vertical at 3/4, three survive a square crop. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
-
-**Everything in a row ends on the same line — photographs included.** Two mechanisms, and both are needed. The title carries `mt-auto`, so it anchors to the bottom of its cell instead of trailing its own image. And the aspect ratio lives on a **wrapper**, with the photograph inside it as `fill`.
-
-That second part is the load-bearing one, and it took three attempts. A normal `<img>` with `w-full` contributes its **natural** height while the row is being measured, so a 1200×1800 source at 437px wide demanded 656px and stretched the row before flex could shrink it — and neither `min-h-0` nor an explicit `h-0` prevented that. An absolutely-positioned `fill` image contributes nothing at all, which lets the wide cell alone decide the row height and the tall cell inherit it through `md:aspect-auto md:flex-1`. Verified identical to the pixel across all three rows.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 
 ### Quote block
 
-Playfair at `quote-md` in typographic quotes (`" "`, never `"`), attribution beneath in `label-sm` uppercase `rose-umber`, separated by a `petal-line` hairline. Lives on the `petal` band — moved off `ink` in the Aug 2026 recalibration; the quotes now read luminous instead of solemn.
+Testimonials live on the `petal` band and use flat `paper` cards with a single `petal-line` border: no radius and no shadow. Cormorant carries typographic quotes (`“ ”`) and `label-sm` uppercase `rose-umber` carries the attribution.
+
+Desktop keeps all three voices visible in one `6 / 3 / 3` row. The first card preserves the approved lead hierarchy with `quote-xl`; the two shorter cards use `quote-md`. Below `lg`, the cards become a native infinite rail with `scroll-snap`: 300–320px on mobile and 340px on tablet, always leaving the next card visible. Three rendered sets create continuity, but only the middle set is exposed to assistive technology. When scrolling settles on an outer copy, the rail moves to its identical middle copy with snap disabled for one frame. Three dots indicate the logical position. There is no autoplay and no carousel dependency.
 
 ### FAQ accordion
 
-One open at a time. Trigger is a full-width button: lowercase roman numeral in `ink-faint`, question in Playfair 500, and a Playfair `+` / `−` at 22px on the right. The answer is capped at `60ch` and indented to align with the question, not the numeral.
+One open at a time. Trigger is a full-width button: lowercase roman numeral in `ink-faint`, question in Cormorant 500, and a Cormorant `+` / `−` at 22px on the right. The answer is capped at `60ch` and indented to align with the question, not the numeral.
 
 ### Inputs
 
@@ -443,11 +441,11 @@ Square corners, no fills, and **a single hairline under each field** rather than
 - **Optional fields** carry a lowercase `(optional)` beside the label in `ink-faint`; required fields are unmarked. Marking the exception rather than the rule keeps eight asterisks off the page.
 - **Select:** the same underline; the native control, restyled — never a custom dropdown.
 - **Error:** the rule turns `rose-umber` and the message sits beneath in `body-sm` `rose-umber`, naming the problem and the fix. Rose is the system's only alarm colour, and it is deliberately quiet — this form never scolds.
-- **Success:** the form is replaced in place by a Playfair confirmation at `heading-lg`; no toast, no modal.
+- **Success:** the form is replaced in place by a Cormorant confirmation at `heading-lg`; no toast, no modal.
 
 ### The inquiry page is its own room
 
-`/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries the **full two-row navigation**, and row 2 never collapses there — the collapse is driven by a sentinel the hero plants, and off the home page there is no sentinel, so the links simply stay.
+`/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries the **same fixed one-row navigation** as the home; on mobile its hamburger is available immediately, while tablet and desktop retain the visible destinations.
 
 A first pass gave the page row 1 only, on the theory that a conversion surface should not offer lateral escapes. That was wrong in practice (PM call, Aug 2026): **a centred logotype does not read as an exit.** Visitors did not perceive a way back at all, which is a worse failure than a few extra links — a trapped visitor leaves the site, not just the page. The nav anchors are therefore root-relative (`/#look-book`, not `#look-book`) so they resolve from any page.
 
@@ -471,7 +469,7 @@ The scheduling calendar of the legacy Wix site is deliberately **not** reproduce
 ### Don't:
 
 - **Don't** introduce any accent beyond `petal`, `rose-umber`, and `sage`, and don't let any exceed its named jobs. No hue-carrying gradients, no pure white, no tinted states outside the accents' assignments.
-- **Don't** scrim a photograph. There are none in the system — the editorial plate carries no type at all. If a composition ever genuinely requires type over an image, measure the contrast against the composited pixels, mobile crop first; never judge one by eye.
+- **Don't** scrim a photograph. There are none in the system. If a composition ever genuinely requires type over an image, measure the contrast against the composited pixels, mobile crop first; never judge one by eye.
 - **Don't** use `ink-faint` on light ground — it fails AA below 24px. It is the dark-ground token.
 - **Don't** add a border-radius anywhere, on anything, ever.
 - **Don't** add a drop shadow or any lift. If it looks like it needs one, it needs space.

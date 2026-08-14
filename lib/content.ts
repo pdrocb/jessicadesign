@@ -15,7 +15,7 @@ import heroTapers from "@/assets/hero-05-tapers.jpg";
 import jessica from "@/assets/jessica-salomon.jpg";
 import lookbookGoldenHour from "@/assets/lookbook-golden-hour.jpg";
 import lookbookMenuSuite from "@/assets/lookbook-menu-suite.jpg";
-import manifesto01 from "@/assets/manifesto-01.jpg";
+import manifesto01 from "@/assets/philosophy-candlelit-tablescape.jpg";
 import manifesto02 from "@/assets/manifesto-02.jpg";
 import serviceCelebrations from "@/assets/service-celebrations.jpg";
 import serviceDayOf from "@/assets/service-day-of.jpg";
@@ -77,7 +77,7 @@ export const services = [
     slug: "celebrations",
     name: "Celebrations",
     img: serviceCelebrations,
-    copy: "Birthdays, bridal and baby showers, sweet sixteens, quinceañeras, mitzvahs, designed with the same care as a wedding.",
+    copy: "Micro weddings, birthday dinner parties, bridal and baby showers, designed with the same care as a wedding.",
   },
   {
     numeral: "No. III",
@@ -91,11 +91,7 @@ export const services = [
     slug: "day-of-set-up",
     name: "Day-Of Set-Up",
     img: serviceDayOf,
-    // Antes abría con "including the decor you made yourself", que dejaba
-    // a J|S como manos de alquiler para montar el DIY ajeno — justo lo
-    // contrario del posicionamiento. El servicio es el mismo; ahora lidera
-    // el oficio de styling y el DIY va como inciso, no como titular.
-    copy: "Our team sets and styles every piece on site, including what you’ve gathered yourself, so nothing is left to the morning of.",
+    copy: "You have the vision and the décor—we bring it all together. Our team handles the set-up and styling on site, making sure every detail is placed just as you envisioned.",
   },
 ];
 
@@ -111,7 +107,7 @@ export const services = [
 export const silkFlorals = {
   eyebrow: "Silk Florals",
   statement: "Real enough to lean in and check.",
-  copy: "Elevated silk florals, arranged and styled like every other piece on the table. Take them in place of fresh, rent them for the day, or let us weave silk and fresh together, indistinguishable by the time your guests sit down.",
+  copy: "Beautiful blooms, designed to last. Our elevated silk florals offer the look and feel of fresh flowers, thoughtfully arranged and styled to complement your celebration. Available to rent. Inquire to learn more.",
 };
 
 /**
@@ -128,32 +124,32 @@ export const process = {
     {
       numeral: "No. I",
       name: "The Concept",
-      copy: "We begin with your story, your inspiration, and how you want your guests to feel. Together, those ideas become a design direction that is entirely your own.",
+      copy: "We begin with your story, your inspiration, and the feeling you want your guests to experience.",
     },
     {
       numeral: "No. II",
       name: "Your Design Deck",
-      copy: "Your custom design presentation covers the color palette, textures, tablescapes, floral direction, stationery, signage, and styling details. It lets you see how the celebration will come together long before the day arrives.",
+      copy: "A custom design presentation featuring your color palette, textures, tablescapes, floral direction, stationery, signage, and styling details, allowing you to see your celebration long before it comes to life.",
     },
     {
       numeral: "No. III",
       name: "Sourcing",
-      copy: "We select and source the candles, tabletop details, furniture, and décor for your celebration. We also define the floral direction, whether fresh, silk, or a blend of both, so everything feels like part of the same design.",
+      copy: "We thoughtfully curate each design element from candles and tabletop details to furniture, florals (fresh or silk), and décor, bringing it all together into one cohesive vision.",
     },
     {
       numeral: "No. IV",
       name: "Floor Plans",
-      copy: "When the design calls for it, we map how guests move through the space, where the focal points are, and how the room feels from every angle.",
+      copy: "When the design calls for it, we map the space, how guests move through it, where focal points unfold, and how the room feels from every angle.",
     },
     {
       numeral: "No. V",
       name: "The Mock-Up",
-      copy: "We build your tablescape in person before your wedding or celebration. You can see it, experience it, and refine every detail before anything is finalized.",
+      copy: "We build your tablescape in person before the wedding or celebration day, giving you the chance to see it, experience it, and refine every detail before anything is finalized.",
     },
     {
       numeral: "No. VI",
       name: "Styling the Day",
-      copy: "On the day, we style every design element on site. We place each candle, bloom, and finishing touch so the room your guests enter matches the design you approved. No surprises. No guesswork.",
+      copy: "We personally style every design element on site, placing each candle, bloom, and finishing touch with intention, so the room your guests walk into is exactly the room you envisioned.",
     },
   ],
 } as const;
@@ -189,36 +185,41 @@ export const quotes = [
  * del nombre.
  */
 /**
- * `shape` arma el mosaico: `wide` ocupa 7 de 12 columnas en 4/3, `tall`
- * ocupa 5 en 4/5. Alternándolos y espejeando las filas, la retícula se
- * lee orgánica sin ser un masonry aleatorio.
+ * `shape` arma el mosaico de Florale: `wide` ocupa 8 de 12 columnas en
+ * 3/2, `tall` ocupa 4 en 3/4 y `square` ocupa 4 en 1/1.
  *
  * El reparto NO es estético, es de recorte: las cuatro fotos originales
  * son verticales (1000×1333 y 1200×1800), así que las celdas anchas se
  * las quedan los bodegones —un flat lay aguanta que le corten alto— y
  * las verticales se quedan con la pareja y el barril, cuyos sujetos se
- * decapitarían en un 4/3.
+ * decapitarían en un 3/2.
  */
 /**
- * El orden ES la composición: fila ancha, fila de tres cuadrados, fila
- * ancha espejeada. Los cuadrados van EN MEDIO y no al final — rompen el
- * ritmo de dos celdas justo cuando el ojo empieza a predecirlo, y de
- * paso la sección abre y cierra con una foto grande.
+ * El orden ES la composición: fila ancha, fila ancha espejeada y tres
+ * cuadrados al final. En tablet se oculta la segunda ancha, exactamente
+ * como en la referencia; mobile muestra las siete piezas.
  *
  * Los tres cuadrados son PROVISIONALES: se repiten de la sección
  * Expertise porque solo hay 10 fotos para 12 huecos. Se cambian en
  * cuanto lleguen las de la clienta.
  */
+export const lookbookIntro = {
+  eyebrow: "The Look Book · Recent selection",
+  heading: "A selection of celebrations, designed down to every detail.",
+  description:
+    "Recent weddings, private dinners, and styled gatherings across the Hudson Valley and beyond.",
+} as const;
+
 export const lookbook = [
-  { cover: heroTerrace, shape: "wide", title: "Terrace Welcome Dinner", alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign" },
+  { cover: heroTerrace, shape: "wide", title: "Wedding dinner party", meta: "Hopewell Junction, NY", alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign" },
   { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
 
-  { cover: serviceDayOf, shape: "square", title: "Loft Dinner", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
-  { cover: lookbookGoldenHour, shape: "square", title: "Golden Hour Table", alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light" },
-  { cover: servicePicnics, shape: "square", title: "Citrus Picnic", alt: "Low picnic table with lemon-print china, rattan chargers and cushions" },
-
   { cover: heroDetail, shape: "tall", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
-  { cover: lookbookMenuSuite, shape: "wide", title: "Stationery Suite", alt: "Hand-lettered menu card on a lilac napkin over a botanical plate" },
+  { cover: lookbookMenuSuite, shape: "wide", title: "Darby & Oliver", meta: "Blackwalnut Farm, Saugerties NY", alt: "Hand-lettered menu card on a lilac napkin over a botanical plate" },
+
+  { cover: serviceDayOf, shape: "square", title: "Loft Dinner", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
+  { cover: lookbookGoldenHour, shape: "square", title: "Cori & Ezra", meta: "Blackwalnut Farm, Saugerties NY", alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light" },
+  { cover: servicePicnics, shape: "square", title: "Citrus Picnic", alt: "Low picnic table with lemon-print china, rattan chargers and cushions" },
 ] as const;
 
 /**
