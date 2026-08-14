@@ -115,9 +115,11 @@ export function LinkUnderline({
  */
 export function Wordmark({
   tone = "dark",
+  priority = false,
   className = "",
 }: {
   tone?: "dark" | "light";
+  priority?: boolean;
   className?: string;
 }) {
   return (
@@ -126,7 +128,7 @@ export function Wordmark({
       alt="Jessica S. Designs"
       width={113}
       height={84}
-      priority
+      priority={priority}
       className={`w-auto ${className}`}
     />
   );

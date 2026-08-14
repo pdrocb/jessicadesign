@@ -66,7 +66,7 @@ export function SiteHeader() {
             aria-label={`${site.name} — home`}
             className="flex min-h-11 shrink-0 items-center"
           >
-            <Wordmark className="h-11 md:h-12 lg:h-13" />
+            <Wordmark priority className="h-11 md:h-12 lg:h-13" />
           </Link>
 
           <div className="hidden items-center gap-7 md:flex lg:gap-10">

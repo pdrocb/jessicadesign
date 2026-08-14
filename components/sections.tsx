@@ -187,7 +187,7 @@ export function Services() {
               <Image
                 src={svc.img}
                 alt={svc.name}
-                sizes="(min-width: 1536px) 340px, (min-width: 1200px) 25vw, (min-width: 768px) 50vw, 100vw"
+                sizes="(min-width: 1536px) 339px, (min-width: 1200px) calc((100vw - 180px) / 4), (min-width: 1024px) calc((100vw - 148px) / 4), (min-width: 768px) calc((100vw - 96px) / 2), calc(100vw - 40px)"
                 className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03] md:aspect-[3/4]"
               />
             </div>
@@ -465,6 +465,13 @@ const RATIO = {
   square: "aspect-square",
 } as const;
 
+const LOOKBOOK_IMAGE_SIZES = {
+  wide: "(min-width: 1632px) 1013px, (min-width: 1024px) calc((100vw - 112px) * 2 / 3), (min-width: 768px) calc(100vw - 64px), calc(100vw - 48px)",
+  tall: "(min-width: 1632px) 507px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 768px) calc((100vw - 80px) / 2), calc(100vw - 48px)",
+  square:
+    "(min-width: 1632px) 507px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 768px) calc((100vw - 96px) / 3), calc(100vw - 48px)",
+} as const;
+
 export function LookBook() {
   return (
     <section
@@ -501,13 +508,7 @@ export function LookBook() {
                   src={album.cover}
                   alt={album.alt}
                   fill
-                  sizes={
-                    album.shape === "wide"
-                      ? "(max-width: 1024px) 100vw, 66vw"
-                      : album.shape === "tall"
-                        ? "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        : "(max-width: 768px) 100vw, 33vw"
-                  }
+                  sizes={LOOKBOOK_IMAGE_SIZES[album.shape]}
                   className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
                 />
               </div>

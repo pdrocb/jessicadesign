@@ -14,34 +14,6 @@ type TestimonialRailProps = {
 
 const SETS = 3;
 
-function cardPosition(track: HTMLDivElement, card: HTMLElement) {
-  const trackBounds = track.getBoundingClientRect();
-  const paddingStart = Number.parseFloat(getComputedStyle(track).paddingLeft);
-  const maxScroll = track.scrollWidth - track.clientWidth;
-
-  return Math.min(
-    Math.max(
-      0,
-      track.scrollLeft +
-        card.getBoundingClientRect().left -
-        trackBounds.left -
-        paddingStart,
-    ),
-    maxScroll,
-  );
-}
-
-function closestCardIndex(track: HTMLDivElement, cards: HTMLElement[]) {
-  return cards.reduce(
-    (closest, card, index) =>
-      Math.abs(track.scrollLeft - cardPosition(track, card)) <
-      Math.abs(track.scrollLeft - cardPosition(track, cards[closest]))
-        ? index
-        : closest,
-    0,
-  );
-}
-
 /**
  * Rail infinito solo para tablet y móvil. Los tres juegos son copias
  * visuales; el central es el único que existe para lectores de pantalla.
@@ -49,6 +21,7 @@ function closestCardIndex(track: HTMLDivElement, cards: HTMLElement[]) {
 export function TestimonialRail({ items, label }: TestimonialRailProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -57,46 +30,76 @@ export function TestimonialRail({ items, label }: TestimonialRailProps) {
     const cards = Array.from(
       track.querySelectorAll<HTMLElement>("[data-testimonial-card]"),
     );
-    const middleFirstCard = cards[items.length];
-    if (!middleFirstCard) return;
+    const firstCard = cards[0];
+    const secondCard = cards[1];
+    if (!firstCard || !secondCard) return;
 
     let activeFrame = 0;
     let restoreFrame = 0;
     let settleTimer: ReturnType<typeof setTimeout> | null = null;
-    let positioned = false;
+    let firstPosition = 0;
+    let cardStep = 0;
+    let measured = false;
 
-    const positionInitialCard = () => {
-      if (positioned || track.clientWidth === 0) return;
+    const closestCardIndex = () => {
+      if (!measured || cardStep <= 0) return items.length;
+      return Math.min(
+        cards.length - 1,
+        Math.max(0, Math.round((track.scrollLeft - firstPosition) / cardStep)),
+      );
+    };
+
+    const measureTrack = () => {
+      if (track.clientWidth === 0) return;
+
+      const logicalIndex = measured
+        ? closestCardIndex() % items.length
+        : activeRef.current;
+      const trackBounds = track.getBoundingClientRect();
+      const paddingStart = Number.parseFloat(
+        getComputedStyle(track).paddingLeft,
+      );
+      firstPosition =
+        track.scrollLeft +
+        firstCard.getBoundingClientRect().left -
+        trackBounds.left -
+        paddingStart;
+      const secondPosition =
+        track.scrollLeft +
+        secondCard.getBoundingClientRect().left -
+        trackBounds.left -
+        paddingStart;
+      cardStep = secondPosition - firstPosition;
+      measured = cardStep > 0;
+      if (!measured) return;
+
       track.style.scrollBehavior = "auto";
-      track.scrollLeft = cardPosition(track, middleFirstCard);
+      track.scrollLeft =
+        firstPosition + (items.length + logicalIndex) * cardStep;
       track.style.removeProperty("scroll-behavior");
-      positioned = true;
     };
 
     const updateActiveCard = () => {
       activeFrame = 0;
-      setActive(closestCardIndex(track, cards) % items.length);
+      const logicalIndex = closestCardIndex() % items.length;
+      if (logicalIndex === activeRef.current) return;
+      activeRef.current = logicalIndex;
+      setActive(logicalIndex);
     };
 
     const recenterTrack = () => {
       settleTimer = null;
-      const currentIndex = closestCardIndex(track, cards);
+      const currentIndex = closestCardIndex();
       const currentSet = Math.floor(currentIndex / items.length);
       if (currentSet === 1) return;
 
       const logicalIndex = currentIndex % items.length;
-      const currentCard = cards[currentIndex];
-      const middleCard = cards[items.length + logicalIndex];
-      if (!currentCard || !middleCard) return;
-
-      const delta =
-        middleCard.getBoundingClientRect().left -
-        currentCard.getBoundingClientRect().left;
-      if (Math.abs(delta) < 1) return;
+      const middlePosition =
+        firstPosition + (items.length + logicalIndex) * cardStep;
 
       track.style.scrollSnapType = "none";
       track.style.scrollBehavior = "auto";
-      track.scrollLeft += delta;
+      track.scrollLeft = middlePosition;
       restoreFrame = requestAnimationFrame(() => {
         track.style.removeProperty("scroll-snap-type");
         track.style.removeProperty("scroll-behavior");
@@ -111,9 +114,9 @@ export function TestimonialRail({ items, label }: TestimonialRailProps) {
       settleTimer = setTimeout(recenterTrack, 160);
     };
 
-    const resizeObserver = new ResizeObserver(positionInitialCard);
+    const resizeObserver = new ResizeObserver(measureTrack);
     resizeObserver.observe(track);
-    positionInitialCard();
+    measureTrack();
     track.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
