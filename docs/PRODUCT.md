@@ -88,8 +88,8 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 - **Logotipo** (ago 2026): monograma J+S entrelazado, con "JESSICA S. DESIGNS" en versales serif cruzando el monograma a media altura, y debajo "Wedding & Event Design & Styling" en una sans ligera espaciada. **En el nav NO se usa esa línea inferior** (decisión PM): satura, y el tagline ya vive en el hero y en el footer.
 - Voz: contenida, segura, sin superlativos huecos. Frases cortas. Nunca "¡El día de tus sueños!". El sitio va en **inglés**; la conversación con el PM, en español.
 - Adjetivos de marca, en palabras de la clienta (ago 2026): *elevated, sophisticated, modern, warm, intentional — luxury, but still approachable*. Anti-referencias explícitas: corporativo, genérico, "traditional wedding décor company". Referencias visuales que ama: simplicityinmind.com (vintage-elegante) y nyflorale.com (flujo, color cálido con acentos) — quiere un punto medio entre vintage, elegante y moderno.
-- Jessica Salomon, dueña y lead stylist. Neoyorquina criada en el Bronx, ~15 años estilizando eventos, madre de tres.
-- Canales existentes: Instagram [`js_eventsllc`](https://instagram.com/js_eventsllc) · Facebook [`celebratewithJess`](https://www.facebook.com/celebratewithJess) · teléfono 845-375-7820.
+- Jessica Salomon, fundadora y creative director. Neoyorquina criada en el Bronx, madre de tres. Tiene experiencia previa en wedding y event planning, pero dejó la planeación para enfocarse exclusivamente en wedding design y styling.
+- Canales existentes: Instagram [`jessicasalomondesigns__`](https://www.instagram.com/jessicasalomondesigns__) · Facebook [`celebratewithJess`](https://www.facebook.com/celebratewithJess) · teléfono 845-375-7820.
 
 ## Evidence on Hand
 

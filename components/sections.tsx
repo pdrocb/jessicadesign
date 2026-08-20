@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  founderStory,
   images,
   lookbook,
   lookbookIntro,
@@ -17,6 +18,7 @@ import {
   Wordmark,
 } from "@/components/ui";
 import { TestimonialRail } from "@/components/TestimonialRail";
+import { FounderStoryDialog } from "@/components/FounderStoryDialog";
 
 /* ── Hero ──────────────────────────────────────────────────────────
    La geometría replica a Florale: apilado hasta 1439px y split 1:1 desde
@@ -51,8 +53,8 @@ export function Hero() {
           </h1>
 
           <p className="text-body-lg mt-1 max-w-[44ch] text-ink-muted md:mt-0">
-            We shape the look and feel of the whole celebration, then style
-            every piece of it ourselves, on the day.
+            Boutique wedding design &amp; styling for thoughtfully created
+            celebrations in the Hudson Valley, NYC, and CT.
           </p>
 
           <div className="mt-1 flex items-center gap-9">
@@ -298,8 +300,8 @@ export function SilkFlorals() {
         </div>
 
         <Image
-          src={images.heroDetail}
-          alt="Silk floral arrangement styled on a table"
+          src={images.silkFloralsBlueCentrepiece}
+          alt="Blue and white silk floral centrepiece in a brass compote on a reception table"
           sizes="(min-width: 1200px) 26vw, (min-width: 768px) 36vw, 100vw"
           data-reveal
           className="aspect-[4/5] w-full object-cover md:aspect-[3/4]"
@@ -350,7 +352,7 @@ export function About() {
       <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
         <Image
           src={images.jessica}
-          alt="Jessica Salomon, owner and lead stylist"
+          alt="Jessica Salomon, founder and creative director"
           sizes="(min-width: 1200px) 42vw, (min-width: 768px) 42vw, 100vw"
           className="w-full object-cover md:col-span-5"
         />
@@ -358,35 +360,23 @@ export function About() {
           data-reveal
           className="flex flex-col gap-5 md:col-span-7 md:mt-14 lg:col-span-6 lg:col-start-7 lg:mt-24 lg:gap-6"
         >
-          <Eyebrow>The Designer</Eyebrow>
+          <Eyebrow>Founder &amp; Creative Director</Eyebrow>
           <h2 className="text-display-md font-display font-medium">
             Jessica Salomon
           </h2>
-          <p className="text-quote-italic font-display text-ink-muted italic">
-            Fifteen years of styling celebrations, from the Bronx to the Hudson
-            Valley.
-          </p>
           {/* Tope de medida: con el rail a 1536 esta columna llega a ~76ch,
               por encima del límite cómodo de lectura. */}
           <p className="text-body-lg max-w-[66ch] text-ink-muted">
-            Jessica is the eye behind every JSD celebration. Her work begins
-            with your story, your Pinterest board, and the feeling you can’t
-            quite put into words. It ends in a room your guests will talk
-            about for years. Details matter; she designs every one of them. And
-            she takes on a small number of celebrations each year, by choice:
-            fewer rooms, more of her in each one.
+            With a background in wedding and event planning, I bring years of
+            experience and a deep understanding of how celebrations come
+            together. Over time, I found myself drawn most to the creative
+            side—the details, the atmosphere, and the way thoughtful design can
+            completely transform a space. That led me to step away from
+            planning and focus exclusively on wedding design and styling,
+            creating celebrations that feel intentional, personal, and
+            beautifully considered.
           </p>
-          {/* Firma de autor, no CTA: cierra la biografía identificando el
-              rol y a la persona detrás del trabajo. La jerarquía viene de
-              Clementine; tipografía y color permanecen en el sistema JSD. */}
-          <footer className="mt-3 flex flex-col gap-2">
-            <p className="text-label font-medium tracking-[0.28em] text-ink-subtle uppercase">
-              Founder &amp; Creative Director
-            </p>
-            <p className="text-heading-md font-display font-medium text-ink">
-              Jessica Salomon
-            </p>
-          </footer>
+          <FounderStoryDialog image={images.jessica} story={founderStory} />
         </div>
       </div>
     </section>
@@ -456,18 +446,21 @@ export function Testimonials() {
 const SPAN = {
   wide: "md:col-span-6 lg:col-span-8",
   tall: "md:col-span-3 lg:col-span-4",
+  portraitPair: "md:col-span-3 lg:col-span-6",
   square: "md:col-span-2 lg:col-span-4",
 } as const;
 
 const RATIO = {
   wide: "aspect-[3/2]",
   tall: "aspect-[3/4] lg:aspect-auto lg:min-h-0 lg:flex-1",
+  portraitPair: "aspect-[3/4] lg:aspect-[4/5]",
   square: "aspect-square",
 } as const;
 
 const LOOKBOOK_IMAGE_SIZES = {
   wide: "(min-width: 1632px) 1013px, (min-width: 1024px) calc((100vw - 112px) * 2 / 3), (min-width: 768px) calc(100vw - 64px), calc(100vw - 48px)",
   tall: "(min-width: 1632px) 507px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 768px) calc((100vw - 80px) / 2), calc(100vw - 48px)",
+  portraitPair: "(min-width: 1632px) 760px, (min-width: 1024px) calc((100vw - 112px) / 2), (min-width: 768px) calc((100vw - 80px) / 2), calc(100vw - 48px)",
   square:
     "(min-width: 1632px) 507px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 768px) calc((100vw - 96px) / 3), calc(100vw - 48px)",
 } as const;
@@ -607,12 +600,16 @@ export function SiteFooter() {
             <div className="text-label-sm flex gap-4 font-medium tracking-[0.2em] uppercase md:mt-1.5 md:justify-end">
               <a
                 href={site.instagram}
+                target="_blank"
+                rel="noreferrer"
                 className="py-[15px] text-bone transition-colors duration-[180ms] hover:text-ink-faint md:py-0"
               >
                 Instagram
               </a>
               <a
                 href={site.facebook}
+                target="_blank"
+                rel="noreferrer"
                 className="py-[15px] text-bone transition-colors duration-[180ms] hover:text-ink-faint md:py-0"
               >
                 Facebook

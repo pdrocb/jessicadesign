@@ -65,6 +65,17 @@
   --text-heading-md: clamp(21px, 0.29vw + 19.9px, 24px); /* 21 → 24 */
   --text-heading-md--line-height: 1.3;
 
+  /* Escala compacta del perfil fullscreen: los tres roles conviven con
+     el CTA en un viewport de laptop sin convertir la columna en panel. */
+  --text-founder-display: clamp(32px, 3.2vw, 46px);
+  --text-founder-display--line-height: 1.04;
+
+  --text-founder-intro: clamp(18px, 1.45vw, 21px);
+  --text-founder-intro--line-height: 1.4;
+
+  --text-founder-body: 16px;
+  --text-founder-body--line-height: 1.55;
+
   --text-quote-md: clamp(17px, 0.38vw + 15.5px, 21px); /* 17 → 21 */
   --text-quote-md--line-height: 1.6;
 
@@ -229,6 +240,28 @@
   [data-reveal].revealed {
     opacity: 1;
     transform: none;
+  }
+
+  .founder-dialog[open] .founder-dialog__image {
+    animation: founder-dialog-image-in 700ms var(--ease-geometry) both;
+  }
+
+  .founder-dialog[open] .founder-dialog__copy {
+    animation: founder-dialog-copy-in 560ms 90ms var(--ease-geometry) both;
+  }
+}
+
+@keyframes founder-dialog-image-in {
+  from {
+    opacity: 0.82;
+    clip-path: inset(0 8% 0 0);
+  }
+}
+
+@keyframes founder-dialog-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
   }
 }
 

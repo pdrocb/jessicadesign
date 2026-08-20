@@ -45,6 +45,21 @@ typography:
     fontSize: "clamp(21px, 0.29vw + 19.9px, 24px)"
     fontWeight: 500
     lineHeight: 1.3
+  founder-display:
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
+    fontSize: "clamp(32px, 3.2vw, 46px)"
+    fontWeight: 500
+    lineHeight: 1.04
+  founder-intro:
+    fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
+    fontSize: "clamp(18px, 1.45vw, 21px)"
+    fontWeight: 500
+    lineHeight: 1.4
+  founder-body:
+    fontFamily: "Karla, Arial, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.55
   quote-xl:
     fontFamily: "Cormorant Garamond, Garamond, Georgia, serif"
     fontSize: "clamp(26px, 1.33vw + 20.8px, 40px)"
@@ -220,6 +235,7 @@ A `clamp()` with only a `vw` middle term cannot touch both ends — it drifted t
   **The floor here is not taste, it is hierarchy.** `display-lg` — the closing CTA headline — is 64px. The hero has to stay far enough above it that the page has one clear loudest voice; at 80px the step is 16px and holds. Below roughly 76px the two collapse into each other and the site loses its accent.
 - **display-lg** (500, 32→64px, 1.15): the closing CTA headline. The largest type after the hero, and the only other place that scale appears.
 - **display-md** (400, 32→56px, 1.15): section headings on the testimonial band and in FAQs. Weight 400, not 500 — at this scale the lighter weight reads correctly.
+- **founder-display / founder-intro / founder-body** (500 / 500 / 400, 32→46px / 18→21px / 16px): compact editorial hierarchy for the fullscreen founder profile. It keeps the complete story and conversion path inside a laptop viewport while preserving a 68ch reading measure; it does not replace the more spacious page roles.
 - **heading-lg** (500, 30→44px, 1.2): standard section headings on light ground.
 - **heading-md** (500, 21→24px, 1.3): service card titles.
 - **quote-xl** (400, 26→40px, 1.45): the manifesto statement. The loosest line-height in the system; it is meant to be read slowly.
@@ -343,9 +359,11 @@ The form language is rectangles and hairlines. Photographs are hard-cropped with
 
 The full-width editorial plate was removed from the page composition in Aug 2026 to test a tighter transition from Silk Florals into About. Its component and asset remain available for an immediate visual comparison or reversal.
 
-### The founder story closes with authorship, not conversion
+### The founder story opens into an editorial profile
 
-About retains its portrait, `The Designer` eyebrow, name, italic experience line and biography. The portrait leads at 5/12 while the text begins lower in the adjacent column, breaking the generic top-aligned bio split without any overlap. It no longer ends with an inquiry CTA. Instead, a signature block closes the column: **`Founder & Creative Director`** in the system label, with **Jessica Salomon** immediately below in `heading-md` Cormorant. Conversion remains available in the fixed navigation and the dedicated closing CTA.
+About retains its portrait, **`Founder & Creative Director`** eyebrow, name and short biography. The portrait leads at 5/12 while the text begins lower in the adjacent column, breaking the generic top-aligned bio split without overlap. A text CTA, **`Meet Jessica`**, replaces the repeated signature block and opens the longer founder story in a native fullscreen dialog.
+
+The dialog is a 5/7 editorial split from tablet upward: the portrait remains fixed at viewport height while the story scrolls independently with the page surface. Mobile returns to the DOM order—a 4/5 portrait, story, then a full conversion path to `/inquire`. The close control remains visible, measures 44px, Escape closes the dialog, scroll is locked behind it and focus returns to `Meet Jessica`. Its role line follows the client-supplied copy exactly: **`founder and lead designer`**; the section's existing title remains **`Founder & Creative Director`**.
 
 This is the third and final position, and the route matters because both alternatives were built and measured:
 
@@ -412,13 +430,13 @@ Expertise and Look Book share Florale's restrained image hover: the photograph s
 
 The section header follows the same reading order as Florale: eyebrow and display heading at left, followed by a separate description row that aligns left on mobile and right from tablet. Its spacing is also literal: 80/88/112px above, 64/72/96px below, 32px from heading group to description and another 32px into the mosaic.
 
-The gallery moves through the same structural breakpoints: one column on mobile, six columns on tablet and twelve on desktop, always with a 16px gap. Desktop runs landscape·portrait (`8/4`), portrait·landscape (`4/8`), then three squares (`4/4/4`). Tablet runs one full-width landscape, the two portraits at half-width and three squares in thirds; matching Florale, the second landscape is hidden only at this intermediate breakpoint. Mobile restores all seven images in one column with their original 3:2, 3:4 and 1:1 shapes.
+The gallery moves through the same structural breakpoints: one column on mobile, six columns on tablet and twelve on desktop, always with a 16px gap. Desktop runs landscape·portrait (`8/4`), a balanced portrait pair (`6/6`) cropped to 4:5 so the row does not dominate the section, then three squares (`4/4/4`). Tablet runs one full-width landscape, the first two portraits at half-width and three squares in thirds; Darby & Oliver stays hidden only at this intermediate breakpoint. Mobile restores all seven images in one column with their original 3:2, 3:4 and 1:1 shapes.
 
-**The shapes are assigned by crop tolerance, not by taste.** All four source photographs are portrait (1000×1333, 1200×1800), so a landscape cell costs real height. The wide cells therefore go to the flat lays, which survive being cropped short, and the tall cells to the couple and the barrel, whose subjects would be decapitated in a 3/2. Any new album gets its `shape` chosen the same way — look at the original before picking.
+**The shapes are assigned by crop tolerance, not by taste.** The wide anchor goes to a scene that survives being cropped short; the couple, barrel and Darby & Oliver stay vertical because their subjects and atmosphere depend on the full frame. The desktop `portraitPair` gives the latter two equal 6-column weight without forcing either into landscape. Any new album gets its `shape` chosen the same way — look at the original before picking.
 
 Unlike Florale, **all text stays below each photograph**. There is no scrim, gradient or over-image caption: Jessica's uppercase plate label remains left-aligned 14–16px below its image. This is the one intentional difference requested by the client.
 
-That fixes what to ask the client for: **seven covers, and their shapes matter.** Two crop to landscape 3/2 for the wide cells, two stay vertical at 3/4, three survive a square crop. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
+That fixes what to ask the client for: **seven covers, and their shapes matter.** One crops to landscape 3/2, three stay vertical at 3/4, and three survive a square crop. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
 
 Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
 

@@ -13,10 +13,11 @@ import heroDetail from "@/assets/hero-03-detail.jpg";
 import heroTerrace from "@/assets/hero-04-terrace.jpg";
 import heroTapers from "@/assets/hero-05-tapers.jpg";
 import jessica from "@/assets/jessica-salomon.jpg";
+import lookbookDarbyOliver from "@/assets/lookbook-darby-oliver.webp";
 import lookbookGoldenHour from "@/assets/lookbook-golden-hour.jpg";
-import lookbookMenuSuite from "@/assets/lookbook-menu-suite.jpg";
 import manifesto01 from "@/assets/philosophy-candlelit-tablescape.jpg";
 import manifesto02 from "@/assets/manifesto-02.jpg";
+import silkFloralsBlueCentrepiece from "@/assets/silk-florals-blue-centrepiece.webp";
 import serviceCelebrations from "@/assets/service-celebrations.jpg";
 import serviceDayOf from "@/assets/service-day-of.jpg";
 import servicePicnics from "@/assets/service-picnics.jpg";
@@ -31,7 +32,7 @@ export const site = {
   location: "Hudson Valley, New York",
   phone: "845 · 375 · 7820",
   phoneHref: "tel:+18453757820",
-  instagram: "https://instagram.com/js_eventsllc",
+  instagram: "https://www.instagram.com/jessicasalomondesigns__",
   facebook: "https://www.facebook.com/celebratewithJess",
   legalName: "J|S Events, Event Styling & Decorating Co. LLC",
 };
@@ -58,9 +59,21 @@ export const images = {
   heroTapers,
   manifesto01,
   manifesto02,
+  silkFloralsBlueCentrepiece,
   jessica,
   serviceWeddings,
 };
+
+export const founderStory = {
+  heading:
+    "Weddings with intention, personality & beautifully considered details.",
+  introduction:
+    "Jessica S. Designs is a boutique wedding design and styling studio led by founder and lead designer Jessica Salomon.",
+  paragraphs: [
+    "With a background in wedding and event planning, I understand how every element of a celebration works together. But it was always the creative side that drew me in most—the details, the atmosphere, and the transformation of a space. Today, I focus exclusively on wedding design and styling, creating celebrations that feel personal, intentional, and distinctly yours.",
+    "From the first design concept to the final styling on wedding day, I work closely with my couples to shape the visual story of their celebration—bringing together tablescapes, florals, candlelight, signage, stationery, décor, and all the thoughtful details that make a space feel complete.",
+  ],
+} as const;
 
 /** `slug` es el ancla de cada servicio: el nav enlaza a la tarjeta, no
  *  a la sección entera, para que la etiqueta cumpla lo que promete. */
@@ -212,12 +225,12 @@ export const lookbookIntro = {
 
 export const lookbook = [
   { cover: heroTerrace, shape: "wide", title: "Wedding dinner party", meta: "Hopewell Junction, NY", alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign" },
-  { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", alt: "Couple walking through tall grasses, in black and white" },
+  { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", meta: "Gardnier NY", alt: "Couple walking through tall grasses, in black and white" },
 
-  { cover: heroDetail, shape: "tall", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
-  { cover: lookbookMenuSuite, shape: "wide", title: "Darby & Oliver", meta: "Blackwalnut Farm, Saugerties NY", alt: "Hand-lettered menu card on a lilac napkin over a botanical plate" },
+  { cover: heroDetail, shape: "portraitPair", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
+  { cover: lookbookDarbyOliver, shape: "portraitPair", title: "Darby & Oliver", meta: "Blackwalnut Farm, Saugerties NY", alt: "Bride in red sunglasses reading with a guest beside a sunlit window" },
 
-  { cover: serviceDayOf, shape: "square", title: "Loft Dinner", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
+  { cover: serviceDayOf, shape: "square", title: "Dinner reception", meta: "B Social Port Chester NY", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
   { cover: lookbookGoldenHour, shape: "square", title: "Cori & Ezra", meta: "Blackwalnut Farm, Saugerties NY", alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light" },
   { cover: servicePicnics, shape: "square", title: "Citrus Picnic", alt: "Low picnic table with lemon-print china, rattan chargers and cushions" },
 ] as const;
