@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   founderStory,
+  homeLookbook,
   images,
-  lookbook,
   lookbookIntro,
   process,
   quotes,
@@ -64,7 +64,7 @@ export function Hero() {
               </ButtonPrimary>
             </div>
             <div className="hidden md:block">
-              <LinkUnderline href="/#look-book" className="!self-center">
+              <LinkUnderline href="/look-book" className="!self-center">
                 See the Work
               </LinkUnderline>
             </div>
@@ -87,7 +87,7 @@ export function Hero() {
             Terrace welcome dinner · Hudson Valley, NY
           </figcaption>
           <div className="flex justify-center md:hidden">
-            <LinkUnderline href="/#look-book" className="!self-center">
+            <LinkUnderline href="/look-book" className="!self-center">
               See the Work
             </LinkUnderline>
           </div>
@@ -136,15 +136,15 @@ export function Manifesto() {
         </div>
 
         <Image
-          src={images.manifesto01}
-          alt="Candlelit reception table beneath suspended greenery"
+          src={images.philosophyOutdoorBarn}
+          alt="Outdoor reception table set beside a white barn"
           sizes="(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 100vw"
           className="aspect-[4/3] w-full object-cover md:col-span-4 md:col-start-1 md:row-start-2 md:aspect-[3/4] lg:col-span-3 lg:row-start-1 lg:row-end-3 lg:mt-20"
         />
 
         <Image
-          src={images.manifesto02}
-          alt="Tablescape detail"
+          src={images.philosophyOutdoorTablescape}
+          alt="Sunlit outdoor reception table with soft florals and taper candles"
           sizes="25vw"
           className="hidden aspect-[3/4] w-full object-cover lg:col-span-3 lg:col-start-10 lg:row-start-2 lg:-mt-24 lg:block xl:-mt-32"
         />
@@ -310,8 +310,8 @@ export function SilkFlorals() {
         {/* La segunda foto aparece solo en desktop y baja 80px: el
             escalonado es lo que distingue esta banda de un split. */}
         <Image
-          src={images.manifesto02}
-          alt="Silk and fresh florals combined in a centrepiece"
+          src={images.silkFloralsReceptionCentrepiece}
+          alt="Tall blue and white silk floral centrepiece above a candlelit reception table"
           sizes="26vw"
           data-reveal
           style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
@@ -376,7 +376,10 @@ export function About() {
             creating celebrations that feel intentional, personal, and
             beautifully considered.
           </p>
-          <FounderStoryDialog image={images.jessica} story={founderStory} />
+          <FounderStoryDialog
+            image={images.jessicaFounderStory}
+            story={founderStory}
+          />
         </div>
       </div>
     </section>
@@ -487,32 +490,43 @@ export function LookBook() {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
-          {lookbook.map((album, i) => (
-            <article
-              key={album.title}
-              data-reveal
-              style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-              className={`group flex flex-col ${SPAN[album.shape]} ${
-                i === 3 ? "md:hidden lg:flex" : ""
-              }`}
-            >
-              <div className={`relative w-full overflow-hidden ${RATIO[album.shape]}`}>
-                <Image
-                  src={album.cover}
-                  alt={album.alt}
-                  fill
-                  sizes={LOOKBOOK_IMAGE_SIZES[album.shape]}
-                  className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
-                />
-              </div>
-              <div className="flex items-start justify-between gap-3 px-2 pt-3.5 text-[9px] leading-[1.4] font-medium tracking-[0.14em] text-ink-subtle uppercase md:text-[10px] md:tracking-[0.16em] lg:pt-4 wide:tracking-[0.18em]">
-                <h3 className="shrink-0 whitespace-nowrap">{album.title}</h3>
-                {"meta" in album && album.meta ? (
-                  <p className="whitespace-nowrap text-right">{album.meta}</p>
-                ) : null}
-              </div>
-            </article>
-          ))}
+          {homeLookbook.map((album, i) => {
+            return (
+              <article
+                key={album.title}
+                data-reveal
+                style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
+                className={`group flex flex-col ${SPAN[album.shape]} ${
+                  i === 3 ? "md:hidden lg:flex" : ""
+                }`}
+              >
+                <Link
+                  href={album.href}
+                  className="flex h-full flex-col"
+                >
+                  <div className={`relative w-full overflow-hidden ${RATIO[album.shape]}`}>
+                    <Image
+                      src={album.cover}
+                      alt={album.alt}
+                      fill
+                      sizes={LOOKBOOK_IMAGE_SIZES[album.shape]}
+                      className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <div className="flex items-start justify-between gap-3 px-2 pt-3.5 text-[9px] leading-[1.4] font-medium tracking-[0.14em] text-ink-subtle uppercase md:text-[10px] md:tracking-[0.16em] lg:pt-4 wide:tracking-[0.18em]">
+                    <h3 className="shrink-0 whitespace-nowrap">{album.title}</h3>
+                    {"meta" in album && album.meta ? (
+                      <p className="whitespace-nowrap text-right">{album.meta}</p>
+                    ) : null}
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+
+        <div data-reveal className="mt-10 flex justify-center md:mt-14">
+          <LinkUnderline href="/look-book">View the full Look Book</LinkUnderline>
         </div>
       </div>
     </section>
@@ -552,8 +566,8 @@ export function Cta() {
 export function SiteFooter() {
   const footerNav = [
     { label: "Home", href: "/" },
-    { label: "Look Book", href: "/#look-book" },
-    { label: "Luxury Picnics", href: "/#luxury-picnics" },
+    { label: "Look Book", href: "/look-book" },
+    { label: "Expertise", href: "/#expertise" },
     { label: "Silk Florals", href: "/#silk-florals" },
     { label: "Process", href: "/#process" },
     { label: "Inquire", href: "/inquire" },

@@ -78,10 +78,23 @@ const jsonLd = {
   ],
 };
 
+const lookbookDirectionContract = `<!--
+THESIS: A continuous editorial portfolio lets each celebration unfold at photographic scale; it refuses the default card grid and project-detail funnel.
+OWN-WORLD: Warm paper and bone, ink hairlines, Cormorant display type, Karla metadata, square controls, no shadows or ornamental chrome.
+STORY: Visitors scan the range, enter one project in sequence, inspect every photograph fullscreen, then move toward inquiry with confidence in Jessica's eye.
+FIRST VIEWPORT: A fixed brand header precedes a wide Look Book title, a concise promise, a hairline, and the first horizontal project cover entering below.
+FORM: Ordered aspect-led chapter sequence with compact contact-sheet rows; position 6 of the grounded list; seed key e35e2af9.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${cormorant.variable} ${karla.variable}`}>
       <body>
+        <template
+          data-impeccable-direction="lookbook"
+          dangerouslySetInnerHTML={{ __html: lookbookDirectionContract }}
+        />
         {children}
         <script
           type="application/ld+json"

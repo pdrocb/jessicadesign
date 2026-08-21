@@ -184,7 +184,7 @@ Twelve warm neutrals running from a near-black umber to ivory, plus the Aug 2026
 
 ### Neutral
 
-- **Umber Black** (`#141312`): the system's ink. Body headlines, the dark section band, the primary button fill. Warm-shifted off true black so it sits beside cream without going cold.
+- **Umber Black** (`#141312`): the system's ink. Body headlines, controls, and the footer ground. Warm-shifted off true black so it sits beside cream without going cold.
 - **Press Umber** (`#2e2b27`): reserved for press and partner marks on light ground. Currently unused — no press assets are cleared for publication.
 - **Reading Umber** (`#4a463f`): long-form body copy. Steps back from the headline without losing contrast.
 - **Quiet Stone** (`#6b6660`): eyebrows, captions, secondary copy, the hover destination for text links.
@@ -202,7 +202,7 @@ Twelve warm neutrals running from a near-black umber to ivory, plus the Aug 2026
 - **Petal** (`#f3e7e2`): a pale blush ground harvested from her florals — the rose as *atmosphere, not ink*. One job: the testimonial band, which moves off the dark `ink` ground onto this luminous one. Text on petal is `ink` for quotes and `rose-umber` for attributions.
 - **Petal Line** (`#ddc9c2`): hairlines on a petal ground only.
 - **Rose Umber** (`#8a5a52`): the dusty rose of her florals, deepened to 5.5:1 on `bone`/`paper` — passes AA for its sizes. Exactly three jobs: the italic accent word inside a display headline, attributions/meta on petal ground, and `::selection`. Never a fill, never a button, never body copy.
-- **Sage** (`#4f5a48`): the foliage behind the florals — the system's **only strong accent**, the role muted green plays on Simplicity in Mind. Exactly three jobs: the primary button fill, the outline button's hover fill, and small typographic marks (the fleuron, the FAQ `+`/`−`). Measures 7:1 against `bone` text and ground — both directions pass AA.
+- **Sage** (`#4f5a48`): the foliage behind the florals — the system's **only strong accent**, the role muted green plays on Simplicity in Mind. Exactly three jobs: primary and nav CTA fills, form focus rules, and small typographic marks (the fleuron, the FAQ `+`/`−`). Measures 7:1 against `bone` text and ground — both directions pass AA.
 - **Deep Sage** (`#3c4536`): the primary button's hover fill. Never a text color.
 
 ### Named Rules
@@ -278,7 +278,8 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 | Founder | stacked | 5 / 7, copy lowered | 5 / 6, copy lowered further |
 | Testimonials | stacked, lead quote first | stacked, lead quote first | 4 / 8, secondary quotes share one inset |
 | FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
-| Look Book | 1 column, ratios kept | 6-col Florale mosaic | 12-col Florale mosaic |
+| Home Look Book | 1 column, ratios kept | 6-col Florale mosaic | 12-col Florale mosaic |
+| `/look-book` | 1-column project chapters | 4/8 project split | 4/8 project split, alternating |
 | Buttons | **full width** | inline | inline |
 
 The governing rule is **one column fewer per breakpoint down**, never a reflow into a different concept. At mobile, every deliberate desktop offset collapses back into DOM order; asymmetry may change emphasis, never reading logic.
@@ -291,7 +292,7 @@ Section boundaries must remain visible even when adjacent bands use restrained t
 
 **The Controlled Asymmetry Rule** *(Aug 2026)*. Organic does not mean random, and asymmetry must earn its whitespace. Narrative and image-led compositions can use a dominant anchor, counterweight and intentional breathing room: Philosophy uses a large photograph against a smaller pale detail; Founder lowers its biography beside the portrait; Testimonials lets one voice lead. Repeated, copy-heavy information stays compact: Expertise uses four equivalent columns and Process uses a 3 × 2 matrix. Rhythm comes from changing alignment and density between sections, not from offsetting every card.
 
-Philosophy no longer flanks a centred paragraph with matching miniatures. Its title begins toward the centre-left, its body advances one grid column, the candlelit table anchors the opposite side and the stationery detail enters later and lower. The imbalance expresses the claim — a room composed as a whole — without changing copy or semantic order.
+Philosophy no longer flanks a centred paragraph with matching miniatures. Its title begins toward the centre-left, its body advances one grid column, a vertical outdoor table beside the barn anchors the opposite side and a sunlit tablescape enters later and lower in a vertical crop on desktop. The imbalance expresses the claim — a room composed as a whole — without changing copy or semantic order.
 
 Expertise presents four equivalent cards at desktop, two at tablet and one at mobile. Its editorial gesture belongs above the grid: the heading and service label share one line, while one short supporting sentence sits below at the far right. The compact card rhythm keeps the service information easy to compare and avoids decorative empty space.
 
@@ -343,8 +344,6 @@ Under `prefers-reduced-motion`, everything is instant — already enforced globa
 
 Depth is built two ways instead. First, **tonal layering**: consecutive full-width bands step through the Grounds Ladder — `paper → bone → petal → cream → ink` — so the page reads as stacked material rather than stacked cards. Second, **hairlines**: a single 1px rule in the appropriate divider token separates what a border-radius-and-shadow card would otherwise separate.
 
-The one `box-shadow` in the entire codebase is not elevation. The primary button's hover state swaps to a light fill and needs an outline; a real `border` would change its box and shift the layout mid-transition, so it uses `inset 0 0 0 1px` as a border substitute. It reads as a hairline, not a shadow.
-
 ### Named Rules
 
 **The No-Lift Rule.** Nothing in this system rises off the page. If an element needs separation, it gets a hairline, a tonal ground, or more space — in that order. A drop shadow anywhere is a defect.
@@ -363,7 +362,7 @@ The full-width editorial plate was removed from the page composition in Aug 2026
 
 About retains its portrait, **`Founder & Creative Director`** eyebrow, name and short biography. The portrait leads at 5/12 while the text begins lower in the adjacent column, breaking the generic top-aligned bio split without overlap. A text CTA, **`Meet Jessica`**, replaces the repeated signature block and opens the longer founder story in a native fullscreen dialog.
 
-The dialog is a 5/7 editorial split from tablet upward: the portrait remains fixed at viewport height while the story scrolls independently with the page surface. Mobile returns to the DOM order—a 4/5 portrait, story, then a full conversion path to `/inquire`. The close control remains visible, measures 44px, Escape closes the dialog, scroll is locked behind it and focus returns to `Meet Jessica`. Its role line follows the client-supplied copy exactly: **`founder and lead designer`**; the section's existing title remains **`Founder & Creative Director`**.
+The dialog is a 5/7 editorial split from tablet upward: its distinct working portrait shows Jessica styling a table and remains fixed at viewport height while the story scrolls independently with the page surface. The image receives a restrained editorial grade—slightly brighter, gently desaturated and with facial/lens highlights recovered—without changing identity or scene. Mobile returns to the DOM order—a 4/5 portrait, story, then a full conversion path to `/inquire`. The close control remains visible, measures 44px, Escape closes the dialog, scroll is locked behind it and focus returns to `Meet Jessica`. Its role line follows the client-supplied copy exactly: **`founder and lead designer`**; the section's existing title remains **`Founder & Creative Director`**.
 
 This is the third and final position, and the route matters because both alternatives were built and measured:
 
@@ -436,9 +435,19 @@ The gallery moves through the same structural breakpoints: one column on mobile,
 
 Unlike Florale, **all text stays below each photograph**. There is no scrim, gradient or over-image caption: Jessica's uppercase plate label remains left-aligned 14–16px below its image. This is the one intentional difference requested by the client.
 
-That fixes what to ask the client for: **seven covers, and their shapes matter.** One crops to landscape 3/2, three stay vertical at 3/4, and three survive a square crop. Anything uploaded runs through `npm run assets`, which caps the long edge at 2000px.
+The home version is a curated doorway, not the complete archive. Its seven covers, shapes, captions and order form an independent editorial set in `lib/content.ts`, so publishing a project cannot silently alter the approved home composition. A cover links to a project anchor only when that correspondence is confirmed; otherwise it opens the complete `/look-book`. The closing action always opens the full page. A future CMS must expose this home curation separately from the project archive.
 
-Each album will grow a set of images behind its cover; the data field is already named `cover` for that reason.
+The complete `/look-book` is a single continuous editorial page with no project index between its title and the work. Each project becomes a chapter: contextual metadata in a restrained column, one dominant horizontal cover, and up to five ordered preview photographs at a smaller contact-sheet scale. Chapters alternate the 4/8 split on desktop and tablet; there are deliberately no project detail routes and no card grid.
+
+Preview order is immutable across breakpoints: one DOM sequence stays in one wrapping flex flow, and CSS changes only its row breaks. Five previews resolve as `3 + 2` on desktop and `2 + 2 + 1` on tablet and mobile. Column fractions use a softened editorial ratio derived from each photograph's intrinsic dimensions: portraits move 30–38% toward square with a `0.74–0.78` floor, while landscapes cap at `1.65–1.70`. The image itself is never distorted; `object-cover` creates the modest crop inside that frame, and a future focal point protects the subject. This keeps mobile and tablet pairs genuinely variable—roughly `33/66`, `40/60`, or `50/50` according to the source—without allowing an extreme portrait to dominate the row height.
+
+A four-image desktop remainder resolves as `2 + 2`, never `3 + 1`; this prevents the stranded white column that a fixed grid created after a vertical photograph. Symmetric spacer weights are row-aware: a single image, a pair, and a trio each receive a different minimum combined ratio, keeping short rows centred without excessive lateral voids. No masonry or dense packing is allowed because either would make visual order diverge from CMS order.
+
+The chapter cover and home cover are separate editorial choices. `coverImageId` must point to a horizontal photograph for `/look-book`; `homeCoverImageId` may select a different image that fits the curated home shape. A future CMS records intrinsic dimensions and may add `focalPoint` plus `cropTolerance: none | soft`; previews default to the soft editorial crop, while `none` restores the exact source ratio when an image cannot tolerate cropping. Each chapter closes with the secondary `View Full Gallery` action and a photograph count.
+
+Any cover or preview opens a project-scoped fullscreen viewer on a light `paper` ground, with the image stage differentiated in `bone`, warm hairlines, and umber controls. Images use `object-contain` so the complete photograph wins over filling the viewport. Previous/next controls remain visible and at least 44px at every breakpoint, wrapping inside that project; keyboard arrows, Escape, swipe, focus return and document scroll lock complement them. The counter communicates both current position and project size.
+
+Project order, photograph order, publication state, cover and home feature order are all explicit fields in `lib/lookbook.ts`. That file is the local data adapter, not component-owned content; a future CMS replaces the adapter while keeping those selectors stable. Imported originals are deduplicated by source URL, auto-oriented, capped at 2000px on the long edge and stored as WebP. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported.
 
 ### Quote block
 
@@ -465,7 +474,7 @@ Square corners, no fills, and **a single hairline under each field** rather than
 
 `/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries the **same fixed one-row navigation** as the home; on mobile its hamburger is available immediately, while tablet and desktop retain the visible destinations.
 
-A first pass gave the page row 1 only, on the theory that a conversion surface should not offer lateral escapes. That was wrong in practice (PM call, Aug 2026): **a centred logotype does not read as an exit.** Visitors did not perceive a way back at all, which is a worse failure than a few extra links — a trapped visitor leaves the site, not just the page. The nav anchors are therefore root-relative (`/#look-book`, not `#look-book`) so they resolve from any page.
+A first pass gave the page row 1 only, on the theory that a conversion surface should not offer lateral escapes. That was wrong in practice (PM call, Aug 2026): **a centred logotype does not read as an exit.** Visitors did not perceive a way back at all, which is a worse failure than a few extra links — a trapped visitor leaves the site, not just the page. The Look Book is now a real route (`/look-book`); section destinations such as Expertise and Process remain root-relative (`/#expertise`) so they resolve from any page.
 
 The content column is **centred in the document** at `max-w-[900px]`, not hung off the left rail. The wide rail exists to feed photography; a form has none, and left-aligning it stranded half the viewport empty.
 

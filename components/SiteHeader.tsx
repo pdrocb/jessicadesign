@@ -78,7 +78,12 @@ export function SiteHeader() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="whitespace-nowrap py-[15px] transition-colors duration-[180ms] hover:text-ink-subtle"
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  className={`relative whitespace-nowrap py-[15px] transition-colors duration-[180ms] hover:text-ink-subtle ${
+                    pathname === item.href
+                      ? "after:absolute after:inset-x-0 after:bottom-2.5 after:h-px after:bg-ink"
+                      : ""
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -158,6 +163,7 @@ export function SiteHeader() {
                 key={item.label}
                 href={item.href}
                 onClick={closeMenu}
+                aria-current={pathname === item.href ? "page" : undefined}
                 className="text-heading-lg border-b border-line py-4 font-display font-medium transition-colors duration-[180ms] hover:text-ink-subtle"
               >
                 {item.label}

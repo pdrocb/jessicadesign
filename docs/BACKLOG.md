@@ -13,9 +13,9 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 
 - **Escala tipográfica definitiva** — ¿escala modular o valores curados? Los actuales son interpolación anclada sobre los valores del handoff.
 - **Sistema de motion** — reveals al scroll, transiciones de página, hover en imágenes.
-- **Páginas internas** — Look Book, Luxury Picnics, Blog. Hoy los links del nav apuntan a anclas de la home o a `#`.
+- **Páginas internas restantes** — Luxury Picnics y Blog. No se publican ni aparecen en el nav hasta tener contenido real.
+- **CMS del Look Book** — sustituir el adaptador local por una interfaz pequeña para crear proyectos, subir y reordenar fotografías, elegir portada, editar alt text/créditos y publicar. Debe conservar el contrato de orden definido en `lib/lookbook.ts` y ejecutar la misma normalización de imágenes al subir.
 - **Dirección de fotografía** — color vs. monocromo, ratios oficiales, tratamiento. El prototipo tenía un toggle global de monocromo (`grayscale(1) contrast(1.02)`) que no se implementó por no tener decisión.
-- **Faltan cuatro fotos del Look Book.** La clienta entregó tres (ago 13, 2026) que ya ocupan las dos celdas anchas y una cuadrada. Faltan **dos verticales 3/4** (hoy las cubren `hero-01-tablescape` y `hero-03-detail`, prestadas de otras secciones) y **dos cuadradas 1:1** (hoy `service-day-of` y `service-picnics`). Faltan también los **nombres reales de álbum** — los actuales describen la foto.
 - **Estados de foco definitivos.** Hoy es provisional: `outline: 1px solid currentColor`.
 - **Logotipo** — pendiente pedirle a su diseñador una **versión horizontal** (monograma a la izquierda, nombre a la derecha). El lockup apilado que entregó no cabe legible en una barra de nav; hoy se resuelve encogiéndolo al colapsar el nav, que es un parche. Falta además el favicon.
 - **"As Featured In"** — solo se publica con logos reales y permiso.

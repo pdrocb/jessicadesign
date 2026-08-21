@@ -93,11 +93,12 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 
 ## Evidence on Hand
 
-**Estado: preview para la clienta.** El material de abajo es provisional a propósito y se sustituye al final. No hace falta volver a señalarlo en cada entrega.
+**Estado: preview para la clienta.** El material de abajo sigue sujeto a curaduría final. No hace falta volver a señalarlo en cada entrega.
 
 - **Tres testimonios reales**, con nombre y contexto, en `lib/content.ts` (Brittney A., Yvette A., Emily G.). Son de clientas reales: no editar su texto.
-- **Diez fotografías** en `assets/`, descargadas del Wix vigente. Provisionales.
-- **Existe más fotografía sin digitalizar** — archivo de eventos pasados fuera del Wix. Alimentará el Look Book y las páginas internas cuando se recopile.
+- **Set general de fotografías** en `assets/`, descargadas del Wix vigente y complementadas por la clienta. Alimenta la home y las secciones de servicio.
+- **Look Book inicial con 7 proyectos y 71 fotografías únicas**, importadas de la galería Wix en el orden publicado. Los originales se normalizaron a WebP, con 2000px máximos en el lado largo, y viven en `public/lookbook/`.
+- **Existe más fotografía sin digitalizar** — archivo de eventos pasados fuera del Wix. Se incorporará al Look Book cuando se recopile.
 - **Existe prensa o publicaciones reales**, aún sin recopilar. Hasta tener logos reales y permiso explícito, la sección "As Featured In" **no se publica**.
 
 **Lo que NO existe y no se debe fabricar:** precios, paquetes, mínimos, número de bodas realizadas, premios, certificaciones, lista de venues asociados, casos de estudio, y cualquier testimonio más allá de los tres reales.
@@ -109,3 +110,9 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 3. **Se juzga por fotografías, no por adjetivos.** Cuando compitan espacio el copy y la imagen, gana la imagen.
 4. **Todo camino lleva a una conversación, no a un precio.** El destino único es la consulta gratuita de una hora.
 5. **Nunca fabricar prueba.** Sin logo real y permiso, no hay prensa; sin reseña real, no hay testimonio.
+
+## Look Book
+
+El Look Book es una sola página editorial en `/look-book`, no una colección de páginas individuales. Cada proyecto muestra una portada horizontal, contexto y una selección compacta de hasta cinco fotografías en el orden publicado. Las selecciones conservan ese orden en todas las resoluciones y usan marcos de proporción editorial con recorte suave: tres columnas como máximo en desktop y dos columnas proporcionales —no fijas— en tablet y mobile. Cualquier fotografía abre un visor de pantalla completa en su posición correspondiente; el CTA `View Full Gallery` abre el proyecto completo desde la primera fotografía.
+
+El orden editorial es dato, no consecuencia del nombre del archivo: cada proyecto y cada fotografía tienen una posición explícita. La selección del home es una curaduría independiente con sus propias fotografías, formas, captions, orden y destinos; no cambia automáticamente al publicar proyectos. La implementación local del archivo vive en `lib/lookbook.ts` y la selección del home en `lib/content.ts`. Un CMS futuro deberá conservar ambos contratos para publicar, reordenar, administrar la portada horizontal de cada capítulo, curar el home, registrar dimensiones, focal point y tolerancia de recorte, y editar créditos sin cambiar los componentes del front.

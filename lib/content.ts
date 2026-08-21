@@ -2,24 +2,27 @@
  * Contenido del sitio. El copy es real (handoff §6): servicios,
  * testimonios, FAQs y contacto vienen del negocio, no son placeholder.
  *
- * Las fotografías se descargaron del Wix vigente a `assets/` y se
- * importan estáticamente para que next/image conozca sus dimensiones y
- * genere AVIF/WebP en build. Sustituir por arte final cuando exista.
+ * Las fotografías generales se importan estáticamente desde `assets/` para
+ * que next/image conozca sus dimensiones. El archivo completo del Look Book
+ * vive, ya optimizado, bajo `public/lookbook/` y se modela en `lib/lookbook.ts`.
  */
 
 import heroTablescape from "@/assets/hero-01-tablescape.jpg";
 import heroReception from "@/assets/hero-02-reception.jpg";
-import heroDetail from "@/assets/hero-03-detail.jpg";
 import heroTerrace from "@/assets/hero-04-terrace.jpg";
 import heroTapers from "@/assets/hero-05-tapers.jpg";
+import jessicaFounderStory from "@/assets/jessica-founder-story.webp";
 import jessica from "@/assets/jessica-salomon.jpg";
-import lookbookDarbyOliver from "@/assets/lookbook-darby-oliver.webp";
 import lookbookGoldenHour from "@/assets/lookbook-golden-hour.jpg";
-import manifesto01 from "@/assets/philosophy-candlelit-tablescape.jpg";
-import manifesto02 from "@/assets/manifesto-02.jpg";
+import lookbookIsabelleMarshall from "@/assets/lookbook-isabelle-marshall.webp";
+import lookbookMorganGarrett from "@/assets/lookbook-morgan-garrett.webp";
+import philosophyOutdoorBarn from "@/assets/philosophy-outdoor-barn.webp";
+import philosophyOutdoorTablescape from "@/assets/philosophy-outdoor-tablescape.webp";
 import silkFloralsBlueCentrepiece from "@/assets/silk-florals-blue-centrepiece.webp";
+import silkFloralsReceptionCentrepiece from "@/assets/silk-florals-reception-centrepiece.webp";
 import serviceCelebrations from "@/assets/service-celebrations.jpg";
 import serviceDayOf from "@/assets/service-day-of.jpg";
+import serviceLuxuryPicnics from "@/assets/service-luxury-picnics.webp";
 import servicePicnics from "@/assets/service-picnics.jpg";
 import serviceWeddings from "@/assets/service-weddings.jpg";
 
@@ -46,21 +49,21 @@ export const site = {
  */
 export const navItems = [
   { label: "Home", href: "/" },
-  { label: "Look Book", href: "/#look-book" },
-  { label: "Luxury Picnics", href: "/#luxury-picnics" },
+  { label: "Look Book", href: "/look-book" },
+  { label: "Expertise", href: "/#expertise" },
   { label: "Process", href: "/#process" },
 ];
 
 export const images = {
-  heroTablescape,
   heroReception,
-  heroDetail,
   heroTerrace,
   heroTapers,
-  manifesto01,
-  manifesto02,
+  philosophyOutdoorBarn,
+  philosophyOutdoorTablescape,
   silkFloralsBlueCentrepiece,
+  silkFloralsReceptionCentrepiece,
   jessica,
+  jessicaFounderStory,
   serviceWeddings,
 };
 
@@ -96,7 +99,7 @@ export const services = [
     numeral: "No. III",
     slug: "luxury-picnics",
     name: "Luxury Picnics",
-    img: servicePicnics,
+    img: serviceLuxuryPicnics,
     copy: "Open-air celebrations, styled to the last napkin and glass.",
   },
   {
@@ -182,40 +185,6 @@ export const quotes = [
   },
 ];
 
-/**
- * Álbumes del Look Book. Cada uno tendrá varias fotos y una portada;
- * por ahora solo existe `cover` y el título — el campo se llama así, y
- * no `img`, para que el modelo ya sea el correcto cuando lleguen las
- * galerías.
- *
- * PENDIENTE DE LA CLIENTA: los títulos describen lo que se ve en cada
- * foto. Los nombres reales de álbum (pareja, venue, temporada) los tiene
- * que dar ella — no se inventan.
- *
- * OJO con los nombres de archivo: vienen del Wix y NO describen su
- * contenido. `hero-01-tablescape` es una pareja en blanco y negro, y las
- * dos `manifesto-*` son bodegones de papelería. Fiarse de la imagen, no
- * del nombre.
- */
-/**
- * `shape` arma el mosaico de Florale: `wide` ocupa 8 de 12 columnas en
- * 3/2, `tall` ocupa 4 en 3/4 y `square` ocupa 4 en 1/1.
- *
- * El reparto NO es estético, es de recorte: las cuatro fotos originales
- * son verticales (1000×1333 y 1200×1800), así que las celdas anchas se
- * las quedan los bodegones —un flat lay aguanta que le corten alto— y
- * las verticales se quedan con la pareja y el barril, cuyos sujetos se
- * decapitarían en un 3/2.
- */
-/**
- * El orden ES la composición: fila ancha, fila ancha espejeada y tres
- * cuadrados al final. En tablet se oculta la segunda ancha, exactamente
- * como en la referencia; mobile muestra las siete piezas.
- *
- * Los tres cuadrados son PROVISIONALES: se repiten de la sección
- * Expertise porque solo hay 10 fotos para 12 huecos. Se cambian en
- * cuanto lleguen las de la clienta.
- */
 export const lookbookIntro = {
   eyebrow: "The Look Book · Recent selection",
   heading: "A selection of celebrations, designed down to every detail.",
@@ -223,16 +192,68 @@ export const lookbookIntro = {
     "Recent weddings, private dinners, and styled gatherings across the Hudson Valley and beyond.",
 } as const;
 
-export const lookbook = [
-  { cover: heroTerrace, shape: "wide", title: "Wedding dinner party", meta: "Hopewell Junction, NY", alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign" },
-  { cover: heroTablescape, shape: "tall", title: "Hudson Valley Wedding", meta: "Gardnier NY", alt: "Couple walking through tall grasses, in black and white" },
-
-  { cover: heroDetail, shape: "portraitPair", title: "Waterfront Details", alt: "Floral-topped barrel on a riverside terrace" },
-  { cover: lookbookDarbyOliver, shape: "portraitPair", title: "Darby & Oliver", meta: "Blackwalnut Farm, Saugerties NY", alt: "Bride in red sunglasses reading with a guest beside a sunlit window" },
-
-  { cover: serviceDayOf, shape: "square", title: "Dinner reception", meta: "B Social Port Chester NY", alt: "Place setting with gold-rimmed charger and menu card against exposed brick" },
-  { cover: lookbookGoldenHour, shape: "square", title: "Cori & Ezra", meta: "Blackwalnut Farm, Saugerties NY", alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light" },
-  { cover: servicePicnics, shape: "square", title: "Citrus Picnic", alt: "Low picnic table with lemon-print china, rattan chargers and cushions" },
+/**
+ * Curaduría editorial exclusiva de la home. No se deriva de los proyectos
+ * publicados: la portada de entrada y el archivo completo cumplen funciones
+ * distintas y deben poder ordenarse de manera independiente en el futuro CMS.
+ * Solo enlazamos a un capítulo cuando la correspondencia está confirmada.
+ */
+export const homeLookbook = [
+  {
+    cover: heroTerrace,
+    shape: "wide",
+    title: "Wedding dinner party",
+    meta: "Hopewell Junction, NY",
+    alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign",
+    href: "/look-book#lucas-will",
+  },
+  {
+    cover: heroTablescape,
+    shape: "tall",
+    title: "Hudson Valley Wedding",
+    meta: "Gardnier NY",
+    alt: "Couple walking through tall grasses, in black and white",
+    href: "/look-book",
+  },
+  {
+    cover: lookbookMorganGarrett,
+    shape: "portraitPair",
+    title: "Morgan & Garrett",
+    meta: "Port Chester, NY",
+    alt: "Morgan and Garrett standing together beside a floral reception tablescape",
+    href: "/look-book",
+  },
+  {
+    cover: lookbookIsabelleMarshall,
+    shape: "portraitPair",
+    title: "Isabelle & Marshall",
+    meta: "New York, NY",
+    alt: "Candlelit reception table beneath suspended greenery in New York City",
+    href: "/look-book#isabelle-marshall",
+  },
+  {
+    cover: serviceDayOf,
+    shape: "square",
+    title: "Dinner reception",
+    meta: "B Social Port Chester NY",
+    alt: "Place setting with gold-rimmed charger and menu card against exposed brick",
+    href: "/look-book#custom-tablescape",
+  },
+  {
+    cover: lookbookGoldenHour,
+    shape: "square",
+    title: "Cori & Ezra",
+    meta: "Blackwalnut Farm, Saugerties NY",
+    alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light",
+    href: "/look-book",
+  },
+  {
+    cover: servicePicnics,
+    shape: "square",
+    title: "Citrus Picnic",
+    alt: "Low picnic table with lemon-print china, rattan chargers and cushions",
+    href: "/look-book",
+  },
 ] as const;
 
 /**
