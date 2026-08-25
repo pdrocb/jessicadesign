@@ -7,12 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "assets": "node scripts/optimize-assets.mjs"
+    "assets": "node scripts/optimize-assets.mjs",
+    "db:init": "node --env-file-if-exists=.env.local db/init.mjs",
+    "cms:user": "node --env-file-if-exists=.env.local scripts/create-cms-user.mjs",
+    "cms:password": "node --env-file-if-exists=.env.local scripts/reset-cms-password.mjs"
   },
   "dependencies": {
+    "@neondatabase/auth": "^0.5.0-beta",
+    "@neondatabase/serverless": "^1.1.0",
+    "@vercel/blob": "^2.8.0",
+    "better-auth": "1.6.23",
     "next": "16.3.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

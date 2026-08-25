@@ -3,6 +3,23 @@
 import { useState } from "react";
 import { faqs } from "@/lib/content";
 import { Eyebrow } from "@/components/ui";
+import type { HomeDocument } from "@/cms/content/home";
+import { homeFaqs, homeText } from "@/cms/content/model";
+
+function toRomanNumeral(value: number) {
+  const numerals: readonly [number, string][] = [
+    [10, "x"], [9, "ix"], [5, "v"], [4, "iv"], [1, "i"],
+  ];
+  let remainder = value;
+  let result = "";
+  for (const [amount, numeral] of numerals) {
+    while (remainder >= amount) {
+      result += numeral;
+      remainder -= amount;
+    }
+  }
+  return `${result}.`;
+}
 
 /**
  * Acordeón de FAQs (handoff §5): una abierta a la vez, signo + / − en
@@ -11,8 +28,12 @@ import { Eyebrow } from "@/components/ui";
  * En desktop el encabezado ocupa la columna izquierda y todas las
  * preguntas quedan juntas a la derecha; tablet y mobile apilan.
  */
-export function Faqs() {
+export function Faqs({ content }: { content?: HomeDocument } = {}) {
   const [open, setOpen] = useState(0);
+  const editableFaqs = homeFaqs(
+    content,
+    faqs.map((faq, index) => ({ id: `faq-${index + 1}`, q: faq.q, a: faq.a })),
+  );
 
   return (
     <section
@@ -21,21 +42,21 @@ export function Faqs() {
     >
       <div className="shell grid items-start gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
         <div className="flex flex-col gap-3.5 lg:sticky lg:top-16 lg:gap-6">
-          <Eyebrow>Good to Know</Eyebrow>
+          <Eyebrow>{homeText(content, "faqs.eyebrow", "Good to Know")}</Eyebrow>
           <h2 className="text-display-md font-display font-normal">
-            Questions, <em>answered</em>
+            {homeText(content, "faqs.heading", "Questions, answered")}
           </h2>
           <div aria-hidden className="hidden h-px w-12 bg-ink-faint md:block" />
           <p className="font-display text-[16px] leading-relaxed text-ink-subtle italic lg:text-[17px]">
-            A few details to know before we begin.
+            {homeText(content, "faqs.intro", "A few details to know before we begin.")}
           </p>
         </div>
 
         <div className="flex flex-col border-t border-line-warm">
-          {faqs.map((faq, i) => {
+          {editableFaqs.map((faq, i) => {
             const isOpen = open === i;
             return (
-              <div key={faq.q} className="border-b border-line-warm">
+              <div key={faq.id} className="border-b border-line-warm">
                 <h3>
                   <button
                     type="button"
@@ -46,7 +67,7 @@ export function Faqs() {
                   >
                     <span className="flex items-baseline gap-3 lg:gap-[18px]">
                       <span className="font-display text-[13px] text-ink-subtle">
-                        {faq.numeral}
+                        {toRomanNumeral(i + 1)}
                       </span>
                       <span className="font-display text-[17px] font-medium lg:text-[19px]">
                         {faq.q}

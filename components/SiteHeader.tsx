@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { navItems, site } from "@/lib/content";
 import { ButtonOutline, ButtonPrimary, Wordmark } from "@/components/ui";
+import { phoneHref, type SiteSettingsDocument } from "@/cms/settings/config";
 
 const primaryNavItems = navItems.filter((item) => item.href !== "/");
 
@@ -13,7 +14,7 @@ const primaryNavItems = navItems.filter((item) => item.href !== "/");
  * identidad visual de Jessica. Desde tablet muestra links + CTA; en móvil
  * el menú está disponible desde el primer frame.
  */
-export function SiteHeader() {
+export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMobileCta, setShowMobileCta] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -56,6 +57,9 @@ export function SiteHeader() {
 
   const closeMenu = () => setMenuOpen(false);
   const mobileCtaVisible = pathname === "/" && showMobileCta;
+  const contactPhone = settings?.phone || site.phone;
+  const contactPhoneHref = settings ? phoneHref(settings.phone) : site.phoneHref;
+  const siteName = settings?.siteName || site.name;
 
   return (
     <>
@@ -63,7 +67,7 @@ export function SiteHeader() {
         <div className="gutter shell flex h-full items-center justify-between gap-5">
           <Link
             href="/"
-            aria-label={`${site.name} — home`}
+            aria-label={`${siteName} — home`}
             className="flex min-h-11 shrink-0 items-center"
           >
             <Wordmark priority className="h-11 md:h-12 lg:h-13" />
@@ -134,7 +138,7 @@ export function SiteHeader() {
           <div className="gutter flex h-20 shrink-0 items-center justify-between border-b border-line">
             <Link
               href="/"
-              aria-label={`${site.name} — home`}
+              aria-label={`${siteName} — home`}
               onClick={closeMenu}
               className="flex min-h-11 items-center"
             >
@@ -180,10 +184,10 @@ export function SiteHeader() {
               Start With a Conversation
             </ButtonPrimary>
             <a
-              href={site.phoneHref}
+              href={contactPhoneHref}
               className="text-label-sm py-2 text-center font-medium tracking-[0.28em] text-ink-subtle uppercase"
             >
-              {site.phone}
+              Tel: {contactPhone}
             </a>
           </div>
         </div>

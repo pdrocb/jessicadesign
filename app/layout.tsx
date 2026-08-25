@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Karla } from "next/font/google";
+import { getSiteSettings } from "@/cms/settings/repository";
+import { phoneHref } from "@/cms/settings/config";
 import "./globals.css";
 
 // La pareja aprobada por la clienta se aloja localmente en el build por
@@ -20,14 +22,6 @@ const karla = Karla({
   display: "swap",
 });
 
-const siteUrl = "https://jessicadesign.vercel.app";
-const title = "Jessica S. Designs | Hudson Valley Wedding & Event Design";
-// Descripción alineada con el copy del hero: nombra la categoría, la
-// distinción diseñadora-no-planner, y los objetos concretos — que es lo
-// que una novia reconoce al escanear resultados de Google.
-const description =
-  "Wedding and event design & styling in the Hudson Valley, New York. We design how your celebration looks and feels: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.";
-
 export const viewport: Viewport = {
   // El marfil de --color-paper, no blanco puro: el sistema no lleva
   // blanco puro en ninguna parte (DESIGN.md §Colors), y la barra del
@@ -35,48 +29,35 @@ export const viewport: Viewport = {
   themeColor: "#fefbf6",
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title,
-  description,
-  alternates: { canonical: "/" },
-  openGraph: {
-    title,
-    description,
-    url: "/",
-    siteName: "Jessica S. Designs",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: { card: "summary_large_image", title, description },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const sharingImages = settings.ogImageUrl
+    ? [{ url: settings.ogImageUrl, width: 1200, height: 630, alt: settings.ogImageAlt }]
+    : undefined;
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Jessica S. Designs",
-  legalName: "J|S Events, Event Styling & Decorating Co. LLC",
-  description,
-  telephone: "+1-845-375-7820",
-  // Sin `priceRange`: no hay precios ni mínimos publicados y el sitio no
-  // debe insinuar rangos (PRODUCT.md). "$$$" lo insinuaba en Google.
-  address: {
-    "@type": "PostalAddress",
-    addressRegion: "NY",
-    addressCountry: "US",
-  },
-  areaServed: [
-    "Hudson Valley",
-    "New York",
-    "The Catskills",
-    "Westchester",
-    "Beacon",
-  ],
-  sameAs: [
-    "https://instagram.com/js_eventsllc",
-    "https://www.facebook.com/celebratewithJess",
-  ],
-};
+  return {
+    metadataBase: new URL(settings.siteUrl),
+    title: settings.metaTitle,
+    description: settings.metaDescription,
+    alternates: { canonical: "/" },
+    icons: { icon: settings.faviconUrl },
+    openGraph: {
+      title: settings.ogTitle || settings.metaTitle,
+      description: settings.ogDescription || settings.metaDescription,
+      url: "/",
+      siteName: settings.siteName,
+      locale: "en_US",
+      type: "website",
+      images: sharingImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: settings.ogTitle || settings.metaTitle,
+      description: settings.ogDescription || settings.metaDescription,
+      images: settings.ogImageUrl ? [settings.ogImageUrl] : undefined,
+    },
+  };
+}
 
 const lookbookDirectionContract = `<!--
 THESIS: A continuous editorial portfolio lets each celebration unfold at photographic scale; it refuses the default card grid and project-detail funnel.
@@ -87,7 +68,32 @@ FORM: Ordered aspect-led chapter sequence with compact contact-sheet rows; posit
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
 -->`;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: settings.siteName,
+    legalName: "J|S Events, Event Styling & Decorating Co. LLC",
+    description: settings.metaDescription,
+    url: settings.siteUrl,
+    telephone: phoneHref(settings.phone).replace("tel:", "") || undefined,
+    email: settings.publicEmail || undefined,
+    address: {
+      "@type": "PostalAddress",
+      addressRegion: "NY",
+      addressCountry: "US",
+    },
+    areaServed: [
+      "Hudson Valley",
+      "New York",
+      "The Catskills",
+      "Westchester",
+      "Beacon",
+    ],
+    sameAs: [settings.instagram, settings.facebook].filter(Boolean),
+  };
+
   return (
     <html lang="en" className={`${cormorant.variable} ${karla.variable}`}>
       <body>
@@ -98,7 +104,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
       </body>
     </html>

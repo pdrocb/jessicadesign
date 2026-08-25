@@ -18,13 +18,13 @@ Este repo tiene dos personas distintas — no confundirlas:
 
 ## Contexto del proyecto
 
-One-pager de **Jessica S. Designs**, estudio de wedding & event design + styling en Hudson Valley, Nueva York. Una sola marca, un solo idioma (inglés en el sitio).
+Sitio editorial de **Jessica S. Designs**, estudio de wedding & event design + styling en Hudson Valley, Nueva York. Incluye Home, Look Book, Inquire y un CMS interno; una sola marca y un solo idioma público (inglés).
 
 No es una empresa de planeación logística: es **la capa de diseño** de la celebración. Estética de revista editorial: mucho blanco, fotografía grande, serif con autoridad, radio 0 en todo, cero adorno. El sistema completo vive en `docs/DESIGN.md`.
 
 Stack: Next.js 16 (App Router) + Tailwind v4, sin librerías extra. Repo `pdrocb/jessicadesign`. Deploy en Vercel: proyecto `jessicadesign`, scope `productcb` (Product Pedro), producción en **jessicadesign.vercel.app**.
 
-**Estatus del diseño:** el handoff de diseño (`docs/DESIGN.md`) es un punto de partida validado visualmente, **no la verdad final**. La escala tipográfica, retícula, motion y arte de fotografía se cierran en la fase **impeccable**. Por eso todos los tokens viven en `app/globals.css` y ningún componente hardcodea valores — un cambio de escala o paleta se aplica en un solo archivo.
+**Estatus del diseño:** el handoff de diseño (`docs/DESIGN.md`) es un punto de partida validado visualmente, **no la verdad final**. La escala tipográfica, retícula, motion y arte de fotografía se cierran en la fase **impeccable**. Los tokens públicos viven en `app/globals.css`; el CMS mantiene su sistema neutral en `cms/styles/`. Ningún componente hardcodea decisiones visuales repetidas.
 
 ## Reading map
 
@@ -41,6 +41,9 @@ Para tocar X, lee/edita Y primero — no explores a ciegas:
 | SEO, metadata, JSON-LD, fuentes   | `app/layout.tsx`                               |
 | Composición de la página          | `app/page.tsx`                                 |
 | Producto / marca / voz            | `docs/PRODUCT.md`                              |
+| Arquitectura y flujo de datos     | `docs/ARCHITECTURE_MAP.md`                     |
+| Convenciones de ingeniería        | `docs/ENGINEERING.md`                          |
+| Arquitectura y evolución del CMS  | `docs/CMS.md`                                  |
 | Pendientes de diseño/producto     | `docs/BACKLOG.md`                              |
 | Deuda técnica                     | `docs/TECH_DEBT.md`                            |
 
@@ -51,6 +54,7 @@ Para tocar X, lee/edita Y primero — no explores a ciegas:
 - **Entrar en plan mode automáticamente** si la tarea cumple cualquiera de estos criterios: 3+ pasos de implementación, 3+ archivos tocados, una decisión arquitectónica, o una feature nueva.
 - **Ejecutar directo** si es trivial: typo, rename, ajuste de 1 línea, cambio de copy.
 - El plan se presenta en español y el PM lo aprueba antes de tocar código.
+- Antes de planear una tarea no trivial, leer los documentos vivos que correspondan según el Reading map y declarar las restricciones relevantes. No diseñar desde memoria si el repositorio ya documenta el área.
 
 ### 2. Subagent strategy
 
@@ -73,10 +77,17 @@ Si no se puede verificar, decirlo explícitamente en vez de asumir éxito.
 
 - Cuando el PM reporta un bug: diagnosticar y arreglar sin ping-pong.
 - Si hay 2+ arreglos viables con trade-offs reales → presentar opciones con pros/cons y recomendar una.
+- Después de dos intentos fallidos sobre el mismo síntoma, detener el parcheo incremental: enumerar hipótesis y evidencia, instrumentar el flujo, cambiar una sola variable y validar también los casos vecinos.
 
-### 5. Captura de lecciones
+### 5. Routing de feedback
 
-Cuando el PM corrige al agente ("no, hazlo así"), esa corrección se escribe en **Learned patterns** (abajo), en el mismo commit del cambio que la originó.
+Las correcciones se incorporan a la fuente de verdad que realmente gobierna el tema:
+
+- Comportamiento, alcance o copy → `docs/PRODUCT.md` o `docs/CMS.md`.
+- Decisiones visuales → `docs/DESIGN.md`.
+- Convenciones durables de código, arquitectura, tokens o calidad → `docs/ENGINEERING.md`.
+- Trabajo futuro evaluado → `docs/BACKLOG.md`; deuda detectada → `docs/TECH_DEBT.md`.
+- `AGENTS.md` cambia solo cuando cambia el contrato operativo de **todos** los agentes del repositorio. No registrar aquí cada incidente de implementación.
 
 ## Learned patterns
 
@@ -97,11 +108,16 @@ Reglas nacidas de incidentes reales. Cada una lleva su caso de origen.
 - **La clienta prefiere ritmo orgánico, pero la asimetría tiene que ganarse el espacio.** Florale y Simplicity in Mind son referencia para encabezados, fotografía y secciones narrativas: alternar alineaciones, jerarquías, densidad y fondos entre bandas. Dos secciones contiguas con funciones distintas deben tener un rompimiento tonal intencionado. En información repetida y extensa, como Expertise o Process, conservar retículas compactas y regulares; desplazar tarjetas solo para “desacomodar” se percibe vacío, no artístico. En móvil, cualquier offset vuelve al orden lineal del DOM. (Origen: revisión de suavidad, layout y ritmo tonal con la clienta, ago 2026.)
 - **En Philosophy, el copy separa alcance y síntesis.** La enumeración de elementos termina en un primer párrafo; la lectura de la celebración como un todo abre el segundo. La imagen secundaria puede ir escalonada, pero debe subir aproximadamente una cuarta parte de su altura hacia el título; anclarla al inicio del párrafo deja un vacío dominante que la clienta rechaza. (Origen: ajuste de ritmo de Philosophy, ago 2026.)
 - **Una pareja de retratos 6/6 en Look Book usa 4:5 en desktop.** Mantener 3:4 cuando cada foto ocupa media retícula alarga demasiado la fila y hace que domine la sección. Tablet y móvil pueden conservar 3:4; el recorte más corto aplica solo desde desktop. (Origen: ajuste de altura de Darby & Oliver, ago 2026.)
+- **Los selectores de contenedores interactivos se limitan a hijos directos.** Un acordeón que use `summary` puede contener otros menús con su propio `summary`; reglas como `.card summary` contaminan todos los niveles y rompen la geometría del control anidado. Usar `.card > summary` y repetir ese aislamiento en cada breakpoint. (Origen: menú de acciones de fotografías del CMS, ago 2026.)
+- **El CMS es un producto neutral, no una extensión visual de la marca pública.** Su layout, tipografía y estados deben poder copiarse entre Jessica, Florale y The Clementine sin heredar la estética de ninguna. El logotipo identifica la instalación; no gobierna la interfaz. En superficies operativas, Impeccable se aplica en modo `Operate` y la claridad del producto gana sobre los tokens del sitio público. (Origen: polish del primer CMS reusable, ago 2026.)
+- **Site Settings administra contenido público global, no diagnósticos de infraestructura.** Esa pantalla debe editar SEO, Open Graph, favicon y datos de contacto/social que cambian el sitio; estados de Neon, Blob, Resend o acceso pertenecen al mantenimiento técnico y no se exponen a la clienta. (Origen: corrección de la primera integración de Site Settings, ago 2026.)
+- **En el CMS, el logotipo identifica pero no domina.** En login vive centrado fuera de la tarjeta; dentro del sidebar y la barra móvil se usa en escala pequeña aunque el lockup pierda legibilidad. La interfaz operativa, no la marca, debe llevar la jerarquía. (Origen: reducción del lockup del CMS, ago 2026.)
 
 ## Documentación
 
 - En la raíz del repo solo viven `CLAUDE.md`, `AGENTS.md` y `README.md`. Todo lo demás va en `docs/` (índice: `docs/README.md`).
 - Documentos **vivos** se editan in-place. Planes o checklists **terminados** se mueven a `docs/archive/YYYY-MM-DD-slug.md`.
+- Especificaciones activas de features complejas viven en `docs/features/`; no se usa esa carpeta como backlog paralelo.
 - Si un cambio afecta lo que un doc describe, el doc se actualiza **en el mismo commit**.
 - En `docs/BACKLOG.md` y `docs/TECH_DEBT.md` los ítems resueltos **se borran**, no se marcan como hechos.
 

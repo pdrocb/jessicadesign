@@ -6,6 +6,6 @@
 
 - **El H1 del hero no pasa contraste en desktop y tablet.** Medido muestreando los píxeles reales de la foto bajo el texto: **1.49:1 a 1440**, ink sobre el follaje oscuro de la foto de recepción, cuando el mínimo para texto grande es 3:1. El `text-shadow` de 40px ayuda a la vista pero no cuenta para WCAG. Es el texto más importante de la página. **Mobile ya está resuelto**: el H1 salió de la foto y va encima, sobre papel, a 18.56:1. Falta decidir la composición de desktop — la opción coherente es la misma que en mobile, o reposicionar el H1 sobre las calles del collage en vez de sobre las imágenes. (Origen: pase de diseño del break editorial, ago 2026.)
 
-- **No hay tests.** El sitio es estático y sin endpoints, así que no hay lógica que testear más allá del colapso del nav — que es un `IntersectionObserver` de tres líneas. Cuando entre el formulario de inquiry, entra también su test de endpoint (molde: `theclementine/app/api/inquiry/route.test.ts`).
+- **Cobertura automatizada parcial.** El formulario de inquiry ya tiene validación centralizada y un handler inyectable, pero todavía falta incorporar una suite de integración para sus respuestas HTTP y persistencia en una rama efímera de Neon.
 
 - **Los links "Luxury Picnics" y "Blog" no llevan a ninguna parte real.** El primero apunta al ancla `#expertise` y el segundo a `#`. Se resuelve cuando existan las páginas internas — ver `docs/BACKLOG.md`.

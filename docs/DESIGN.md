@@ -276,7 +276,7 @@ Gutters and section rhythm are CSS variables that change at two breakpoints, so 
 | Process | 1 ordered column | 2 ordered columns | compact 3 × 2 matrix |
 | Silk Florals | stacked, 1 photo | 1fr / 0.8fr | 1fr / 0.7fr / 0.7fr, 2nd photo +80px |
 | Founder | stacked | 5 / 7, copy lowered | 5 / 6, copy lowered further |
-| Testimonials | stacked, lead quote first | stacked, lead quote first | 4 / 8, secondary quotes share one inset |
+| Testimonials | horizontal rail, 1 card visible | horizontal rail, ~2 cards visible | horizontal rail, ~2.5 cards visible |
 | FAQs | stacked | stacked | 0.8fr / 1.2fr, sticky heading |
 | Home Look Book | 1 column, ratios kept | 6-col Florale mosaic | 12-col Florale mosaic |
 | `/look-book` | 1-column project chapters | 4/8 project split | 4/8 project split, alternating |
@@ -435,7 +435,7 @@ The gallery moves through the same structural breakpoints: one column on mobile,
 
 Unlike Florale, **all text stays below each photograph**. There is no scrim, gradient or over-image caption: Jessica's uppercase plate label remains left-aligned 14–16px below its image. This is the one intentional difference requested by the client.
 
-The home version is a curated doorway, not the complete archive. Its seven covers, shapes, captions and order form an independent editorial set in `lib/content.ts`, so publishing a project cannot silently alter the approved home composition. A cover links to a project anchor only when that correspondence is confirmed; otherwise it opens the complete `/look-book`. The closing action always opens the full page. A future CMS must expose this home curation separately from the project archive.
+The home version is a curated doorway, not the complete archive. Its seven covers, shapes, captions and order form an independent editorial set in `lib/content.ts`, so publishing a project cannot silently alter the approved home composition. A cover links to a project anchor only when that correspondence is confirmed; otherwise it opens the complete `/look-book`. The closing action always opens the full page. The CMS keeps this home curation separate from the project archive.
 
 The complete `/look-book` is a single continuous editorial page with no project index between its title and the work. Each project becomes a chapter: contextual metadata in a restrained column, one dominant horizontal cover, and up to five ordered preview photographs at a smaller contact-sheet scale. Chapters alternate the 4/8 split on desktop and tablet; there are deliberately no project detail routes and no card grid.
 
@@ -443,17 +443,29 @@ Preview order is immutable across breakpoints: one DOM sequence stays in one wra
 
 A four-image desktop remainder resolves as `2 + 2`, never `3 + 1`; this prevents the stranded white column that a fixed grid created after a vertical photograph. Symmetric spacer weights are row-aware: a single image, a pair, and a trio each receive a different minimum combined ratio, keeping short rows centred without excessive lateral voids. No masonry or dense packing is allowed because either would make visual order diverge from CMS order.
 
-The chapter cover and home cover are separate editorial choices. `coverImageId` must point to a horizontal photograph for `/look-book`; `homeCoverImageId` may select a different image that fits the curated home shape. A future CMS records intrinsic dimensions and may add `focalPoint` plus `cropTolerance: none | soft`; previews default to the soft editorial crop, while `none` restores the exact source ratio when an image cannot tolerate cropping. Each chapter closes with the secondary `View Full Gallery` action and a photograph count.
+The chapter cover and home cover are separate editorial choices. `coverImageId` must point to a horizontal photograph for `/look-book`; `homeCoverImageId` may select a different image that fits the curated home shape. The CMS data contract records intrinsic dimensions and supports `focalPoint` plus `cropTolerance: none | soft`; previews default to the soft editorial crop, while `none` restores the exact source ratio when an image cannot tolerate cropping. Each chapter closes with the secondary `View Full Gallery` action and a photograph count.
 
 Any cover or preview opens a project-scoped fullscreen viewer on a light `paper` ground, with the image stage differentiated in `bone`, warm hairlines, and umber controls. Images use `object-contain` so the complete photograph wins over filling the viewport. Previous/next controls remain visible and at least 44px at every breakpoint, wrapping inside that project; keyboard arrows, Escape, swipe, focus return and document scroll lock complement them. The counter communicates both current position and project size.
 
-Project order, photograph order, publication state, cover and home feature order are all explicit fields in `lib/lookbook.ts`. That file is the local data adapter, not component-owned content; a future CMS replaces the adapter while keeping those selectors stable. Imported originals are deduplicated by source URL, auto-oriented, capped at 2000px on the long edge and stored as WebP. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported.
+Project order, photograph order, publication state, cover and home feature order are explicit data. `lib/lookbook.ts` remains the local fallback; the CMS repository reads the same contract from Neon and seeds it on first connection. Imported originals will be deduplicated by source URL, auto-oriented, capped at 2000px on the long edge and stored through Vercel Blob once uploads are enabled. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported.
+
+### The CMS is an operational tool, not an extension of the wedding site
+
+`/admin` uses a separate, reusable visual system: warm gray surfaces, black operational type, thin neutral rules and one electric-blue action color. It does not borrow Cormorant, petal or editorial asymmetry because speed and legibility win inside the tool. Controls use a restrained 4–8px radius and almost no lift, matching the supplied CMS reference without imitating the storefront.
+
+Desktop and tablet use a fixed 236px navigation rail with the editor beside it. Mobile replaces the rail with a 56px top bar, a full-screen navigation sheet and a sticky save bar. Editor cards collapse to reduce scroll; fields become one column; inputs remain at least 44px high and 16px to prevent browser zoom. The login is a single centred panel with no password-recovery link until that flow exists.
+
+The Projects editor separates metadata, publication/order controls and gallery management instead of presenting one uninterrupted form. Inside an expanded project, photographs lead as a compact operational gallery: one horizontal unit per row on mobile, two visual tiles on tablet and three on desktop. Every tile keeps the complete image visible with `object-contain`, places its position and `Principal` status outside the photograph, and keeps alt text plus the action menu subordinate to the visual reference. Disabled future actions are not rendered as dead controls.
+
+Destructive actions never call the browser's confirmation UI. A single CMS confirmation dialog uses the neutral surface, danger token and explicit consequence copy, with `Cancel` receiving initial focus. Local collection deletes explain that saving is still required; database deletes expose a locked `Deleting…` state. Escape, backdrop dismissal, focus containment and focus return come from the modal dialog contract rather than being reimplemented per feature.
 
 ### Quote block
 
 Testimonials live on the `petal` band and use flat `paper` cards with a single `petal-line` border: no radius and no shadow. Cormorant carries typographic quotes (`“ ”`) and `label-sm` uppercase `rose-umber` carries the attribution.
 
-Desktop keeps all three voices visible in one `6 / 3 / 3` row. The first card preserves the approved lead hierarchy with `quote-xl`; the two shorter cards use `quote-md`. Below `lg`, the cards become a native infinite rail with `scroll-snap`: 300–320px on mobile and 340px on tablet, always leaving the next card visible. Three rendered sets create continuity, but only the middle set is exposed to assistive technology. When scrolling settles on an outer copy, the rail moves to its identical middle copy with snap disabled for one frame. Three dots indicate the logical position. There is no autoplay and no carousel dependency.
+Every breakpoint uses the same native finite rail with `scroll-snap`, allowing six or more long-form testimonials without turning the section into a tall fixed grid. The rail breaks out of the shared `shell` to use the complete viewport: cards are approximately 84vw on mobile, up to 520px on tablet, exactly two across standard desktop and three across viewports from 1800px. Every voice uses the established `quote-md` role at 17–21px with a maximum 62ch measure; the first voice leads through order and initial position, not an arbitrary change in scale. Cards keep their natural height rather than inheriting the tallest review.
+
+Each testimonial is rendered once. The rail begins flush with the first card and ends with enough trailing padding to reveal the final card completely; it never exposes fragments from duplicated previous or following sets. A numeric counter scales cleanly with the collection length at every breakpoint; desktop also exposes previous/next buttons, disabled at their true boundaries. Keyboard arrows, trackpad and touch share the same movement. There is no autoplay, wraparound or carousel dependency.
 
 ### FAQ accordion
 

@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
     deviceSizes: [390, 640, 828, 1080, 1200, 1440, 1920],
     // Un año de caché: el hash del archivo cambia si la imagen cambia.
     minimumCacheTTL: 31_536_000,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+        port: "",
+        pathname: "/**",
+        search: "",
+      },
+    ],
   },
 };
 

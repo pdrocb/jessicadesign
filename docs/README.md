@@ -6,17 +6,21 @@
 
 Se editan in-place y deben reflejar el estado actual del proyecto.
 
-| Documento      | Qué es                                                      | Cuándo leerlo                                                       |
-| -------------- | ----------------------------------------------------------- | ------------------------------------------------------------------- |
-| `DESIGN.md`    | Sistema de diseño: tokens, tipografía, nav, breakpoints      | Antes de cualquier cambio visual                                     |
-| `PRODUCT.md`   | Producto y marca: clienta, audiencia, voz                    | Antes de escribir o revisar copy                                     |
-| `BACKLOG.md`   | Pendientes de diseño/producto evaluados                      | Al buscar qué sigue; los ítems resueltos se **borran**              |
-| `TECH_DEBT.md` | Único hogar de la deuda técnica                              | Antes de un upgrade, o al toparse con algo que "está así por algo"   |
+| Documento             | Qué es                                                  | Cuándo leerlo                                                     |
+| --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------- |
+| `DESIGN.md`           | Sistema visual del sitio público                        | Antes de cualquier cambio visual público                          |
+| `PRODUCT.md`          | Producto, marca, clienta, audiencia y voz                | Antes de escribir copy o cambiar comportamiento                   |
+| `CMS.md`              | Producto, configuración y evolución del CMS             | Antes de tocar `/admin`, Neon, Blob, usuarios o Resend             |
+| `ENGINEERING.md`      | Convenciones durables de arquitectura, UI y calidad      | Antes de una abstracción, refactor o feature transversal          |
+| `ARCHITECTURE_MAP.md` | Mapa de rutas, componentes, acciones y persistencia      | Antes de modificar un flujo de datos existente                    |
+| `BACKLOG.md`          | Trabajo futuro evaluado de producto/diseño               | Al buscar qué sigue; los ítems resueltos se **borran**            |
+| `TECH_DEBT.md`        | Problemas técnicos conocidos aún no resueltos            | Antes de un upgrade o al encontrar una limitación intencional     |
 
 ## Convención de ciclo de vida
 
 - **Vivo** → vive en `docs/`, se edita in-place, se actualiza en el mismo commit que el cambio que lo afecta.
-- **Terminado** → se mueve a `docs/archive/YYYY-MM-DD-slug.md` con un encabezado `Status: ARCHIVADO`. Nunca queda suelto en la raíz del repo.
+- **Feature compleja activa** → su especificación vive temporalmente en `docs/features/`; no duplica el backlog.
+- **Terminado** → su plan se mueve a `docs/archive/YYYY-MM-DD-slug.md` y se registra en `docs/archive/README.md`. Nunca queda suelto en la raíz del repo.
 
 ## Skill `impeccable`: dónde viven sus archivos
 

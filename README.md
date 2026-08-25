@@ -27,5 +27,6 @@ npm run build
 | [`docs/PRODUCT.md`](docs/PRODUCT.md)   | Producto, marca y voz                               |
 | [`docs/BACKLOG.md`](docs/BACKLOG.md)   | Pendientes de diseño y producto                     |
 | [`docs/TECH_DEBT.md`](docs/TECH_DEBT.md) | Deuda técnica                                     |
+| [`docs/CMS.md`](docs/CMS.md)             | CMS interno, acceso y activación                  |
 
 Índice completo en [`docs/README.md`](docs/README.md).

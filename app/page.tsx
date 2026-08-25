@@ -13,25 +13,31 @@ import {
   SiteFooter,
   Testimonials,
 } from "@/components/sections";
+import { getHomeDocument } from "@/cms/content/home";
+import { getSiteSettings } from "@/cms/settings/repository";
 
-export default function Page() {
+export default async function Page() {
+  const [content, settings] = await Promise.all([
+    getHomeDocument(),
+    getSiteSettings(),
+  ]);
   return (
     <>
       <RevealObserver />
-      <SiteHeader />
+      <SiteHeader settings={settings} />
       <main className="pt-20 md:pt-22 lg:pt-24">
-        <Hero />
-        <Manifesto />
-        <Services />
-        <LookBook />
-        <Process />
-        <SilkFlorals />
-        <About />
-        <Testimonials />
-        <Faqs />
-        <Cta />
+        <Hero content={content} />
+        <Manifesto content={content} />
+        <Services content={content} />
+        <LookBook content={content} />
+        <Process content={content} />
+        <SilkFlorals content={content} />
+        <About content={content} />
+        <Testimonials content={content} />
+        <Faqs content={content} />
+        <Cta content={content} />
       </main>
-      <SiteFooter />
+      <SiteFooter settings={settings} />
     </>
   );
 }

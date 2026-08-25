@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 type Testimonial = {
+  id: string;
   text: string;
   who: string;
 };
@@ -12,16 +13,15 @@ type TestimonialRailProps = {
   label: string;
 };
 
-const SETS = 3;
-
 /**
- * Rail infinito solo para tablet y móvil. Los tres juegos son copias
- * visuales; el central es el único que existe para lectores de pantalla.
+ * Rail finito para todas las resoluciones. Empieza y termina con una tarjeta
+ * completa; no duplica contenido para simular continuidad.
  */
 export function TestimonialRail({ items, label }: TestimonialRailProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const activeRef = useRef(0);
+  const [canScrollPrevious, setCanScrollPrevious] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(items.length > 1);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -30,131 +30,80 @@ export function TestimonialRail({ items, label }: TestimonialRailProps) {
     const cards = Array.from(
       track.querySelectorAll<HTMLElement>("[data-testimonial-card]"),
     );
-    const firstCard = cards[0];
-    const secondCard = cards[1];
-    if (!firstCard || !secondCard) return;
-
     let activeFrame = 0;
-    let restoreFrame = 0;
-    let settleTimer: ReturnType<typeof setTimeout> | null = null;
-    let firstPosition = 0;
-    let cardStep = 0;
-    let measured = false;
 
-    const closestCardIndex = () => {
-      if (!measured || cardStep <= 0) return items.length;
-      return Math.min(
-        cards.length - 1,
-        Math.max(0, Math.round((track.scrollLeft - firstPosition) / cardStep)),
-      );
-    };
-
-    const measureTrack = () => {
-      if (track.clientWidth === 0) return;
-
-      const logicalIndex = measured
-        ? closestCardIndex() % items.length
-        : activeRef.current;
-      const trackBounds = track.getBoundingClientRect();
-      const paddingStart = Number.parseFloat(
-        getComputedStyle(track).paddingLeft,
-      );
-      firstPosition =
-        track.scrollLeft +
-        firstCard.getBoundingClientRect().left -
-        trackBounds.left -
-        paddingStart;
-      const secondPosition =
-        track.scrollLeft +
-        secondCard.getBoundingClientRect().left -
-        trackBounds.left -
-        paddingStart;
-      cardStep = secondPosition - firstPosition;
-      measured = cardStep > 0;
-      if (!measured) return;
-
-      track.style.scrollBehavior = "auto";
-      track.scrollLeft =
-        firstPosition + (items.length + logicalIndex) * cardStep;
-      track.style.removeProperty("scroll-behavior");
-    };
-
-    const updateActiveCard = () => {
+    const updateRailState = () => {
       activeFrame = 0;
-      const logicalIndex = closestCardIndex() % items.length;
-      if (logicalIndex === activeRef.current) return;
-      activeRef.current = logicalIndex;
-      setActive(logicalIndex);
-    };
+      const trackBounds = track.getBoundingClientRect();
+      const paddingStart = Number.parseFloat(getComputedStyle(track).paddingLeft);
+      const snapLine = trackBounds.left + paddingStart;
+      const firstCardBounds = cards[0]?.getBoundingClientRect();
+      const lastCardBounds = cards.at(-1)?.getBoundingClientRect();
+      setCanScrollPrevious((firstCardBounds?.left ?? snapLine) < snapLine - 2);
+      setCanScrollNext((lastCardBounds?.right ?? trackBounds.right) > trackBounds.right + 2);
 
-    const recenterTrack = () => {
-      settleTimer = null;
-      const currentIndex = closestCardIndex();
-      const currentSet = Math.floor(currentIndex / items.length);
-      if (currentSet === 1) return;
-
-      const logicalIndex = currentIndex % items.length;
-      const middlePosition =
-        firstPosition + (items.length + logicalIndex) * cardStep;
-
-      track.style.scrollSnapType = "none";
-      track.style.scrollBehavior = "auto";
-      track.scrollLeft = middlePosition;
-      restoreFrame = requestAnimationFrame(() => {
-        track.style.removeProperty("scroll-snap-type");
-        track.style.removeProperty("scroll-behavior");
-      });
+      const closest = cards.reduce((best, card, index) => {
+        const distance = Math.abs(card.getBoundingClientRect().left - snapLine);
+        return distance < best.distance ? { index, distance } : best;
+      }, { index: 0, distance: Number.POSITIVE_INFINITY });
+      setActive(closest.index);
     };
 
     const handleScroll = () => {
       if (!activeFrame) {
-        activeFrame = requestAnimationFrame(updateActiveCard);
+        activeFrame = requestAnimationFrame(updateRailState);
       }
-      if (settleTimer) clearTimeout(settleTimer);
-      settleTimer = setTimeout(recenterTrack, 160);
     };
 
-    const resizeObserver = new ResizeObserver(measureTrack);
-    resizeObserver.observe(track);
-    measureTrack();
     track.addEventListener("scroll", handleScroll, { passive: true });
+    const resizeObserver = new ResizeObserver(updateRailState);
+    resizeObserver.observe(track);
+    updateRailState();
 
     return () => {
-      resizeObserver.disconnect();
       track.removeEventListener("scroll", handleScroll);
+      resizeObserver.disconnect();
       cancelAnimationFrame(activeFrame);
-      cancelAnimationFrame(restoreFrame);
-      if (settleTimer) clearTimeout(settleTimer);
     };
   }, [items.length]);
 
-  const cards = Array.from({ length: SETS }, (_, set) =>
-    items.map((item, index) => ({
-      item,
-      set,
-      key: `${set}-${index}`,
-    })),
-  ).flat();
+  const scrollByCard = (direction: -1 | 1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = track.querySelectorAll<HTMLElement>("[data-testimonial-card]");
+    const nextIndex = Math.min(items.length - 1, Math.max(0, active + direction));
+    const target = cards[nextIndex];
+    if (!target) return;
+    const paddingStart = Number.parseFloat(getComputedStyle(track).paddingLeft);
+    track.scrollTo({
+      left: target.offsetLeft - paddingStart,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  };
 
   return (
-    <div className="lg:hidden">
-      <div className="-mx-(--gutter)">
+    <div>
+      <div className="relative left-1/2 w-screen -translate-x-1/2">
         <div
           ref={trackRef}
           role="region"
           aria-roledescription="carousel"
           aria-label={label}
           tabIndex={0}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-(--gutter) pb-2 [scroll-padding-inline:var(--gutter)] [scrollbar-width:none] [-webkit-overflow-scrolling:touch] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-umber [&::-webkit-scrollbar]:hidden"
+          onKeyDown={(event) => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            scrollByCard(event.key === "ArrowLeft" ? -1 : 1);
+          }}
+          className="flex items-start snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-(--gutter) pb-2 [scroll-padding-inline:var(--gutter)] [scrollbar-width:none] [-webkit-overflow-scrolling:touch] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-umber lg:gap-5 [&::-webkit-scrollbar]:hidden"
         >
-          {cards.map(({ item, set, key }) => (
+          {items.map((item) => (
             <figure
-              key={key}
+              key={item.id}
               data-testimonial-card=""
-              aria-hidden={set !== 1 || undefined}
-              className="flex w-[80vw] max-w-[320px] shrink-0 snap-start flex-col justify-between border border-petal-line bg-paper p-7 md:w-[340px] md:max-w-none md:p-8"
+              className="flex min-h-[300px] w-[84vw] max-w-[350px] shrink-0 snap-start flex-col justify-between border border-petal-line bg-paper p-7 md:min-h-[320px] md:w-[64vw] md:max-w-[520px] md:p-8 lg:min-h-[340px] lg:w-[calc((100vw-var(--gutter)-40px)/2)] lg:max-w-none lg:p-10 min-[1800px]:!w-[calc((100vw-var(--gutter)-60px)/3)]"
             >
-              <blockquote className="text-quote-md font-display text-ink">
+              <blockquote className="text-quote-md max-w-[62ch] font-display font-normal text-ink">
                 “{item.text}”
               </blockquote>
               <figcaption className="text-label-xs mt-8 font-medium tracking-[0.3em] text-rose-umber uppercase md:text-label-sm">
@@ -165,15 +114,38 @@ export function TestimonialRail({ items, label }: TestimonialRailProps) {
         </div>
       </div>
 
-      <div aria-hidden="true" className="flex justify-center gap-2 pt-6">
-        {items.map((item, index) => (
-          <span
-            key={item.who}
-            className={`h-1.5 transition-[width,background-color] duration-300 ease-out motion-reduce:transition-none ${
-              index === active ? "w-5 bg-rose-umber" : "w-1.5 bg-petal-line"
-            }`}
-          />
-        ))}
+      <div className="flex items-center justify-center pt-6 lg:justify-between lg:pt-8">
+        <p
+          aria-live="polite"
+          className="text-label-xs font-medium tracking-[0.24em] text-rose-umber uppercase"
+        >
+          <span className="sr-only">Testimonial </span>
+          {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+        </p>
+        <div className="hidden items-center gap-2 lg:flex">
+          <button
+            type="button"
+            onClick={() => scrollByCard(-1)}
+            disabled={!canScrollPrevious}
+            aria-label="Previous testimonial"
+            className="grid size-11 cursor-pointer place-items-center border border-petal-line bg-paper text-rose-umber transition-colors hover:bg-petal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-umber disabled:cursor-default disabled:opacity-35"
+          >
+            <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4 fill-none stroke-current" strokeWidth="1.5">
+              <path d="m12.5 4.5-5 5.5 5 5.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByCard(1)}
+            disabled={!canScrollNext}
+            aria-label="Next testimonial"
+            className="grid size-11 cursor-pointer place-items-center border border-petal-line bg-paper text-rose-umber transition-colors hover:bg-petal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-umber disabled:cursor-default disabled:opacity-35"
+          >
+            <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4 fill-none stroke-current" strokeWidth="1.5">
+              <path d="m7.5 4.5 5 5.5-5 5.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

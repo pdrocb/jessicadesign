@@ -3,6 +3,7 @@ import { InquiryForm } from "@/components/InquiryForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Eyebrow } from "@/components/ui";
 import { inquiry } from "@/lib/content";
+import { getSiteSettings } from "@/cms/settings/repository";
 
 export const metadata: Metadata = {
   title: "Inquire | Jessica S. Designs",
@@ -21,10 +22,11 @@ export const metadata: Metadata = {
  * borde izquierdo: sin fotografía que sostenga el rail completo, una
  * columna alineada a la izquierda dejaba medio viewport vacío.
  */
-export default function InquirePage() {
+export default async function InquirePage() {
+  const settings = await getSiteSettings();
   return (
     <>
-      <SiteHeader />
+      <SiteHeader settings={settings} />
       <main className="gutter section-y pt-[calc(var(--section-y)_+_80px)] md:pt-[calc(var(--section-y)_+_88px)] lg:pt-[calc(var(--section-y)_+_96px)]">
         <div className="mx-auto flex w-full max-w-[900px] flex-col">
           <div className="flex flex-col gap-4 md:gap-5">

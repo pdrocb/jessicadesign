@@ -19,12 +19,35 @@ import {
 } from "@/components/ui";
 import { TestimonialRail } from "@/components/TestimonialRail";
 import { FounderStoryDialog } from "@/components/FounderStoryDialog";
+import type { HomeDocument } from "@/cms/content/home";
+import { homeTestimonials, homeText } from "@/cms/content/model";
+import { phoneHref, type SiteSettingsDocument } from "@/cms/settings/config";
+
+type EditableSectionProps = { content?: HomeDocument };
+
+function editable(content: HomeDocument | undefined, key: string, fallback: string) {
+  return homeText(content, key, fallback);
+}
+
+function EmphasizedEnding({ children }: { children: string }) {
+  const match = children.trim().match(/^(.*?)([^\s]+?)([.!?]*)$/);
+  if (!match) return children;
+
+  const [, opening, finalWord, punctuation] = match;
+  return (
+    <>
+      {opening}
+      <em className="font-normal">{finalWord}</em>
+      {punctuation}
+    </>
+  );
+}
 
 /* ── Hero ──────────────────────────────────────────────────────────
    La geometría replica a Florale: apilado hasta 1439px y split 1:1 desde
    1440px. La identidad no se replica: tipografía, color, botones, copy y
    pie de foto siguen perteneciendo al sistema de Jessica. */
-export function Hero() {
+export function Hero({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Introduction"
@@ -39,33 +62,30 @@ export function Hero() {
               NY" a unos centímetros, y repetirlo en el eyebrow sonaba a
               relleno. */}
           <p className="text-label-sm font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-label md:tracking-[0.3em]">
-            {site.tagline}
+            {editable(content, "hero.eyebrow", site.tagline)}
           </p>
 
           <h1 className="text-display-hero max-w-none font-display font-medium leading-[1.1] tracking-[0.005em] text-ink md:max-w-[15ch] md:leading-[1.04] md:tracking-normal">
-            <span className="block">You know how</span>
+            <span className="block">{editable(content, "hero.lead", "You know how")}</span>
             <span className="block md:inline wide:block">
-              it should <em className="font-normal">feel</em>.
+              <EmphasizedEnding>{editable(content, "hero.feeling", "it should feel.")}</EmphasizedEnding>
             </span>{" "}
-            <span className="block md:inline wide:block">
-              We design the rest.
-            </span>
+            <span className="block md:inline wide:block">{editable(content, "hero.tail", "We design the rest.")}</span>
           </h1>
 
           <p className="text-body-lg mt-1 max-w-[44ch] text-ink-muted md:mt-0">
-            Boutique wedding design &amp; styling for thoughtfully created
-            celebrations in the Hudson Valley, NYC, and CT.
+            {editable(content, "hero.intro", "Boutique wedding design & styling for thoughtfully created celebrations in the Hudson Valley, NYC, and CT.")}
           </p>
 
           <div className="mt-1 flex items-center gap-9">
             <div id="hero-primary-cta" className="w-full md:w-auto">
               <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-                Start With a Conversation
+                {editable(content, "hero.primaryLabel", "Start With a Conversation")}
               </ButtonPrimary>
             </div>
             <div className="hidden md:block">
               <LinkUnderline href="/look-book" className="!self-center">
-                See the Work
+                {editable(content, "hero.secondaryLabel", "See the Work")}
               </LinkUnderline>
             </div>
           </div>
@@ -74,8 +94,8 @@ export function Hero() {
         <figure className="m-0 flex flex-col gap-3">
           <div className="relative -mx-(--gutter) aspect-square w-[calc(100%_+_var(--gutter)_*_2)] max-w-none md:mx-0 md:aspect-[16/10] md:w-full wide:aspect-square">
             <Image
-              src={images.heroTapers}
-              alt="Long garden table set with white hydrangeas, taper candles and gold vessels at golden hour"
+              src={editable(content, "hero.image", images.heroTapers.src)}
+              alt={editable(content, "hero.imageAlt", "Long garden table set with white hydrangeas, taper candles and gold vessels at golden hour")}
               sizes="(min-width: 1440px) 50vw, 100vw"
               priority
               fetchPriority="high"
@@ -84,11 +104,11 @@ export function Hero() {
             />
           </div>
           <figcaption className="text-label-sm text-center font-medium tracking-[0.28em] text-ink-subtle uppercase md:text-left">
-            Terrace welcome dinner · Hudson Valley, NY
+            {editable(content, "hero.caption", "Terrace welcome dinner · Hudson Valley, NY")}
           </figcaption>
           <div className="flex justify-center md:hidden">
             <LinkUnderline href="/look-book" className="!self-center">
-              See the Work
+              {editable(content, "hero.secondaryLabel", "See the Work")}
             </LinkUnderline>
           </div>
         </figure>
@@ -101,7 +121,7 @@ export function Hero() {
    Composición editorial asimétrica: una fotografía ancla la izquierda,
    el texto avanza hacia el centro y una segunda pieza, menor y más baja,
    cierra a la derecha. En móvil vuelve a una lectura lineal. */
-export function Manifesto() {
+export function Manifesto({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Our philosophy"
@@ -112,9 +132,10 @@ export function Manifesto() {
           data-reveal
           className="flex flex-col gap-5 md:col-span-8 md:col-start-5 md:gap-6 lg:col-span-6 lg:col-start-4 lg:pt-4"
         >
-          <Eyebrow>Our Philosophy</Eyebrow>
+          <Eyebrow>{editable(content, "philosophy.eyebrow", "Our Philosophy")}</Eyebrow>
           <p className="text-quote-xl max-w-[22ch] font-display font-normal">
-            An unforgettable celebration is designed to be <em>felt</em>.
+            {editable(content, "philosophy.heading", "An unforgettable celebration is designed to be")}{" "}
+            <em>{editable(content, "philosophy.emphasis", "felt.")}</em>
           </p>
         </div>
 
@@ -123,28 +144,27 @@ export function Manifesto() {
           className="text-body-lg flex flex-col gap-5 text-ink-muted md:col-span-7 md:col-start-6 lg:col-span-5 lg:col-start-5 lg:max-w-[520px]"
         >
           <p>
-            We shape how your celebration looks, feels, and comes together.
-            From tablescapes and candlelight to florals, stationery, signage,
-            furniture, and the smallest finishing details, every element is
-            thoughtfully considered.
+            {editable(content, "philosophy.paragraphOne", "We shape how your celebration looks, feels, and comes together. From tablescapes and candlelight to florals, stationery, signage, furniture, and the smallest finishing details, every element is thoughtfully considered.")}
           </p>
           <p>
-            We look at the celebration as a whole, making sure each piece works
-            together to create a space that feels cohesive, intentional, and
-            distinctly yours.
+            {editable(content, "philosophy.paragraphTwo", "We look at the celebration as a whole, making sure each piece works together to create a space that feels cohesive, intentional, and distinctly yours.")}
           </p>
         </div>
 
         <Image
-          src={images.philosophyOutdoorBarn}
-          alt="Outdoor reception table set beside a white barn"
+          src={editable(content, "philosophy.primaryImage", images.philosophyOutdoorBarn.src)}
+          alt={editable(content, "philosophy.primaryImageAlt", "Outdoor reception table set beside a white barn")}
+          width={1600}
+          height={2000}
           sizes="(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 100vw"
           className="aspect-[4/3] w-full object-cover md:col-span-4 md:col-start-1 md:row-start-2 md:aspect-[3/4] lg:col-span-3 lg:row-start-1 lg:row-end-3 lg:mt-20"
         />
 
         <Image
-          src={images.philosophyOutdoorTablescape}
-          alt="Sunlit outdoor reception table with soft florals and taper candles"
+          src={editable(content, "philosophy.secondaryImage", images.philosophyOutdoorTablescape.src)}
+          alt={editable(content, "philosophy.secondaryImageAlt", "Sunlit outdoor reception table with soft florals and taper candles")}
+          width={1600}
+          height={2000}
           sizes="25vw"
           className="hidden aspect-[3/4] w-full object-cover lg:col-span-3 lg:col-start-10 lg:row-start-2 lg:-mt-24 lg:block xl:-mt-32"
         />
@@ -157,7 +177,15 @@ export function Manifesto() {
    La información repetida necesita una retícula compacta: 4 col →
    2 col → 1 col. El gesto editorial vive en el encabezado, donde el
    texto de apoyo se desplaza al extremo derecho. */
-export function Services() {
+export function Services({ content }: EditableSectionProps = {}) {
+  const editableServices = services.map((service, index) => ({
+    ...service,
+    name: editable(content, `expertise.items.${index + 1}.title`, service.name),
+    copy: editable(content, `expertise.items.${index + 1}.paragraph`, service.copy),
+    image: editable(content, `expertise.items.${index + 1}.image`, service.img.src),
+    imageAlt: editable(content, `expertise.items.${index + 1}.imageAlt`, service.name),
+  }));
+
   return (
     <section
       id="expertise"
@@ -166,19 +194,19 @@ export function Services() {
     >
       <div data-reveal className="mb-8 md:mb-12 lg:mb-14">
         <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
-          <h2 className="text-heading-lg font-display font-medium">Expertise</h2>
+          <h2 className="text-heading-lg font-display font-medium">{editable(content, "expertise.heading", "Expertise")}</h2>
           <div className="text-label-sm font-medium tracking-[0.3em] text-ink-subtle uppercase md:text-label">
-            Design · Styling · Execution
+            {editable(content, "expertise.meta", "Design · Styling · Execution")}
           </div>
         </div>
         <p className="text-body-lg mt-6 max-w-[42ch] text-ink-muted md:mt-8 md:ml-auto md:text-right">
-          Four ways to bring a clear, cohesive design vision to life.
+          {editable(content, "expertise.intro", "Four ways to bring a clear, cohesive design vision to life.")}
         </p>
       </div>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-7">
-        {services.map((svc, i) => (
+        {editableServices.map((svc, i) => (
           <article
-            key={svc.name}
+            key={svc.slug}
             id={svc.slug}
             data-reveal
             // Escalonado de 80ms entre tarjetas (DESIGN.md §Motion).
@@ -187,8 +215,10 @@ export function Services() {
           >
             <div className="mb-1 overflow-hidden lg:mb-2">
               <Image
-                src={svc.img}
-                alt={svc.name}
+                src={svc.image}
+                alt={svc.imageAlt}
+                width={1600}
+                height={2000}
                 sizes="(min-width: 1536px) 339px, (min-width: 1200px) calc((100vw - 180px) / 4), (min-width: 1024px) calc((100vw - 148px) / 4), (min-width: 768px) calc((100vw - 96px) / 2), calc(100vw - 40px)"
                 className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03] md:aspect-[3/4]"
               />
@@ -215,7 +245,13 @@ export function Services() {
    El paso V (el mock-up presencial) lleva el fleurón — la única
    ornamentación que permite el sistema, gastada en el único paso que
    casi ningún competidor puede ofrecer. */
-export function Process() {
+export function Process({ content }: EditableSectionProps = {}) {
+  const editableSteps = process.steps.map((step, index) => ({
+    ...step,
+    name: editable(content, `process.steps.${index + 1}.title`, step.name),
+    copy: editable(content, `process.steps.${index + 1}.paragraph`, step.copy),
+  }));
+
   return (
     <section
       id="process"
@@ -224,19 +260,19 @@ export function Process() {
     >
       <div className="shell">
         <div data-reveal className="flex flex-col gap-4 md:max-w-[62ch] md:gap-5">
-          <Eyebrow>{process.eyebrow}</Eyebrow>
+          <Eyebrow>{editable(content, "process.eyebrow", process.eyebrow)}</Eyebrow>
           <h2 className="text-heading-lg font-display font-medium">
-            {process.heading}
+            {editable(content, "process.heading", process.heading)}
           </h2>
           <p className="text-body-lg text-ink-muted">
-            {process.intro}
+            {editable(content, "process.intro", process.intro)}
           </p>
         </div>
 
         <ol className="mt-9 grid grid-cols-1 gap-px border-t border-line-warm md:mt-12 md:grid-cols-2 lg:grid-cols-3">
-          {process.steps.map((step, i) => (
+          {editableSteps.map((step, i) => (
             <li
-              key={step.name}
+              key={step.numeral}
               data-reveal
               style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
               className="flex flex-col gap-2.5 border-b border-line-warm py-6 pr-0 md:py-8 md:pr-10"
@@ -245,7 +281,7 @@ export function Process() {
                 <span className="font-display text-[13px] text-ink-subtle md:text-[14px]">
                   {step.numeral}
                 </span>
-                {step.name === "The Mock-Up" && (
+                {i === 4 && (
                   <span aria-hidden className="font-display text-[15px] text-sage">
                     ❋
                   </span>
@@ -276,7 +312,7 @@ export function Process() {
    escalonadas a distinta altura, el gesto del collage del hero. La
    página venía de dos rejillas seguidas (4 col y 3 col) y una tercera
    la habría vuelto una pila de grids. */
-export function SilkFlorals() {
+export function SilkFlorals({ content }: EditableSectionProps = {}) {
   return (
     <section
       id="silk-florals"
@@ -285,23 +321,25 @@ export function SilkFlorals() {
     >
       <div className="shell grid items-start gap-8 md:grid-cols-[1fr_0.8fr] md:gap-12 lg:grid-cols-[1fr_0.7fr_0.7fr] lg:gap-16">
         <div data-reveal className="flex flex-col gap-5 md:self-center md:gap-6 lg:gap-7">
-          <Eyebrow>{silkFlorals.eyebrow}</Eyebrow>
+          <Eyebrow>{editable(content, "silk.eyebrow", silkFlorals.eyebrow)}</Eyebrow>
           <p className="text-quote-xl font-display font-normal lg:max-w-[16ch]">
-            {silkFlorals.statement}
+            {editable(content, "silk.statement", silkFlorals.statement)}
           </p>
           <p className="text-body-lg max-w-[52ch] text-ink-muted">
-            {silkFlorals.copy}
+            {editable(content, "silk.copy", silkFlorals.copy)}
           </p>
           <div className="mt-1">
             <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-              Start With a Conversation
+              {editable(content, "silk.ctaLabel", "Start With a Conversation")}
             </ButtonPrimary>
           </div>
         </div>
 
         <Image
-          src={images.silkFloralsBlueCentrepiece}
-          alt="Blue and white silk floral centrepiece in a brass compote on a reception table"
+          src={editable(content, "silk.primaryImage", images.silkFloralsBlueCentrepiece.src)}
+          alt={editable(content, "silk.primaryImageAlt", "Blue and white silk floral centrepiece in a brass compote on a reception table")}
+          width={1600}
+          height={2000}
           sizes="(min-width: 1200px) 26vw, (min-width: 768px) 36vw, 100vw"
           data-reveal
           className="aspect-[4/5] w-full object-cover md:aspect-[3/4]"
@@ -310,8 +348,10 @@ export function SilkFlorals() {
         {/* La segunda foto aparece solo en desktop y baja 80px: el
             escalonado es lo que distingue esta banda de un split. */}
         <Image
-          src={images.silkFloralsReceptionCentrepiece}
-          alt="Tall blue and white silk floral centrepiece above a candlelit reception table"
+          src={editable(content, "silk.secondaryImage", images.silkFloralsReceptionCentrepiece.src)}
+          alt={editable(content, "silk.secondaryImageAlt", "Tall blue and white silk floral centrepiece above a candlelit reception table")}
+          width={1600}
+          height={2000}
           sizes="26vw"
           data-reveal
           style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
@@ -343,7 +383,16 @@ export function EditorialBreak() {
 }
 
 /* ── About ─────────────────────────────────────────────────────── */
-export function About() {
+export function About({ content }: EditableSectionProps = {}) {
+  const story = {
+    heading: editable(content, "founder.story.heading", founderStory.heading),
+    introduction: editable(content, "founder.story.introduction", founderStory.introduction),
+    paragraphs: [
+      editable(content, "founder.story.paragraphOne", founderStory.paragraphs[0]),
+      editable(content, "founder.story.paragraphTwo", founderStory.paragraphs[1]),
+    ],
+  };
+
   return (
     <section
       aria-label="About Jessica Salomon"
@@ -351,8 +400,10 @@ export function About() {
     >
       <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
         <Image
-          src={images.jessica}
-          alt="Jessica Salomon, founder and creative director"
+          src={editable(content, "founder.primaryImage", images.jessica.src)}
+          alt={editable(content, "founder.primaryImageAlt", "Jessica Salomon, founder and creative director")}
+          width={1600}
+          height={2000}
           sizes="(min-width: 1200px) 42vw, (min-width: 768px) 42vw, 100vw"
           className="w-full object-cover md:col-span-5"
         />
@@ -360,25 +411,21 @@ export function About() {
           data-reveal
           className="flex flex-col gap-5 md:col-span-7 md:mt-14 lg:col-span-6 lg:col-start-7 lg:mt-24 lg:gap-6"
         >
-          <Eyebrow>Founder &amp; Creative Director</Eyebrow>
+          <Eyebrow>{editable(content, "founder.eyebrow", "Founder & Creative Director")}</Eyebrow>
           <h2 className="text-display-md font-display font-medium">
-            Jessica Salomon
+            {editable(content, "founder.name", "Jessica Salomon")}
           </h2>
           {/* Tope de medida: con el rail a 1536 esta columna llega a ~76ch,
               por encima del límite cómodo de lectura. */}
           <p className="text-body-lg max-w-[66ch] text-ink-muted">
-            With a background in wedding and event planning, I bring years of
-            experience and a deep understanding of how celebrations come
-            together. Over time, I found myself drawn most to the creative
-            side—the details, the atmosphere, and the way thoughtful design can
-            completely transform a space. That led me to step away from
-            planning and focus exclusively on wedding design and styling,
-            creating celebrations that feel intentional, personal, and
-            beautifully considered.
+            {editable(content, "founder.bio", "With a background in wedding and event planning, I bring years of experience and a deep understanding of how celebrations come together. Over time, I found myself drawn most to the creative side—the details, the atmosphere, and the way thoughtful design can completely transform a space. That led me to step away from planning and focus exclusively on wedding design and styling, creating celebrations that feel intentional, personal, and beautifully considered.")}
           </p>
           <FounderStoryDialog
-            image={images.jessicaFounderStory}
-            story={founderStory}
+            image={editable(content, "founder.story.image", images.jessicaFounderStory.src)}
+            imageAlt={editable(content, "founder.story.imageAlt", "Portrait of Jessica Salomon")}
+            triggerLabel={editable(content, "founder.triggerLabel", "Meet Jessica")}
+            ctaLabel={editable(content, "founder.story.ctaLabel", "Start With a Conversation")}
+            story={story}
           />
         </div>
       </div>
@@ -387,10 +434,18 @@ export function About() {
 }
 
 /* ── Testimonios ──────────────────────────────────────────────────
-   Desktop deja las tres voces visibles en cards 6 / 3 / 3. Tablet y
-   mobile usan un rail infinito nativo: el contenido se compacta sin
-   convertir una pieza de lectura en autoplay. */
-export function Testimonials() {
+   Todas las resoluciones usan un rail infinito nativo: admite una colección
+   creciente y voces extensas sin convertir la lectura en autoplay. */
+export function Testimonials({ content }: EditableSectionProps = {}) {
+  const editableQuotes = homeTestimonials(
+    content,
+    quotes.map((quote, index) => ({
+      id: `testimonial-${index + 1}`,
+      text: quote.text,
+      who: quote.who,
+    })),
+  );
+
   return (
     <section
       aria-label="Testimonials"
@@ -402,41 +457,17 @@ export function Testimonials() {
           className="flex flex-col gap-3.5 border-b border-petal-line pb-8 md:pb-10 lg:gap-6"
         >
           <div className="text-label-sm font-medium tracking-[0.34em] text-rose-umber uppercase md:text-label">
-            Kind Words
+            {editable(content, "testimonials.eyebrow", "Kind Words")}
           </div>
           <h2 className="text-display-md font-display font-normal">
-            In their <em className="text-rose-umber">own</em> words
+            {editable(content, "testimonials.lead", "In their")}{" "}
+            <em className="text-rose-umber">{editable(content, "testimonials.emphasis", "own")}</em>{" "}
+            {editable(content, "testimonials.tail", "words")}
           </h2>
         </header>
 
         <div className="mt-8 md:mt-10 lg:mt-12">
-          <TestimonialRail items={quotes} label="Client testimonials" />
-
-          <div className="hidden lg:grid lg:grid-cols-12 lg:gap-5 xl:gap-6">
-            {quotes.map((q, i) => (
-              <figure
-                key={q.who}
-                data-reveal
-                style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-                className={`flex min-h-[340px] flex-col justify-between border border-petal-line bg-paper p-8 xl:p-10 ${
-                  i === 0 ? "lg:col-span-6" : "lg:col-span-3"
-                }`}
-              >
-                <blockquote
-                  className={`${
-                    i === 0
-                      ? "text-quote-xl max-w-[36ch]"
-                      : "text-quote-md max-w-[62ch]"
-                  } font-display text-ink`}
-                >
-                  “{q.text}”
-                </blockquote>
-                <figcaption className="text-label-xs mt-8 font-medium tracking-[0.3em] text-rose-umber uppercase md:text-label-sm">
-                  {q.who}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+          <TestimonialRail items={editableQuotes} label="Client testimonials" />
         </div>
       </div>
     </section>
@@ -468,7 +499,7 @@ const LOOKBOOK_IMAGE_SIZES = {
     "(min-width: 1632px) 507px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 768px) calc((100vw - 96px) / 3), calc(100vw - 48px)",
 } as const;
 
-export function LookBook() {
+export function LookBook({ content }: EditableSectionProps = {}) {
   return (
     <section
       id="look-book"
@@ -477,15 +508,15 @@ export function LookBook() {
     >
       <div className="shell">
         <header data-reveal className="flex flex-col gap-6">
-          <Eyebrow>{lookbookIntro.eyebrow}</Eyebrow>
+          <Eyebrow>{editable(content, "lookbook.eyebrow", lookbookIntro.eyebrow)}</Eyebrow>
           <h2 className="text-heading-lg max-w-[640px] font-display font-medium wide:max-w-[640px] xl:max-w-[70%]">
-            {lookbookIntro.heading}
+            {editable(content, "lookbook.heading", lookbookIntro.heading)}
           </h2>
         </header>
 
         <div data-reveal className="mt-8 flex justify-start md:justify-end">
           <p className="text-body-lg max-w-none text-left text-ink-muted md:max-w-[70%] md:text-right lg:max-w-[60%] wide:max-w-[40%]">
-            {lookbookIntro.description}
+            {editable(content, "lookbook.description", lookbookIntro.description)}
           </p>
         </div>
 
@@ -534,7 +565,7 @@ export function LookBook() {
 }
 
 /* ── CTA ──────────────────────────────────────────────────────── */
-export function Cta() {
+export function Cta({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Begin the experience"
@@ -547,15 +578,15 @@ export function Cta() {
             "You know how it should feel" y cierra pidiendo justo eso.
             El mismo CTA en los dos extremos, y el "no obligation" para
             quitarle peso al último clic. */}
-        <Eyebrow>Let’s Begin</Eyebrow>
+        <Eyebrow>{editable(content, "cta.eyebrow", "Let’s Begin")}</Eyebrow>
         <h2 className="text-display-lg max-w-[16ch] font-display font-medium">
-          Tell us how you want it to feel.
+          {editable(content, "cta.heading", "Tell us how you want it to feel.")}
         </h2>
         <p className="text-body-lg max-w-[46ch] text-ink-subtle">
-          A complimentary hour together, and no obligation after it.
+          {editable(content, "cta.copy", "A complimentary hour together, and no obligation after it.")}
         </p>
         <ButtonPrimary href="/inquire" className="w-full md:w-auto">
-          Start With a Conversation
+          {editable(content, "cta.label", "Start With a Conversation")}
         </ButtonPrimary>
       </div>
     </section>
@@ -563,7 +594,11 @@ export function Cta() {
 }
 
 /* ── Footer ───────────────────────────────────────────────────── */
-export function SiteFooter() {
+export function SiteFooter({ settings }: { settings?: SiteSettingsDocument } = {}) {
+  const contactPhone = settings?.phone || site.phone;
+  const contactPhoneHref = settings ? phoneHref(settings.phone) : site.phoneHref;
+  const instagram = settings?.instagram || site.instagram;
+  const facebook = settings?.facebook || site.facebook;
   const footerNav = [
     { label: "Home", href: "/" },
     { label: "Look Book", href: "/look-book" },
@@ -606,14 +641,22 @@ export function SiteFooter() {
           <div className="flex flex-col gap-1.5 text-[11px] text-on-dark-muted md:gap-2 md:text-right md:text-[12px]">
             <div>{site.location}</div>
             <a
-              href={site.phoneHref}
+              href={contactPhoneHref}
               className="py-[15px] transition-colors duration-[180ms] hover:text-bone md:py-0"
             >
-              {site.phone}
+              Tel: {contactPhone}
             </a>
+            {settings?.publicEmail ? (
+              <a
+                href={`mailto:${settings.publicEmail}`}
+                className="py-[15px] transition-colors duration-[180ms] hover:text-bone md:py-0"
+              >
+                {settings.publicEmail}
+              </a>
+            ) : null}
             <div className="text-label-sm flex gap-4 font-medium tracking-[0.2em] uppercase md:mt-1.5 md:justify-end">
               <a
-                href={site.instagram}
+                href={instagram}
                 target="_blank"
                 rel="noreferrer"
                 className="py-[15px] text-bone transition-colors duration-[180ms] hover:text-ink-faint md:py-0"
@@ -621,7 +664,7 @@ export function SiteFooter() {
                 Instagram
               </a>
               <a
-                href={site.facebook}
+                href={facebook}
                 target="_blank"
                 rel="noreferrer"
                 className="py-[15px] text-bone transition-colors duration-[180ms] hover:text-ink-faint md:py-0"

@@ -5,7 +5,10 @@ import { useEffect, useRef } from "react";
 import { ButtonPrimary } from "@/components/ui";
 
 type FounderStoryDialogProps = {
-  image: StaticImageData;
+  image: StaticImageData | string;
+  imageAlt: string;
+  triggerLabel: string;
+  ctaLabel: string;
   story: {
     heading: string;
     introduction: string;
@@ -15,6 +18,9 @@ type FounderStoryDialogProps = {
 
 export function FounderStoryDialog({
   image,
+  imageAlt,
+  triggerLabel,
+  ctaLabel,
   story,
 }: FounderStoryDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -51,7 +57,7 @@ export function FounderStoryDialog({
         onClick={openDialog}
         className="group text-label mt-3 inline-flex min-h-11 self-start items-center gap-4 border-b border-ink py-3 font-medium tracking-[0.28em] uppercase transition-colors duration-[180ms] hover:text-ink-subtle"
       >
-        Meet Jessica
+        {triggerLabel}
         <svg
           aria-hidden="true"
           viewBox="0 0 24 12"
@@ -93,7 +99,7 @@ export function FounderStoryDialog({
             <div className="relative h-full w-full">
               <Image
                 src={image}
-                alt="Portrait of Jessica Salomon"
+                alt={imageAlt}
                 fill
                 sizes="(min-width: 768px) 42vw, 100vw"
                 className="object-cover"
@@ -123,7 +129,7 @@ export function FounderStoryDialog({
                   onClick={closeDialog}
                   className="w-full md:w-auto"
                 >
-                  Start With a Conversation
+                  {ctaLabel}
                 </ButtonPrimary>
               </div>
             </div>

@@ -7,10 +7,8 @@ import { inquiry } from "@/lib/content";
  * Formulario de inquiry (DESIGN.md §Inputs): campos subrayados con
  * hairline, sin cajas, foco en sage. Validación nativa del navegador —
  * `required` y `type` hacen el trabajo; no hay librería de forms.
- *
- * PENDIENTE DE NEGOCIO: no hay correo destino público (PRODUCT.md), así
- * que el envío aún no está conectado. En cuanto exista la dirección,
- * `handleSubmit` es el único punto a tocar.
+ * El envío se persiste primero en Neon. Resend se agregará como una capa
+ * posterior, sin convertir al correo en la fuente de verdad del lead.
  */
 
 const FIELD =
@@ -18,10 +16,29 @@ const FIELD =
 
 export function InquiryForm() {
   const [sent, setSent] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO(negocio): enviar a la dirección de JSD en cuanto exista.
+    setPending(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const response = await fetch("/api/inquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(formData.entries())),
+    });
+    const result = (await response.json().catch(() => null)) as { message?: string } | null;
+
+    if (!response.ok) {
+      setError(result?.message ?? "We could not send your inquiry. Please try again.");
+      setPending(false);
+      return;
+    }
+
     setSent(true);
   }
 
@@ -40,6 +57,10 @@ export function InquiryForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-9">
+      <div className="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor="inquiry-company">Company</label>
+        <input id="inquiry-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="grid gap-8 md:grid-cols-2 md:gap-x-10 md:gap-y-9">
         {inquiry.fields.map((field) => {
           const id = `inquiry-${field.name}`;
@@ -109,10 +130,12 @@ export function InquiryForm() {
 
       <button
         type="submit"
+        disabled={pending}
         className="text-label w-full cursor-pointer bg-sage px-14 py-[18px] text-center font-medium text-bone uppercase transition-colors duration-[180ms] hover:bg-sage-deep md:w-auto md:self-start"
       >
-        {inquiry.submit}
+        {pending ? "Sending…" : inquiry.submit}
       </button>
+      {error ? <p role="alert" className="text-body-md text-ink-muted">{error}</p> : null}
     </form>
   );
 }

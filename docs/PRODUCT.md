@@ -76,7 +76,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 **Restricciones de información:**
 
 - No hay precios ni mínimos publicados, ni en el sitio vigente ni acordados aquí. El sitio no debe insinuar rangos.
-- **No se conoce una dirección de correo pública.** El único canal directo publicado es el teléfono `845-375-7820`. El formulario de inquiry **ya está construido** en `/inquire` (pantalla propia, nueve campos, estado de éxito), pero **no envía**: `handleSubmit` en `components/InquiryForm.tsx` es el único punto a conectar en cuanto exista el correo destino o un servicio de formularios. Hasta entonces el sitio no se puede publicar como canal de captación.
+- **No se conoce una dirección de correo pública.** El único canal directo publicado es el teléfono `845-375-7820`. El formulario de `/inquire` ya valida y registra cada solicitud en Neon; la entrega por Resend se conectará cuando exista el correo destino y el dominio esté verificado. La base, no el email, es la fuente de verdad del lead.
 - **El auto-agendado del Wix no se reproduce** (decisión PM, ago 2026). El calendario público de la página vigente promete una disponibilidad que nadie mantiene; el horario de la consulta se acuerda en la respuesta al inquiry.
 - Área de servicio: Hudson Valley, Nueva York — y viaja fuera.
 
