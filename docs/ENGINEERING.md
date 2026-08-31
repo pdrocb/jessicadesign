@@ -12,6 +12,7 @@ Cada flujo mantiene una sola dirección:
 - Los componentes renderizan estado y disparan acciones; no consultan la base de datos.
 - Las acciones validan y coordinan; los repositorios encapsulan queries y fallbacks.
 - Las integraciones externas no se importan directamente desde la UI.
+- La persistencia nunca guarda rutas internas generadas por un build (`/_next/...`). Los assets incluidos en código se resuelven como fallbacks del deployment activo; los reemplazos editoriales usan URLs públicas durables.
 
 El mapa concreto y sus entrypoints viven en `ARCHITECTURE_MAP.md`.
 

@@ -13,19 +13,13 @@ import {
   type HomeFaq,
   type HomeTestimonial,
 } from "@/cms/content/model";
+import { isPersistentCmsImageSource } from "@/cms/content/media";
 
 export type { HomeDocument } from "@/cms/content/model";
 
 const imageKeys = new Set(
   homeFieldDefinitions.filter((field) => field.type === "image").map((field) => field.key),
 );
-
-function isUsableImageSource(value: string) {
-  if (value.startsWith("/")) return true;
-  if (!URL.canParse(value)) return false;
-  const url = new URL(value);
-  return url.protocol === "https:" && url.hostname.endsWith(".public.blob.vercel-storage.com");
-}
 
 function migrateLegacyHero(document: HomeDocument): HomeDocument {
   if (typeof document["hero.feeling"] === "string" && document["hero.feeling"]) return document;
@@ -124,7 +118,7 @@ export async function getHomeDocument(): Promise<HomeDocument> {
     Object.entries(stored).filter(
       (entry): entry is [string, string] =>
         typeof entry[1] === "string" &&
-        (!imageKeys.has(entry[0]) || isUsableImageSource(entry[1])),
+        (!imageKeys.has(entry[0]) || isPersistentCmsImageSource(entry[1])),
     ),
   );
 

@@ -12,10 +12,12 @@ import {
   type HomeFaq,
   type HomeTestimonial,
 } from "@/cms/content/model";
+import { isPersistentCmsImageSource } from "@/cms/content/media";
 
 export type SaveState = { status: "idle" | "saved" | "error"; message: string };
 
 const imageFields = homeFieldDefinitions.filter((field) => field.type === "image");
+const imageKeys = new Set(imageFields.map((field) => field.key));
 const allowedKeys = new Set(
   homeFieldDefinitions.flatMap((field) =>
     field.type === "image" ? [field.key, field.altKey] : [field.key],
@@ -105,6 +107,7 @@ export async function saveHome(
     if (normalized.length > 5000) {
       return { status: "error", message: "One of the fields is too long." };
     }
+    if (imageKeys.has(key) && !isPersistentCmsImageSource(normalized)) continue;
     data[key] = normalized;
   }
 
