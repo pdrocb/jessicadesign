@@ -1,8 +1,12 @@
 "use server";
 
+import { del, put } from "@vercel/blob";
+import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { requireSession } from "@/cms/auth/session";
 import { getCmsDatabase } from "@/cms/database/client";
+import { projectImageMetadata } from "@/cms/projects/media";
+import type { LookbookImage } from "@/lib/lookbook";
 
 export type ProjectImageAction =
   | "make-primary"
@@ -20,6 +24,67 @@ function revalidateProjects() {
   revalidatePath("/");
   revalidatePath("/admin/projects");
   revalidatePath("/look-book");
+}
+
+function revalidateProject(projectId: string) {
+  revalidateProjects();
+  revalidatePath(`/admin/projects/${projectId}`);
+}
+
+export async function uploadProjectImage(projectId: string, formData: FormData): Promise<LookbookImage> {
+  await requireSession();
+
+  const file = formData.get("file");
+  if (!(file instanceof File)) throw new Error("Choose an image before uploading.");
+
+  const metadata = await projectImageMetadata(file);
+  const sql = getCmsDatabase();
+  const project = (await sql.query(
+    "SELECT id FROM cms_projects WHERE id = $1 LIMIT 1",
+    [projectId],
+  )) as { id: string }[];
+  if (!project[0]) throw new Error("Project not found.");
+  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Image uploads are not configured yet.");
+
+  const id = `project-image-${randomUUID()}`;
+  const blob = await put(`projects/${projectId}/${id}.${metadata.extension}`, file, {
+    access: "public",
+    addRandomSuffix: true,
+    cacheControlMaxAge: 31_536_000,
+    contentType: file.type,
+  });
+
+  try {
+    const imageRows = (await sql.query(
+      `WITH target_project AS (
+         SELECT id FROM cms_projects WHERE id = $1 FOR UPDATE
+       ), next_position AS (
+         SELECT COALESCE(MAX(image.position), 0) + 1 AS position
+           FROM cms_project_images image
+           JOIN target_project project ON project.id = image.project_id
+       )
+       INSERT INTO cms_project_images (id, project_id, src, alt, width, height, position)
+       SELECT $2,
+              project.id,
+              $3,
+              CONCAT('Design details from ', project.title, ', photograph ', next_position.position),
+              $4,
+              $5,
+              next_position.position
+         FROM target_project project, next_position
+       RETURNING id, src, alt, width, height, position`,
+      [projectId, id, blob.url, metadata.width, metadata.height],
+    )) as LookbookImage[];
+
+    const image = imageRows[0];
+    if (!image) throw new Error("The photograph could not be added to this project.");
+
+    revalidateProject(projectId);
+    return image;
+  } catch (error) {
+    await del(blob.url).catch(() => undefined);
+    throw error;
+  }
 }
 
 export async function saveProject(projectId: string, formData: FormData) {
@@ -43,7 +108,6 @@ export async function saveProject(projectId: string, formData: FormData) {
             venue = $4,
             location = $5,
             photographer = $6,
-            published = $7,
             updated_at = now()
       WHERE id = $1
       RETURNING id
@@ -51,7 +115,7 @@ export async function saveProject(projectId: string, formData: FormData) {
        UPDATE cms_project_images AS image
           SET alt = incoming.alt,
               updated_at = now()
-         FROM jsonb_to_recordset($8::jsonb) AS incoming(id text, alt text)
+         FROM jsonb_to_recordset($7::jsonb) AS incoming(id text, alt text)
         WHERE image.id = incoming.id
           AND image.project_id = $1
           AND EXISTS (SELECT 1 FROM updated_project)
@@ -65,11 +129,23 @@ export async function saveProject(projectId: string, formData: FormData) {
       text("venue"),
       text("location"),
       text("photographer"),
-      formData.get("published") === "on",
       JSON.stringify(imageAlts),
     ],
   );
-  revalidateProjects();
+  revalidateProject(projectId);
+}
+
+export async function setProjectPublished(projectId: string, published: boolean) {
+  await requireSession();
+  const sql = getCmsDatabase();
+  await sql.query(
+    `UPDATE cms_projects
+        SET published = $2,
+            updated_at = now()
+      WHERE id = $1`,
+    [projectId, published],
+  );
+  revalidateProject(projectId);
 }
 
 export async function moveProject(projectId: string, direction: "up" | "down") {
@@ -98,7 +174,7 @@ export async function moveProject(projectId: string, direction: "up" | "down") {
       WHERE p.id IN (c.id, t.id)`,
     [projectId],
   );
-  revalidateProjects();
+  revalidateProject(projectId);
 }
 
 export async function updateProjectImage(
@@ -194,6 +270,6 @@ export async function updateProjectImage(
     ),
   ]);
 
-  revalidateProjects();
+  revalidateProject(projectId);
   return { ok: true };
 }

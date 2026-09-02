@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Project photographs may be up to 4 MB; the Server Action request needs room for multipart overhead.
+    serverActions: {
+      bodySizeLimit: "5mb",
+    },
+  },
   images: {
     // Formatos next-gen por content negotiation: Next sirve AVIF al navegador
     // que lo acepte, WebP al que no, y el original como último recurso.

@@ -97,7 +97,7 @@ const records: readonly LookbookProject[] = [
     featuredPosition: 2,
     homeShape: "tall",
     homeCoverImageId: "lucas-will-01",
-    coverImageId: "lucas-will-04",
+    coverImageId: "lucas-will-01",
     previewImageCount: 5,
     images: images("lucas-will", "Lucas & Will", [
       [1125, 2000], [1125, 2000], [1125, 2000], [2000, 1125],
@@ -140,7 +140,7 @@ const records: readonly LookbookProject[] = [
     featuredPosition: 4,
     homeShape: "portraitPair",
     homeCoverImageId: "mckenzie-jordan-01",
-    coverImageId: "mckenzie-jordan-04",
+    coverImageId: "mckenzie-jordan-01",
     previewImageCount: 5,
     images: images("mckenzie-jordan", "Mckenzie & Jordan", [
       [1333, 2000], [1333, 2000], [1333, 2000], [2000, 1333],
@@ -184,7 +184,7 @@ const records: readonly LookbookProject[] = [
     featuredPosition: 6,
     homeShape: "square",
     homeCoverImageId: "isabelle-marshall-01",
-    coverImageId: "isabelle-marshall-03",
+    coverImageId: "isabelle-marshall-01",
     previewImageCount: 5,
     images: images("isabelle-marshall", "Isabelle & Marshall", [
       [1333, 2000], [1333, 2000], [2000, 1333], [1333, 2000],

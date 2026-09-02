@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type MouseEvent } from "react";
+import { useEffect, useState, useTransition, type ChangeEvent, type MouseEvent } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsConfirmDialog } from "@/cms/components/ui/CmsConfirmDialog";
 import { CmsField } from "@/cms/components/ui/CmsField";
 import {
+  uploadProjectImage,
   updateProjectImage,
   type ProjectImageAction,
 } from "@/cms/projects/actions";
@@ -62,8 +63,51 @@ export function ProjectImageManager({
   const [images, setImages] = useState(() => orderedImages(projectImages, coverImageId));
   const [primaryId, setPrimaryId] = useState(coverImageId);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [uploadPreview, setUploadPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => () => {
+    if (uploadPreview) URL.revokeObjectURL(uploadPreview);
+  }, [uploadPreview]);
+
+  function resetUpload() {
+    setUploadPreview(null);
+  }
+
+  function chooseUpload(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    if (!file) return;
+    event.currentTarget.value = "";
+
+    setError("");
+    if (file.type !== "image/jpeg" && file.type !== "image/webp") {
+      resetUpload();
+      setError("Choose a JPG or WebP image.");
+      return;
+    }
+    if (file.size > 4_000_000) {
+      resetUpload();
+      setError("The image must be under 4 MB.");
+      return;
+    }
+
+    setUploadPreview(URL.createObjectURL(file));
+    const formData = new FormData();
+    formData.set("file", file);
+
+    startTransition(async () => {
+      try {
+        const image = await uploadProjectImage(projectId, formData);
+        setImages((currentImages) => [...currentImages, image]);
+        resetUpload();
+        router.refresh();
+      } catch (uploadError) {
+        setError(uploadError instanceof Error ? uploadError.message : "The photograph could not be uploaded.");
+        resetUpload();
+      }
+    });
+  }
 
   function runAction(imageId: string, action: ProjectImageAction) {
     if (!connected || pending) return;
@@ -106,7 +150,7 @@ export function ProjectImageManager({
   return (
     <section className="cms-project-photo-editors" aria-busy={pending}>
       <div className="cms-project-photo-heading">
-        <div><h2>Project photographs</h2><p>Choose the principal image and arrange the gallery in its published order.</p></div>
+        <div><h2>Project photographs</h2><p>The principal image is the cover and always stays first. Choose another principal to move it to the beginning of the gallery.</p></div>
         <span>{String(images.length).padStart(2, "0")} photographs</span>
       </div>
       {error ? <p className="cms-project-photo-error" role="alert">{error}</p> : null}
@@ -144,6 +188,31 @@ export function ProjectImageManager({
             </article>
           );
         })}
+        <article className="cms-project-photo-editor cms-project-photo-upload">
+          <label className="cms-project-photo-upload-trigger" htmlFor={`${projectId}-new-image`}>
+            <div className="cms-project-photo-preview">
+              {uploadPreview ? (
+                // The local preview is a browser Blob URL, so it cannot use Next's image optimizer.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={uploadPreview} alt="" />
+              ) : (
+                <span aria-hidden><CmsIcon name="plus" /></span>
+              )}
+            </div>
+            <div className="cms-project-photo-upload-copy">
+              <strong>{uploadPreview ? "Uploading photograph…" : "Add photograph"}</strong>
+              <small>JPG or WebP, up to 4 MB. It will be placed last in the gallery.</small>
+            </div>
+            <input
+              className="cms-file-input"
+              id={`${projectId}-new-image`}
+              type="file"
+              accept="image/jpeg,image/webp"
+              disabled={!connected || pending}
+              onChange={chooseUpload}
+            />
+          </label>
+        </article>
       </div>
       <CmsConfirmDialog
         open={deleteTargetId !== null}

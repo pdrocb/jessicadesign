@@ -16,7 +16,8 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 | --- | --- | --- |
 | `/admin/login` | `cms/components/LoginForm.tsx` | `cms/auth/actions.ts` → Neon Auth |
 | `/admin` | `cms/components/HomeEditor.tsx` | `cms/content/actions.ts` → documento `home` + Blob para imágenes |
-| `/admin/projects` | `cms/components/ProjectsEditor.tsx` | `cms/projects/actions.ts` y `repository.ts`, incluida metadata de fotografías |
+| `/admin/projects` | `cms/components/ProjectsEditor.tsx` | Índice de orden/visibilidad: `cms/projects/actions.ts` y `repository.ts` |
+| `/admin/projects/[projectId]` | `cms/components/ProjectEditor.tsx` | Detalle, fotografías y guardado: `cms/projects/actions.ts` y `repository.ts` |
 | `/admin/settings` | `cms/components/SiteSettingsEditor.tsx` | `cms/settings/actions.ts` → documento global + Blob para medios |
 | `/admin/inquiries` | página read-only | `cms/inquiries/repository.ts` |
 | `/api/auth/[...path]` | proxy de autenticación | `cms/auth/neon.ts` |

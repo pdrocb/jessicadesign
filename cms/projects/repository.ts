@@ -38,6 +38,38 @@ type ImageRow = {
   crop_tolerance: "none" | "soft" | null;
 };
 
+function toLookbookProject(row: ProjectRow, imageRows: ImageRow[]): LookbookProject {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    subtitle: row.subtitle ?? undefined,
+    venue: row.venue ?? undefined,
+    location: row.location ?? undefined,
+    photographer: row.photographer ?? undefined,
+    position: row.position,
+    published: row.published,
+    featured: row.featured,
+    featuredPosition: row.featured_position ?? undefined,
+    homeShape: row.home_shape,
+    homeCoverImageId: row.home_cover_image_id ?? undefined,
+    coverImageId: row.cover_image_id,
+    previewImageCount: row.preview_image_count,
+    images: imageRows.map((image) => ({
+      id: image.id,
+      src: image.src,
+      alt: image.alt,
+      width: image.width,
+      height: image.height,
+      position: image.position,
+      focalPoint: image.focal_x !== null && image.focal_y !== null
+        ? { x: Number(image.focal_x), y: Number(image.focal_y) }
+        : undefined,
+      cropTolerance: image.crop_tolerance ?? undefined,
+    })),
+  };
+}
+
 async function seedCurrentProjects() {
   const sql = getCmsDatabase();
   const countRows = (await sql.query("SELECT count(*)::int AS count FROM cms_projects")) as { count: number }[];
@@ -129,35 +161,32 @@ export async function getCmsProjects(): Promise<{ projects: LookbookProject[]; c
     throw error;
   }
 
-  const projects = projectRows.map((row) => ({
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    subtitle: row.subtitle ?? undefined,
-    venue: row.venue ?? undefined,
-    location: row.location ?? undefined,
-    photographer: row.photographer ?? undefined,
-    position: row.position,
-    published: row.published,
-    featured: row.featured,
-    featuredPosition: row.featured_position ?? undefined,
-    homeShape: row.home_shape,
-    homeCoverImageId: row.home_cover_image_id ?? undefined,
-    coverImageId: row.cover_image_id,
-    previewImageCount: row.preview_image_count,
-    images: imageRows.filter((image) => image.project_id === row.id).map((image) => ({
-      id: image.id,
-      src: image.src,
-      alt: image.alt,
-      width: image.width,
-      height: image.height,
-      position: image.position,
-      focalPoint: image.focal_x !== null && image.focal_y !== null
-        ? { x: Number(image.focal_x), y: Number(image.focal_y) }
-        : undefined,
-      cropTolerance: image.crop_tolerance ?? undefined,
-    })),
-  }));
+  const projects = projectRows.map((row) => toLookbookProject(
+    row,
+    imageRows.filter((image) => image.project_id === row.id),
+  ));
 
   return { projects, connected: true };
+}
+
+export async function getCmsProject(projectId: string): Promise<{ project?: LookbookProject; connected: boolean }> {
+  if (!isCmsDatabaseConfigured()) {
+    return { project: getPublishedLookbookProjects().find((project) => project.id === projectId), connected: false };
+  }
+
+  try {
+    await seedCurrentProjects();
+    const sql = getCmsDatabase();
+    const [projectRows, imageRows] = await Promise.all([
+      sql.query("SELECT * FROM cms_projects WHERE id = $1 LIMIT 1", [projectId]),
+      sql.query("SELECT * FROM cms_project_images WHERE project_id = $1 ORDER BY position", [projectId]),
+    ]) as [ProjectRow[], ImageRow[]];
+    const row = projectRows[0];
+    return { project: row ? toLookbookProject(row, imageRows) : undefined, connected: true };
+  } catch (error) {
+    if (isCmsDatabaseConnectionError(error)) {
+      return { project: getPublishedLookbookProjects().find((project) => project.id === projectId), connected: false };
+    }
+    throw error;
+  }
 }

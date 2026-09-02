@@ -28,7 +28,7 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
         <div className="cms-nav-group" key={group.label}>
           <p>{group.label}</p>
           {group.items.map((item) => {
-            const active = pathname === item.href;
+            const active = pathname === item.href || (item.href === "/admin/projects" && pathname.startsWith("/admin/projects/"));
             return (
               <Link
                 href={item.href}
