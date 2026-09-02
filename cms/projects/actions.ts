@@ -3,6 +3,7 @@
 import { del, put } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { requireSession } from "@/cms/auth/session";
 import { getCmsDatabase } from "@/cms/database/client";
 import { projectImageMetadata } from "@/cms/projects/media";
@@ -16,9 +17,19 @@ export type ProjectImageAction =
 
 type ProjectImageRow = {
   id: string;
+  src: string;
   position: number;
   is_primary: boolean;
 };
+
+function isManagedBlobUrl(source: string) {
+  try {
+    const url = new URL(source);
+    return url.protocol === "https:" && url.hostname.endsWith(".public.blob.vercel-storage.com");
+  } catch {
+    return false;
+  }
+}
 
 function revalidateProjects() {
   revalidatePath("/");
@@ -57,7 +68,7 @@ export async function uploadProjectImage(projectId: string, formData: FormData):
   try {
     const imageRows = (await sql.query(
       `WITH target_project AS (
-         SELECT id FROM cms_projects WHERE id = $1 FOR UPDATE
+       SELECT id, title FROM cms_projects WHERE id = $1 FOR UPDATE
        ), next_position AS (
          SELECT COALESCE(MAX(image.position), 0) + 1 AS position
            FROM cms_project_images image
@@ -133,6 +144,7 @@ export async function saveProject(projectId: string, formData: FormData) {
     ],
   );
   revalidateProject(projectId);
+  redirect("/admin/projects");
 }
 
 export async function setProjectPublished(projectId: string, published: boolean) {
@@ -186,6 +198,7 @@ export async function updateProjectImage(
   const sql = getCmsDatabase();
   const rows = (await sql.query(
     `SELECT image.id,
+            image.src,
             image.position,
             image.id = project.cover_image_id AS is_primary
        FROM cms_project_images image
@@ -269,6 +282,15 @@ export async function updateProjectImage(
       [projectId, nextPrimaryId, action === "delete", imageId],
     ),
   ]);
+
+  if (action === "delete") {
+    const deletedSource = rows[currentIndex].src;
+    if (isManagedBlobUrl(deletedSource)) {
+      await del(deletedSource).catch((error) => {
+        console.error("The project photograph was removed from Neon but not from Vercel Blob.", error);
+      });
+    }
+  }
 
   revalidateProject(projectId);
   return { ok: true };

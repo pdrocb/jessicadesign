@@ -447,7 +447,7 @@ The chapter cover and home cover are separate editorial choices. `coverImageId` 
 
 Any cover or preview opens a project-scoped fullscreen viewer on a light `paper` ground, with the image stage differentiated in `bone`, warm hairlines, and umber controls. Images use `object-contain` so the complete photograph wins over filling the viewport. Previous/next controls remain visible and at least 44px at every breakpoint, wrapping inside that project; keyboard arrows, Escape, swipe, focus return and document scroll lock complement them. The counter communicates both current position and project size.
 
-Project order, photograph order, publication state, cover and home feature order are explicit data. `lib/lookbook.ts` remains the local fallback; the CMS repository reads the same contract from Neon and seeds it on first connection. Imported originals will be deduplicated by source URL, auto-oriented, capped at 2000px on the long edge and stored through Vercel Blob once uploads are enabled. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported.
+Project order, photograph order, publication state, cover and home feature order are explicit data. `lib/lookbook.ts` remains the versioned fallback; the CMS repository reads the same contract from Neon and seeds it on first connection. Project photographs are auto-oriented, capped at 2000px on the long edge and stored through Vercel Blob. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported.
 
 ### The CMS is an operational tool, not an extension of the wedding site
 

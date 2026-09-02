@@ -2,9 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    // Project photographs may be up to 4 MB; the Server Action request needs room for multipart overhead.
+    // Project photographs may be up to 10 MB after browser optimization; leave room for multipart overhead.
     serverActions: {
-      bodySizeLimit: "5mb",
+      bodySizeLimit: "11mb",
     },
   },
   images: {

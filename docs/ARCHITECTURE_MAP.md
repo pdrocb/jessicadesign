@@ -36,4 +36,4 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 - El contenido público puede leer documentos del CMS; nunca importa componentes de administración.
 - Los editores no importan el cliente de base de datos.
 - Auth protege el layout de `/admin`; no se replica en cada página protegida.
-- Los fallbacks de desarrollo pertenecen a repositorios/configuración, no a componentes visuales.
+- Los fallbacks de desarrollo pertenecen a repositorios/configuración, no a componentes visuales; las fotografías versionadas del Look Book conservan sus URLs públicas de Blob en `lib/lookbook-blob-sources.json`.

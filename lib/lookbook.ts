@@ -1,3 +1,5 @@
+import blobSources from "@/lib/lookbook-blob-sources.json";
+
 /**
  * Adaptador local del Look Book.
  *
@@ -51,10 +53,13 @@ function images(
   return dimensions.map(([width, height], index) => {
     const position = index + 1;
     const paddedPosition = String(position).padStart(2, "0");
+    const localSource = `/lookbook/${slug}/${paddedPosition}.webp`;
+    const source = (blobSources as Record<string, string>)[localSource];
+    if (!source) throw new Error(`Missing Blob source for ${localSource}.`);
 
     return {
       id: `${slug}-${paddedPosition}`,
-      src: `/lookbook/${slug}/${paddedPosition}.webp`,
+      src: source,
       alt: `Design details from ${title}, photograph ${position}`,
       width,
       height,

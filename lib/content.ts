@@ -4,7 +4,7 @@
  *
  * Las fotografías generales se importan estáticamente desde `assets/` para
  * que next/image conozca sus dimensiones. El archivo completo del Look Book
- * vive, ya optimizado, bajo `public/lookbook/` y se modela en `lib/lookbook.ts`.
+ * vive, ya optimizado, en Vercel Blob y se modela en `lib/lookbook.ts`.
  */
 
 import heroTablescape from "@/assets/hero-01-tablescape.jpg";

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition, type ChangeEvent, type MouseEvent } from "react";
+import { useEffect, useRef, useState, useTransition, type ChangeEvent, type MouseEvent } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsConfirmDialog } from "@/cms/components/ui/CmsConfirmDialog";
 import { CmsField } from "@/cms/components/ui/CmsField";
@@ -11,6 +11,8 @@ import {
   updateProjectImage,
   type ProjectImageAction,
 } from "@/cms/projects/actions";
+import { largeProjectImageBytes, maximumProjectImageBytes } from "@/cms/projects/image-policy";
+import { optimizeProjectImage } from "@/cms/projects/optimize-image";
 import type { LookbookImage } from "@/lib/lookbook";
 
 type ProjectImageManagerProps = {
@@ -19,6 +21,19 @@ type ProjectImageManagerProps = {
   images: readonly LookbookImage[];
   connected: boolean;
 };
+
+type UploadStage = "queued" | "optimizing" | "uploading" | "error";
+
+type UploadItem = {
+  id: string;
+  file: File;
+  preview: string;
+  stage: UploadStage;
+  error?: string;
+  warning?: string;
+};
+
+const optimizationConcurrency = 3;
 
 function orderedImages(images: readonly LookbookImage[], coverImageId: string) {
   return [...images]
@@ -63,54 +78,121 @@ export function ProjectImageManager({
   const [images, setImages] = useState(() => orderedImages(projectImages, coverImageId));
   const [primaryId, setPrimaryId] = useState(coverImageId);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-  const [uploadPreview, setUploadPreview] = useState<string | null>(null);
-  const [error, setError] = useState("");
+  const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
+  const [actionError, setActionError] = useState("");
+  const previewUrls = useRef(new Set<string>());
   const [pending, startTransition] = useTransition();
+  const uploading = uploadItems.some((item) => item.stage !== "error");
+  const busy = pending || uploading;
 
   useEffect(() => () => {
-    if (uploadPreview) URL.revokeObjectURL(uploadPreview);
-  }, [uploadPreview]);
+    previewUrls.current.forEach((url) => URL.revokeObjectURL(url));
+    previewUrls.current.clear();
+  }, []);
 
-  function resetUpload() {
-    setUploadPreview(null);
+  function releasePreview(url: string) {
+    URL.revokeObjectURL(url);
+    previewUrls.current.delete(url);
   }
 
-  function chooseUpload(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.currentTarget.files?.[0];
-    if (!file) return;
+  function clearUploadItems() {
+    uploadItems.forEach((item) => releasePreview(item.preview));
+    setUploadItems([]);
+  }
+
+  function updateUploadItem(id: string, update: Partial<UploadItem>) {
+    setUploadItems((currentItems) => currentItems.map((item) => (
+      item.id === id ? { ...item, ...update } : item
+    )));
+  }
+
+  async function chooseUpload(event: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.currentTarget.files ?? []);
+    if (files.length === 0) return;
     event.currentTarget.value = "";
 
-    setError("");
-    if (file.type !== "image/jpeg" && file.type !== "image/webp") {
-      resetUpload();
-      setError("Choose a JPG or WebP image.");
-      return;
-    }
-    if (file.size > 4_000_000) {
-      resetUpload();
-      setError("The image must be under 4 MB.");
-      return;
+    setActionError("");
+    clearUploadItems();
+
+    const nextItems = files.map((file, index): UploadItem => {
+      const preview = URL.createObjectURL(file);
+      previewUrls.current.add(preview);
+      const id = `${Date.now()}-${index}-${file.name}`;
+
+      if (file.type !== "image/jpeg" && file.type !== "image/webp") {
+        return { id, file, preview, stage: "error", error: "Choose a JPG or WebP image." };
+      }
+      return { id, file, preview, stage: "queued" };
+    });
+    setUploadItems(nextItems);
+
+    // Give React a frame to paint every queued card before image decoding begins.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+    const uploadableItems = nextItems.filter((item) => item.stage === "queued");
+    const optimizedFiles = new Map<string, File>();
+    let optimizationIndex = 0;
+    async function optimizeNext() {
+      while (optimizationIndex < uploadableItems.length) {
+        const item = uploadableItems[optimizationIndex];
+        optimizationIndex += 1;
+        updateUploadItem(item.id, { stage: "optimizing" });
+        try {
+          const optimizedFile = await optimizeProjectImage(item.file);
+          if (optimizedFile.size > maximumProjectImageBytes) {
+            throw new Error("The optimized image must be 10 MB or smaller.");
+          }
+          optimizedFiles.set(item.id, optimizedFile);
+          updateUploadItem(item.id, {
+            stage: "queued",
+            warning: optimizedFile.size > largeProjectImageBytes
+              ? "This image is still quite large. Consider replacing it with a smaller version."
+              : undefined,
+          });
+        } catch (optimizationFailure) {
+          updateUploadItem(item.id, {
+            stage: "error",
+            error: optimizationFailure instanceof Error
+              ? optimizationFailure.message
+              : "The photograph could not be optimized.",
+          });
+        }
+      }
     }
 
-    setUploadPreview(URL.createObjectURL(file));
-    const formData = new FormData();
-    formData.set("file", file);
+    await Promise.all(Array.from(
+      { length: Math.min(optimizationConcurrency, uploadableItems.length) },
+      () => optimizeNext(),
+    ));
 
-    startTransition(async () => {
+    let uploadedAny = false;
+    for (const item of uploadableItems) {
+      const optimizedFile = optimizedFiles.get(item.id);
+      if (!optimizedFile) continue;
+      updateUploadItem(item.id, { stage: "uploading" });
       try {
+        const formData = new FormData();
+        formData.set("file", optimizedFile);
         const image = await uploadProjectImage(projectId, formData);
         setImages((currentImages) => [...currentImages, image]);
-        resetUpload();
-        router.refresh();
-      } catch (uploadError) {
-        setError(uploadError instanceof Error ? uploadError.message : "The photograph could not be uploaded.");
-        resetUpload();
+        setUploadItems((currentItems) => currentItems.filter((currentItem) => currentItem.id !== item.id));
+        releasePreview(item.preview);
+        uploadedAny = true;
+      } catch (uploadFailure) {
+        updateUploadItem(item.id, {
+          stage: "error",
+          error: uploadFailure instanceof Error
+            ? uploadFailure.message
+            : "The photograph could not be uploaded.",
+        });
       }
-    });
+    }
+
+    if (uploadedAny) router.refresh();
   }
 
   function runAction(imageId: string, action: ProjectImageAction) {
-    if (!connected || pending) return;
+    if (!connected || busy) return;
 
     const previousImages = images;
     const previousPrimaryId = primaryId;
@@ -118,7 +200,7 @@ export function ProjectImageManager({
     const nextPrimaryId = nextImages[0]?.id ?? primaryId;
     setImages(nextImages);
     setPrimaryId(nextPrimaryId);
-    setError("");
+    setActionError("");
 
     startTransition(async () => {
       try {
@@ -127,7 +209,7 @@ export function ProjectImageManager({
       } catch (actionError) {
         setImages(previousImages);
         setPrimaryId(previousPrimaryId);
-        setError(actionError instanceof Error ? actionError.message : "The photograph could not be updated.");
+        setActionError(actionError instanceof Error ? actionError.message : "The photograph could not be updated.");
       } finally {
         if (action === "delete") setDeleteTargetId(null);
       }
@@ -148,12 +230,12 @@ export function ProjectImageManager({
   }
 
   return (
-    <section className="cms-project-photo-editors" aria-busy={pending}>
+    <section className="cms-project-photo-editors" aria-busy={busy}>
       <div className="cms-project-photo-heading">
         <div><h2>Project photographs</h2><p>The principal image is the cover and always stays first. Choose another principal to move it to the beginning of the gallery.</p></div>
         <span>{String(images.length).padStart(2, "0")} photographs</span>
       </div>
-      {error ? <p className="cms-project-photo-error" role="alert">{error}</p> : null}
+      {actionError ? <p className="cms-project-photo-error" role="alert">{actionError}</p> : null}
       <div className="cms-project-photo-grid">
         {images.map((image, index) => {
           const isPrimary = image.id === primaryId;
@@ -161,18 +243,45 @@ export function ProjectImageManager({
             <article className="cms-project-photo-editor" data-primary={isPrimary || undefined} key={image.id}>
               <div className="cms-project-photo-visual">
                 <div className="cms-project-photo-preview">
-                  <Image src={image.src} alt="" fill sizes="(min-width: 1180px) 24vw, (min-width: 760px) 38vw, 104px" />
-                  <details className="cms-project-photo-menu">
-                    <summary aria-label={`Actions for photograph ${index + 1}`}><CmsIcon name="more" /></summary>
-                    <div role="menu">
-                      <button type="button" role="menuitem" disabled={!connected || pending || isPrimary} onClick={(event) => chooseAction(event, image.id, "make-primary")}>Make principal</button>
-                      <button type="button" role="menuitem" disabled={!connected || pending || isPrimary || index === 1} onClick={(event) => chooseAction(event, image.id, "move-up")}>Move up</button>
-                      <button type="button" role="menuitem" disabled={!connected || pending || isPrimary || index === images.length - 1} onClick={(event) => chooseAction(event, image.id, "move-down")}>Move down</button>
-                      <button className="cms-project-photo-delete" type="button" role="menuitem" disabled={!connected || pending || images.length === 1} onClick={(event) => chooseAction(event, image.id, "delete")}>Delete</button>
+                  <Image src={image.src} alt="" fill sizes="(min-width: 1180px) 24vw, (min-width: 760px) 38vw, calc(100vw - 48px)" />
+                  <div className="cms-project-photo-toolbar">
+                    <div className="cms-project-photo-labels">
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      {isPrimary ? <strong>Principal</strong> : null}
                     </div>
-                  </details>
+                    <div className="cms-project-photo-toolbar-actions">
+                      {!isPrimary ? (
+                        <div className="cms-project-photo-order" aria-label={`Reorder photograph ${index + 1}`}>
+                          <button
+                            type="button"
+                            aria-label={`Move photograph ${index + 1} up`}
+                            title="Move up"
+                            disabled={!connected || busy || index === 1}
+                            onClick={() => runAction(image.id, "move-up")}
+                          >
+                            <CmsIcon name="up" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Move photograph ${index + 1} down`}
+                            title="Move down"
+                            disabled={!connected || busy || index === images.length - 1}
+                            onClick={() => runAction(image.id, "move-down")}
+                          >
+                            <CmsIcon name="down" />
+                          </button>
+                        </div>
+                      ) : null}
+                      <details className="cms-project-photo-menu">
+                        <summary aria-label={`Actions for photograph ${index + 1}`}><CmsIcon name="more" /></summary>
+                        <div role="menu">
+                          <button type="button" role="menuitem" disabled={!connected || busy || isPrimary} onClick={(event) => chooseAction(event, image.id, "make-primary")}>Make principal</button>
+                          <button className="cms-project-photo-delete" type="button" role="menuitem" disabled={!connected || busy || images.length === 1} onClick={(event) => chooseAction(event, image.id, "delete")}>Delete</button>
+                        </div>
+                      </details>
+                    </div>
+                  </div>
                 </div>
-                <div className="cms-project-photo-meta"><span>{String(index + 1).padStart(2, "0")}</span>{isPrimary ? <strong>Principal</strong> : null}</div>
               </div>
               <CmsField
                 id={`${projectId}-${image.id}-alt`}
@@ -188,27 +297,47 @@ export function ProjectImageManager({
             </article>
           );
         })}
+        {uploadItems.map((item) => (
+          <article className="cms-project-photo-editor cms-project-photo-upload cms-project-photo-upload-item" key={item.id}>
+            <div className="cms-project-photo-upload-trigger">
+              <div className="cms-project-photo-preview">
+                {/* Local browser Blob URLs cannot use Next's image optimizer. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.preview} alt="" />
+              </div>
+              <div className="cms-project-photo-upload-copy">
+                <strong>
+                  {item.stage === "optimizing"
+                    ? "Optimizing photograph…"
+                    : item.stage === "uploading"
+                      ? "Uploading photograph…"
+                      : item.stage === "error"
+                        ? "Photograph not uploaded"
+                        : "Waiting to upload…"}
+                </strong>
+                <small title={item.file.name}>{item.file.name}</small>
+                {item.error ? <span className="cms-project-photo-upload-error" role="alert">{item.error}</span> : null}
+                {item.warning ? <span className="cms-project-photo-upload-warning" role="status">{item.warning}</span> : null}
+              </div>
+            </div>
+          </article>
+        ))}
         <article className="cms-project-photo-editor cms-project-photo-upload">
           <label className="cms-project-photo-upload-trigger" htmlFor={`${projectId}-new-image`}>
             <div className="cms-project-photo-preview">
-              {uploadPreview ? (
-                // The local preview is a browser Blob URL, so it cannot use Next's image optimizer.
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={uploadPreview} alt="" />
-              ) : (
-                <span aria-hidden><CmsIcon name="plus" /></span>
-              )}
+              <span aria-hidden><CmsIcon name="plus" /></span>
             </div>
             <div className="cms-project-photo-upload-copy">
-              <strong>{uploadPreview ? "Uploading photograph…" : "Add photograph"}</strong>
-              <small>JPG or WebP, up to 4 MB. It will be placed last in the gallery.</small>
+              <strong>Add photographs</strong>
+              <small>Select one or more JPG or WebP files. Images are optimized before upload; each optimized file may be up to 10 MB.</small>
             </div>
             <input
               className="cms-file-input"
               id={`${projectId}-new-image`}
               type="file"
               accept="image/jpeg,image/webp"
-              disabled={!connected || pending}
+              multiple
+              disabled={!connected || busy}
               onChange={chooseUpload}
             />
           </label>
@@ -217,7 +346,7 @@ export function ProjectImageManager({
       <CmsConfirmDialog
         open={deleteTargetId !== null}
         title="Delete this photograph?"
-        description="This permanently removes it from the project and from the CMS database. This action cannot be undone."
+        description="This permanently removes it from the project, the CMS database, and image storage. This action cannot be undone."
         confirmLabel="Delete photograph"
         pending={pending}
         onCancel={() => setDeleteTargetId(null)}

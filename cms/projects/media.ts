@@ -1,11 +1,12 @@
 import "server-only";
 
+import { maximumProjectImageBytes } from "@/cms/projects/image-policy";
+
 const projectImageTypes = new Map([
   ["image/jpeg", "jpg"],
   ["image/webp", "webp"],
 ]);
 
-const maximumProjectImageBytes = 4_000_000;
 const maximumImageDimension = 20_000;
 
 export type ProjectImageMetadata = {
@@ -125,7 +126,7 @@ export async function projectImageMetadata(file: File): Promise<ProjectImageMeta
   const extension = projectImageTypes.get(file.type);
   if (!extension) throw new Error("Choose a JPG or WebP image.");
   if (file.size === 0) throw new Error("Choose an image before uploading.");
-  if (file.size > maximumProjectImageBytes) throw new Error("The image must be under 4 MB.");
+  if (file.size > maximumProjectImageBytes) throw new Error("The image must be 10 MB or smaller.");
 
   const bytes = new Uint8Array(await file.arrayBuffer());
   const dimensions = file.type === "image/jpeg" ? jpegDimensions(bytes) : webpDimensions(bytes);

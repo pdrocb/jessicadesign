@@ -97,7 +97,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 
 - **Tres testimonios reales**, con nombre y contexto, en `lib/content.ts` (Brittney A., Yvette A., Emily G.). Son de clientas reales: no editar su texto.
 - **Set general de fotografías** en `assets/`, descargadas del Wix vigente y complementadas por la clienta. Alimenta la home y las secciones de servicio.
-- **Look Book inicial con 7 proyectos y 71 fotografías únicas**, importadas de la galería Wix en el orden de su primera aparición pública. Las siete entradas visualmente duplicadas del Wix no se replican. Los originales se normalizaron a WebP, con 2000px máximos en el lado largo, y viven en `public/lookbook/`.
+- **Look Book inicial con 7 proyectos y 71 fotografías únicas**, importadas de la galería Wix en el orden de su primera aparición pública. Las siete entradas visualmente duplicadas del Wix no se replican. Los originales se normalizaron a WebP, con 2000px máximos en el lado largo, y viven en Vercel Blob; `lib/lookbook-blob-sources.json` conserva las URLs del fallback local.
 - **Existe más fotografía sin digitalizar** — archivo de eventos pasados fuera del Wix. Se incorporará al Look Book cuando se recopile.
 - **Existe prensa o publicaciones reales**, aún sin recopilar. Hasta tener logos reales y permiso explícito, la sección "As Featured In" **no se publica**.
 

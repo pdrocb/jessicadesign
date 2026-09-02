@@ -568,11 +568,8 @@
 .cms-project-photo-grid { display: grid; gap: 12px; }
 .cms-project-photo-editor {
   position: relative;
-  display: grid;
+  display: block;
   min-width: 0;
-  grid-template-columns: 104px minmax(0, 1fr);
-  align-items: start;
-  gap: 12px;
   border: 1px solid var(--cms-line);
   border-radius: 12px;
   background: var(--cms-surface);
@@ -580,20 +577,29 @@
 }
 .cms-project-photo-editor[data-primary] { border-color: var(--cms-line-strong); }
 .cms-project-photo-upload { border-style: dashed; background: var(--cms-surface-muted); }
+.cms-project-photo-upload-item { border-style: solid; }
+.cms-project-photo-upload-item .cms-project-photo-upload-trigger { cursor: default; }
+.cms-project-photo-upload-item .cms-project-photo-preview { overflow: hidden; }
 .cms-project-photo-upload-trigger { display: grid; min-width: 0; grid-template-columns: 104px minmax(0, 1fr); align-items: start; gap: 12px; color: inherit; cursor: pointer; }
 .cms-project-photo-upload-trigger:hover .cms-project-photo-preview { border-color: var(--cms-subtle); }
 .cms-project-photo-upload-trigger:has(.cms-file-input:focus-visible) { outline: 3px solid var(--cms-focus-ring); outline-offset: 2px; }
 .cms-project-photo-visual { display: grid; min-width: 0; gap: 8px; }
-.cms-project-photo-preview { position: relative; width: 104px; height: 104px; overflow: visible; border-radius: 8px; background: var(--cms-media-placeholder); }
-.cms-project-photo-preview > img { border-radius: 8px; object-fit: contain; }
+.cms-project-photo-preview { position: relative; width: 100%; height: auto; overflow: visible; aspect-ratio: 4 / 3; border-radius: 8px; background: var(--cms-media-placeholder); }
+.cms-project-photo-preview > img { display: block; width: 100%; height: 100%; border-radius: 8px; object-fit: contain; }
 .cms-project-photo-preview > span { display: grid; width: 100%; height: 100%; place-items: center; color: var(--cms-muted); }
 .cms-project-photo-preview > span svg { width: 24px; height: 24px; }
 .cms-project-photo-upload-copy { display: grid; min-width: 0; gap: 4px; }
 .cms-project-photo-upload-copy strong { color: var(--cms-ink); font-size: 13px; font-weight: 680; }
 .cms-project-photo-upload-copy small { color: var(--cms-muted); font-size: 12px; line-height: 1.45; }
-.cms-project-photo-meta { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 6px; }
-.cms-project-photo-meta span,
-.cms-project-photo-meta strong {
+.cms-project-photo-upload-item .cms-project-photo-upload-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cms-project-photo-toolbar { position: absolute; z-index: 3; inset: 7px 7px auto; display: flex; min-width: 0; align-items: flex-start; justify-content: space-between; gap: 8px; pointer-events: none; }
+.cms-project-photo-labels,
+.cms-project-photo-order,
+.cms-project-photo-toolbar-actions { display: flex; min-width: 0; align-items: center; gap: 6px; }
+.cms-project-photo-toolbar-actions,
+.cms-project-photo-labels { pointer-events: auto; }
+.cms-project-photo-toolbar span,
+.cms-project-photo-toolbar strong {
   border-radius: 999px;
   padding: 3px 7px;
   font-size: 9px;
@@ -603,12 +609,26 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.cms-project-photo-meta span { background: var(--cms-active); color: var(--cms-ink-soft); }
-.cms-project-photo-meta strong { overflow: hidden; background: var(--cms-ink); color: var(--cms-surface); text-overflow: ellipsis; white-space: nowrap; }
+.cms-project-photo-toolbar span { background: color-mix(in srgb, var(--cms-surface) 94%, transparent); color: var(--cms-ink-soft); }
+.cms-project-photo-toolbar strong { overflow: hidden; background: var(--cms-ink); color: var(--cms-surface); text-overflow: ellipsis; white-space: nowrap; }
+.cms-project-photo-order button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--cms-line);
+  border-radius: 8px;
+  background: var(--cms-surface);
+  color: var(--cms-ink-soft);
+}
+.cms-project-photo-order button:hover:not(:disabled) { border-color: var(--cms-line-hover); background: var(--cms-surface-muted); color: var(--cms-ink); }
+.cms-project-photo-order button:focus-visible { outline: 3px solid var(--cms-focus-ring); outline-offset: 2px; }
+.cms-project-photo-order button:disabled { cursor: default; opacity: 0.35; }
+.cms-project-photo-order svg { width: 17px; height: 17px; }
 .cms-project-photo-editor .cms-field-stack { gap: 6px; }
 .cms-project-photo-editor .cms-field-stack > label { font-size: 12px; }
 .cms-project-photo-editor textarea { min-height: 86px; padding: 9px 10px; font-size: 14px; line-height: 1.4; resize: vertical; }
-.cms-project-photo-menu { position: absolute; z-index: 3; top: 7px; right: 7px; }
+.cms-project-photo-menu { position: relative; z-index: 3; }
 .cms-project-photo-menu[open] { z-index: 8; }
 .cms-project-photo-menu > summary {
   display: grid;
@@ -630,7 +650,7 @@
 .cms-project-photo-menu > div {
   position: absolute;
   top: 50px;
-  left: 0;
+  right: 0;
   display: grid;
   width: 168px;
   overflow: hidden;
@@ -663,6 +683,11 @@
   font-size: 12px;
   line-height: 1.45;
 }
+.cms-project-photo-upload-error,
+.cms-project-photo-upload-warning { margin-top: 4px; font-size: 12px; font-weight: 620; line-height: 1.4; }
+.cms-project-photo-upload-error { color: var(--cms-danger, #a33b34); }
+.cms-project-photo-upload-warning { color: var(--cms-warning); }
+.cms-project-photo-editor:not(.cms-project-photo-upload) .cms-field-stack { margin-top: 14px; }
 
 .cms-confirm-dialog {
   width: min(calc(100% - 32px), 440px);
@@ -863,7 +888,6 @@
   .cms-project-photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cms-project-photo-editor { display: block; padding: 12px; }
   .cms-project-photo-preview { width: 100%; height: auto; aspect-ratio: 4 / 3; }
-  .cms-project-photo-meta { justify-content: flex-start; }
   .cms-project-photo-editor .cms-field-stack { margin-top: 14px; }
   .cms-project-photo-upload-trigger { grid-template-columns: 1fr; }
   .cms-project-photo-upload-copy { margin-top: 14px; }
