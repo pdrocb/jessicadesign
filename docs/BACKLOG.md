@@ -7,7 +7,6 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 - **Entrega por correo de inquiries.** El formulario, endpoint, validación y persistencia en Neon ya están activos. Cuando el dominio y el remitente estén verificados, conectar Resend para enviar aviso interno y confirmación a la pareja, actualizando los campos `email_status`, `internal_email_id` y `client_email_id`.
 - **Assets fotográficos propios.** Las fotos de `assets/` se descargaron del Wix vigente de la clienta. Sustituir por arte final optimizado antes de publicar.
 - **Dominio propio.** Producción vive en `jessicadesign.vercel.app`. Actualizar la URL canónica desde Site Settings cuando se conecte el dominio real.
-- **Favicon y open-graph finales.** Los campos y uploads ya existen en Site Settings; falta que la clienta entregue y publique los assets definitivos.
 
 ## Pendientes de la fase impeccable
 

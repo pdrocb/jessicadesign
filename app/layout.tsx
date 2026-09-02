@@ -31,30 +31,21 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
-  const sharingImages = settings.ogImageUrl
-    ? [{ url: settings.ogImageUrl, width: 1200, height: 630, alt: settings.ogImageAlt }]
-    : undefined;
 
   return {
     metadataBase: new URL(settings.siteUrl),
-    title: settings.metaTitle,
-    description: settings.metaDescription,
-    alternates: { canonical: "/" },
+    applicationName: settings.siteName,
     icons: { icon: settings.faviconUrl },
-    openGraph: {
-      title: settings.ogTitle || settings.metaTitle,
-      description: settings.ogDescription || settings.metaDescription,
-      url: "/",
-      siteName: settings.siteName,
-      locale: "en_US",
-      type: "website",
-      images: sharingImages,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: settings.ogTitle || settings.metaTitle,
-      description: settings.ogDescription || settings.metaDescription,
-      images: settings.ogImageUrl ? [settings.ogImageUrl] : undefined,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }

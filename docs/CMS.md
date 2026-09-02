@@ -15,7 +15,7 @@ El sitio incluye un CMS mobile-first en `/admin`. Vive en `cms/` como un módulo
 - Formulario público conectado a `leads` y bandeja de inquiries de solo lectura.
 - Fallback al contenido local si la base no está disponible, para que el sitio público siga funcionando.
 
-Vercel Blob ya almacena el favicon y la imagen Open Graph desde Site Settings. La creación y eliminación de proyectos, la curaduría independiente del Look Book de Home, la carga y la sustitución de sus fotografías siguen pendientes de interfaz; usarán el mismo store. Resend se conectará junto con el dominio para entregar inquiries y, posteriormente, recuperación de contraseña.
+Vercel Blob almacena el favicon y la imagen Open Graph desde Site Settings. El sitio incluye un favicon inicial PNG en `public/favicon.png` y una imagen Open Graph inicial en `public/site/open-graph.png`; Site Settings permite sustituir ambos por una carga futura sin cambios de código. La creación y eliminación de proyectos, la curaduría independiente del Look Book de Home, la carga y la sustitución de sus fotografías siguen pendientes de interfaz; usarán el mismo store. Resend se conectará junto con el dominio para entregar inquiries y, posteriormente, recuperación de contraseña.
 
 ## Estructura reutilizable
 

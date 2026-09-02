@@ -5,25 +5,20 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Cta, SiteFooter } from "@/components/sections";
 import { getCmsProjects } from "@/cms/projects/repository";
 import { getSiteSettings } from "@/cms/settings/repository";
+import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const description =
     "Explore weddings, dinner receptions, and styled celebrations designed by Jessica S. Designs across the Hudson Valley, New York City, and beyond.";
-  return {
+  return createPageMetadata(settings, {
     title: `Look Book | ${settings.siteName}`,
     description,
-    alternates: { canonical: "/look-book" },
-    openGraph: {
-      title: `The Look Book | ${settings.siteName}`,
-      description:
-        "A collection of weddings and celebrations designed down to every detail.",
-      url: "/look-book",
-      images: settings.ogImageUrl
-        ? [{ url: settings.ogImageUrl, width: 1200, height: 630, alt: settings.ogImageAlt }]
-        : undefined,
-    },
-  };
+    pathname: "/look-book",
+    openGraphTitle: `The Look Book | ${settings.siteName}`,
+    openGraphDescription:
+      "A collection of weddings and celebrations designed down to every detail.",
+  });
 }
 
 export const dynamic = "force-dynamic";

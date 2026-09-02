@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Faqs } from "@/components/Faqs";
 import { RevealObserver } from "@/components/RevealObserver";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -15,6 +16,19 @@ import {
 } from "@/components/sections";
 import { getHomeDocument } from "@/cms/content/home";
 import { getSiteSettings } from "@/cms/settings/repository";
+import { createPageMetadata } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return createPageMetadata(settings, {
+    title: settings.metaTitle,
+    description: settings.metaDescription,
+    pathname: "/",
+    openGraphTitle: settings.ogTitle || settings.metaTitle,
+    openGraphDescription: settings.ogDescription || settings.metaDescription,
+  });
+}
 
 export default async function Page() {
   const [content, settings] = await Promise.all([

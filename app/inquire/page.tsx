@@ -4,12 +4,21 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Eyebrow } from "@/components/ui";
 import { inquiry } from "@/lib/content";
 import { getSiteSettings } from "@/cms/settings/repository";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Inquire | Jessica S. Designs",
-  description:
-    "Tell us about your celebration. Every inquiry begins with a complimentary one-hour design consultation.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return createPageMetadata(settings, {
+    title: `Inquire | ${settings.siteName}`,
+    description:
+      "Tell Jessica S. Designs about your wedding or celebration. Every inquiry begins with a complimentary one-hour design consultation.",
+    pathname: "/inquire",
+    openGraphTitle: `Start a Conversation | ${settings.siteName}`,
+    openGraphDescription:
+      "Tell us about your wedding or celebration and begin with a complimentary one-hour design consultation.",
+  });
+}
 
 /**
  * Pantalla propia del inquiry (DESIGN.md §"The inquiry page is its own

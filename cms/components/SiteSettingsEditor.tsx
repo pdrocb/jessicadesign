@@ -38,7 +38,7 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
           urlName="ogImageUrl"
           fileName="ogImageFile"
           accept="image/jpeg,image/png,image/webp"
-          hint="Recommended · 1200 × 630 px · JPG, PNG or WebP · under 4 MB"
+          hint="Current image is the site default · replace it here anytime · 1200 × 630 px · JPG, PNG or WebP · under 4 MB"
           alt={{ name: "ogImageAlt", value: settings.ogImageAlt, required: Boolean(settings.ogImageUrl) }}
         />
       </>

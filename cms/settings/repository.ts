@@ -54,5 +54,19 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsDocument> => 
     }),
   ) as Partial<SiteSettingsDocument>;
 
-  return { ...defaultSiteSettings, ...sanitized };
+  const settings = { ...defaultSiteSettings, ...sanitized };
+
+  // Las instalaciones existentes pueden haber guardado el valor vacío que
+  // precedía a la imagen OG incluida con el sitio. En ese caso la imagen
+  // inicial sigue apareciendo en el CMS y en los metatags, sin migración
+  // manual de la base de datos.
+  if (!settings.ogImageUrl) {
+    settings.ogImageUrl = defaultSiteSettings.ogImageUrl;
+    settings.ogImageAlt = defaultSiteSettings.ogImageAlt;
+  }
+  if (settings.faviconUrl === "/favicon.ico") {
+    settings.faviconUrl = defaultSiteSettings.faviconUrl;
+  }
+
+  return settings;
 });

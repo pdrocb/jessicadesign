@@ -23,9 +23,10 @@ export const defaultSiteSettings: SiteSettingsDocument = {
   ogTitle: "Jessica S. Designs | Wedding & Event Design",
   ogDescription:
     "Boutique wedding design and styling for thoughtfully created celebrations in the Hudson Valley, NYC, and Connecticut.",
-  ogImageUrl: "",
-  ogImageAlt: "Jessica S. Designs wedding and event styling",
-  faviconUrl: "/favicon.ico",
+  ogImageUrl: "/site/open-graph.png",
+  ogImageAlt:
+    "Outdoor wedding dinner table designed with white florals, taper candles and warm wooden chairs",
+  faviconUrl: "/favicon.png",
   phone: "845 · 375 · 7820",
   publicEmail: "",
   instagram: "https://www.instagram.com/jessicasalomondesigns__",
