@@ -6,6 +6,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireSession } from "@/cms/auth/session";
 import { getCmsDatabase } from "@/cms/database/client";
+import {
+  flushProjectBlobDeletions,
+  isManagedBlobUrl,
+} from "@/cms/projects/blob-cleanup";
 import { projectImageMetadata } from "@/cms/projects/media";
 import type { LookbookImage } from "@/lib/lookbook";
 
@@ -15,21 +19,23 @@ export type ProjectImageAction =
   | "move-down"
   | "delete";
 
+export type ProjectSaveState = {
+  status: "idle" | "saved" | "error";
+  message: string;
+  field?: string;
+};
+
+export type ProjectCreateState = {
+  status: "idle" | "error";
+  message: string;
+};
+
 type ProjectImageRow = {
   id: string;
   src: string;
   position: number;
   is_primary: boolean;
 };
-
-function isManagedBlobUrl(source: string) {
-  try {
-    const url = new URL(source);
-    return url.protocol === "https:" && url.hostname.endsWith(".public.blob.vercel-storage.com");
-  } catch {
-    return false;
-  }
-}
 
 function revalidateProjects() {
   revalidatePath("/");
@@ -40,6 +46,114 @@ function revalidateProjects() {
 function revalidateProject(projectId: string) {
   revalidateProjects();
   revalidatePath(`/admin/projects/${projectId}`);
+}
+
+function slugifyProjectTitle(title: string) {
+  return title
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 72) || "project";
+}
+
+async function availableProjectSlug(title: string) {
+  const base = slugifyProjectTitle(title);
+  const sql = getCmsDatabase();
+  const rows = (await sql.query(
+    "SELECT slug FROM cms_projects WHERE slug = $1 OR slug LIKE $2",
+    [base, `${base}-%`],
+  )) as { slug: string }[];
+  const existing = new Set(rows.map((row) => row.slug));
+  if (!existing.has(base)) return base;
+  let suffix = 2;
+  while (existing.has(`${base}-${suffix}`)) suffix += 1;
+  return `${base}-${suffix}`;
+}
+
+export async function createProject(
+  _previousState: ProjectCreateState,
+  formData: FormData,
+): Promise<ProjectCreateState> {
+  await requireSession();
+  const title = String(formData.get("title") ?? "").trim();
+  if (!title) return { status: "error", message: "Enter a project title." };
+  if (title.length > 160) {
+    return { status: "error", message: "Keep the project title under 160 characters." };
+  }
+
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) {
+    return { status: "error", message: "Choose the first cover photograph." };
+  }
+
+  let metadata;
+  try {
+    metadata = await projectImageMetadata(file);
+  } catch (error) {
+    return {
+      status: "error",
+      message: error instanceof Error ? error.message : "The cover photograph could not be read.",
+    };
+  }
+
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return { status: "error", message: "Image uploads are not configured yet." };
+  }
+
+  const projectId = `project-${randomUUID()}`;
+  const imageId = `project-image-${randomUUID()}`;
+  const slug = await availableProjectSlug(title);
+  const blob = await put(`projects/${projectId}/${imageId}.${metadata.extension}`, file, {
+    access: "public",
+    addRandomSuffix: true,
+    cacheControlMaxAge: 31_536_000,
+    contentType: file.type,
+  });
+
+  try {
+    const sql = getCmsDatabase();
+    await sql.transaction((transaction) => [
+      transaction.query(
+        `INSERT INTO cms_projects (
+           id, slug, title, position, published, featured, cover_image_id
+         )
+         VALUES (
+           $1, $2, $3,
+           (SELECT COALESCE(MAX(position), 0) + 1 FROM cms_projects),
+           false, false, $4
+         )`,
+        [projectId, slug, title, imageId],
+      ),
+      transaction.query(
+        `INSERT INTO cms_project_images (
+           id, project_id, src, alt, width, height, position
+         )
+         VALUES ($1, $2, $3, $4, $5, $6, 1)`,
+        [
+          imageId,
+          projectId,
+          blob.url,
+          `Design details from ${title}, cover photograph`,
+          metadata.width,
+          metadata.height,
+        ],
+      ),
+      transaction.query(
+        "INSERT INTO cms_seed_state (content_key) VALUES ('lookbook') ON CONFLICT (content_key) DO NOTHING",
+      ),
+    ]);
+  } catch {
+    await del(blob.url).catch(() => undefined);
+    return {
+      status: "error",
+      message: "The project could not be created. Check your connection and try again.",
+    };
+  }
+
+  revalidateProject(projectId);
+  redirect(`/admin/projects/${projectId}`);
 }
 
 export async function uploadProjectImage(projectId: string, formData: FormData): Promise<LookbookImage> {
@@ -98,21 +212,31 @@ export async function uploadProjectImage(projectId: string, formData: FormData):
   }
 }
 
-export async function saveProject(projectId: string, formData: FormData) {
+export async function saveProject(
+  projectId: string,
+  _previousState: ProjectSaveState,
+  formData: FormData,
+): Promise<ProjectSaveState> {
   await requireSession();
   const text = (key: string) => String(formData.get(key) ?? "").trim() || null;
   const title = text("title");
-  if (!title) throw new Error("Project title is required.");
+  if (!title) return { status: "error", message: "Enter a project title before saving.", field: "title" };
   const imageAlts = Array.from(formData.entries())
     .filter(([key, value]) => key.startsWith("imageAlt:") && typeof value === "string")
     .map(([key, value]) => ({ id: key.slice("imageAlt:".length), alt: String(value).trim() }));
-  if (imageAlts.some((image) => !image.alt || image.alt.length > 500)) {
-    throw new Error("Every photograph needs alternative text under 500 characters.");
+  const invalidImageAlt = imageAlts.find((image) => !image.alt || image.alt.length > 500);
+  if (invalidImageAlt) {
+    return {
+      status: "error",
+      message: "Add alternative text under 500 characters to every photograph.",
+      field: `imageAlt:${invalidImageAlt.id}`,
+    };
   }
 
-  const sql = getCmsDatabase();
-  await sql.query(
-    `WITH updated_project AS (
+  try {
+    const sql = getCmsDatabase();
+    await sql.query(
+      `WITH updated_project AS (
        UPDATE cms_projects
         SET title = $2,
             subtitle = $3,
@@ -133,16 +257,22 @@ export async function saveProject(projectId: string, formData: FormData) {
        RETURNING image.id
      )
      SELECT id FROM updated_project`,
-    [
-      projectId,
-      title,
-      text("subtitle"),
-      text("venue"),
-      text("location"),
-      text("photographer"),
-      JSON.stringify(imageAlts),
-    ],
-  );
+      [
+        projectId,
+        title,
+        text("subtitle"),
+        text("venue"),
+        text("location"),
+        text("photographer"),
+        JSON.stringify(imageAlts),
+      ],
+    );
+  } catch {
+    return {
+      status: "error",
+      message: "The project could not be saved. Check your connection and try again.",
+    };
+  }
   revalidateProject(projectId);
   redirect("/admin/projects");
 }
@@ -153,11 +283,69 @@ export async function setProjectPublished(projectId: string, published: boolean)
   await sql.query(
     `UPDATE cms_projects
         SET published = $2,
+            featured = CASE WHEN $2 THEN featured ELSE false END,
             updated_at = now()
       WHERE id = $1`,
     [projectId, published],
   );
   revalidateProject(projectId);
+}
+
+export async function setProjectFeatured(
+  projectId: string,
+  featured: boolean,
+): Promise<{ ok: boolean; message?: string }> {
+  await requireSession();
+  const sql = getCmsDatabase();
+
+  try {
+    if (!featured) {
+      await sql.query(
+        `UPDATE cms_projects
+            SET featured = false,
+                updated_at = now()
+          WHERE id = $1`,
+        [projectId],
+      );
+    } else {
+      const rows = (await sql.query(
+        `UPDATE cms_projects project
+            SET featured = true,
+                updated_at = now()
+          WHERE project.id = $1
+            AND project.published = true
+            AND (
+              SELECT count(*)
+                FROM cms_projects selected
+               WHERE selected.featured = true
+                 AND selected.id <> project.id
+            ) < 7
+        RETURNING project.id`,
+        [projectId],
+      )) as { id: string }[];
+
+      if (!rows[0]) {
+        const projectRows = (await sql.query(
+          "SELECT published FROM cms_projects WHERE id = $1 LIMIT 1",
+          [projectId],
+        )) as { published: boolean }[];
+        return {
+          ok: false,
+          message: projectRows[0]?.published
+            ? "Home can show up to 7 projects. Remove one before adding another."
+            : "Publish this project before showing it on Home.",
+        };
+      }
+    }
+  } catch {
+    return {
+      ok: false,
+      message: "Couldn’t update Home visibility. Try again.",
+    };
+  }
+
+  revalidateProject(projectId);
+  return { ok: true };
 }
 
 export async function moveProject(projectId: string, direction: "up" | "down") {
@@ -187,6 +375,47 @@ export async function moveProject(projectId: string, direction: "up" | "down") {
     [projectId],
   );
   revalidateProject(projectId);
+}
+
+export async function deleteProject(projectId: string) {
+  await requireSession();
+  const sql = getCmsDatabase();
+  const projectRows = (await sql.query(
+    "SELECT id FROM cms_projects WHERE id = $1 LIMIT 1",
+    [projectId],
+  )) as { id: string }[];
+
+  if (!projectRows[0]) throw new Error("Project not found.");
+
+  await sql.transaction((transaction) => [
+    transaction.query(
+      `INSERT INTO cms_blob_deletion_queue (project_id, url)
+       SELECT project.id, image.src
+         FROM (
+           SELECT id FROM cms_projects WHERE id = $1 FOR UPDATE
+         ) project
+         JOIN cms_project_images image ON image.project_id = project.id
+        WHERE image.src LIKE 'https://%.public.blob.vercel-storage.com/%'
+       ON CONFLICT (project_id, url) DO NOTHING`,
+      [projectId],
+    ),
+    transaction.query(
+      `WITH deleted_project AS (
+         DELETE FROM cms_projects
+          WHERE id = $1
+          RETURNING position
+       )
+       UPDATE cms_projects
+          SET position = position - 1,
+              updated_at = now()
+        WHERE position > COALESCE((SELECT position FROM deleted_project), 2147483647)`,
+      [projectId],
+    ),
+  ]);
+
+  await flushProjectBlobDeletions(projectId);
+  revalidateProject(projectId);
+  redirect("/admin/projects");
 }
 
 export async function updateProjectImage(
@@ -229,7 +458,7 @@ export async function updateProjectImage(
       orderedIds[currentIndex - 1],
     ];
   } else if (action === "move-down") {
-    if (currentIndex === 0) throw new Error("The principal photograph is pinned first.");
+    if (currentIndex === 0) throw new Error("The cover photograph is pinned first.");
     if (currentIndex === rows.length - 1) {
       throw new Error("This photograph is already last.");
     }
@@ -273,13 +502,9 @@ export async function updateProjectImage(
     transaction.query(
       `UPDATE cms_projects
           SET cover_image_id = $2,
-              home_cover_image_id = CASE
-                WHEN $3::boolean AND home_cover_image_id = $4 THEN $2
-                ELSE home_cover_image_id
-              END,
               updated_at = now()
         WHERE id = $1`,
-      [projectId, nextPrimaryId, action === "delete", imageId],
+      [projectId, nextPrimaryId],
     ),
   ]);
 

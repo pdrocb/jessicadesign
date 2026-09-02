@@ -13,16 +13,19 @@ export function ProjectPublishedToggle({
   disabled: boolean;
 }) {
   const [checked, setChecked] = useState(published);
+  const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
   function changePublished(nextPublished: boolean) {
     const previous = checked;
+    setError("");
     setChecked(nextPublished);
     startTransition(async () => {
       try {
         await setProjectPublished(projectId, nextPublished);
       } catch {
         setChecked(previous);
+        setError("Couldn’t update visibility. Try again.");
       }
     });
   }
@@ -35,7 +38,8 @@ export function ProjectPublishedToggle({
         disabled={disabled || pending}
         onChange={(event) => changePublished(event.currentTarget.checked)}
       />
-      <span>Published</span>
+      <span aria-live="polite">{pending ? "Updating…" : checked ? "Published" : "Draft"}</span>
+      {error ? <small role="alert">{error}</small> : null}
     </label>
   );
 }

@@ -33,6 +33,9 @@ No se trasladan tokens de marca al CMS. El logo identifica la instalación, pero
 - Las variantes son explícitas y acotadas; se evita acumular booleanos que produzcan combinaciones ambiguas.
 - Los campos de formulario se alinean al inicio de su celda. El texto de ayuda pertenece al campo, pero nunca cambia la geometría del control vecino.
 - Labels, descripciones y errores se conectan con atributos accesibles desde la primitiva, no se reconstruyen en cada pantalla.
+- Todo editor persistente comparte cuatro estados observables: `Unsaved`, `Saving`, `Saved` y `Error`. Un error nunca limpia `dirty`, permite reintento y, cuando identifica un campo, abre su sección y mueve el foco al control.
+- Una salida interna con cambios pendientes usa `CmsUnsavedChangesGuard`; recargar o cerrar la pestaña conserva además la protección nativa `beforeunload`.
+- Los encabezados operativos usan `CmsPageHeader`: título, una frase contextual y, como máximo, una acción primaria acompañada por una secundaria cuando aporta salida o preview.
 
 ## Feedback y mejora continua
 

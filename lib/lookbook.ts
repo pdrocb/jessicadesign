@@ -8,12 +8,6 @@ import blobSources from "@/lib/lookbook-blob-sources.json";
  * forma: proyecto publicado, portada, posición y fotografías ordenadas.
  */
 
-export type HomeLookbookShape =
-  | "wide"
-  | "tall"
-  | "portraitPair"
-  | "square";
-
 export type LookbookImage = {
   id: string;
   src: string;
@@ -36,13 +30,17 @@ export type LookbookProject = {
   position: number;
   published: boolean;
   featured: boolean;
-  featuredPosition?: number;
-  homeShape: HomeLookbookShape;
-  homeCoverImageId?: string;
   /** La portada del proyecto debe ser horizontal. */
   coverImageId: string;
   previewImageCount: number;
   images: readonly LookbookImage[];
+};
+
+export type HomeLookbookProject = Pick<
+  LookbookProject,
+  "id" | "slug" | "title" | "venue" | "location" | "position"
+> & {
+  cover: LookbookImage;
 };
 
 function images(
@@ -77,11 +75,9 @@ const records: readonly LookbookProject[] = [
     venue: "The Thayer Hotel",
     location: "West Point, NY",
     photographer: "Tara Kearsing",
-    position: 1,
+    position: 8,
     published: true,
-    featured: true,
-    featuredPosition: 1,
-    homeShape: "wide",
+    featured: false,
     coverImageId: "emily-moses-01",
     previewImageCount: 5,
     images: images("emily-moses", "Emily & Moses", [
@@ -96,12 +92,9 @@ const records: readonly LookbookProject[] = [
     title: "Lucas & Will",
     venue: "Private Residence",
     photographer: "M&M Photomemories",
-    position: 2,
+    position: 1,
     published: true,
     featured: true,
-    featuredPosition: 2,
-    homeShape: "tall",
-    homeCoverImageId: "lucas-will-01",
     coverImageId: "lucas-will-01",
     previewImageCount: 5,
     images: images("lucas-will", "Lucas & Will", [
@@ -117,12 +110,9 @@ const records: readonly LookbookProject[] = [
     venue: "B Social",
     location: "Port Chester, NY",
     photographer: "Hillary C. Photos",
-    position: 3,
+    position: 5,
     published: true,
     featured: true,
-    featuredPosition: 3,
-    homeShape: "portraitPair",
-    homeCoverImageId: "custom-tablescape-04",
     coverImageId: "custom-tablescape-01",
     previewImageCount: 5,
     images: images("custom-tablescape", "Custom Tablescape", [
@@ -139,12 +129,9 @@ const records: readonly LookbookProject[] = [
     venue: "Private Residence",
     location: "Gardiner, NY",
     photographer: "Lauren Nemeroff & Shawn McLaws",
-    position: 4,
+    position: 2,
     published: true,
     featured: true,
-    featuredPosition: 4,
-    homeShape: "portraitPair",
-    homeCoverImageId: "mckenzie-jordan-01",
     coverImageId: "mckenzie-jordan-01",
     previewImageCount: 5,
     images: images("mckenzie-jordan", "Mckenzie & Jordan", [
@@ -161,12 +148,9 @@ const records: readonly LookbookProject[] = [
     venue: "B Social",
     location: "Port Chester, NY",
     photographer: "Sammy Finch Photography",
-    position: 5,
+    position: 3,
     published: true,
     featured: true,
-    featuredPosition: 5,
-    homeShape: "square",
-    homeCoverImageId: "morgan-garrett-07",
     coverImageId: "morgan-garrett-01",
     previewImageCount: 5,
     images: images("morgan-garrett", "Morgan & Garrett", [
@@ -183,12 +167,9 @@ const records: readonly LookbookProject[] = [
     venue: "Helen Mills Event Space",
     location: "New York, NY",
     photographer: "Shiloh Leath Photography & JSD",
-    position: 6,
+    position: 4,
     published: true,
     featured: true,
-    featuredPosition: 6,
-    homeShape: "square",
-    homeCoverImageId: "isabelle-marshall-01",
     coverImageId: "isabelle-marshall-01",
     previewImageCount: 5,
     images: images("isabelle-marshall", "Isabelle & Marshall", [
@@ -198,21 +179,40 @@ const records: readonly LookbookProject[] = [
     ]),
   },
   {
-    id: "project-open-house-summer-tablescape",
-    slug: "open-house-summer-tablescape",
-    title: "Open House Summer Tablescape",
-    photographer: "M.M Photo Memories",
+    id: "project-2ae6763e-333f-47df-915f-c69c8fc0678e",
+    slug: "cori-ezra",
+    title: "Cori & Ezra",
+    venue: "Blackwalnut Farm",
+    location: "Saugerties, NY",
+    position: 6,
+    published: true,
+    featured: true,
+    coverImageId: "cori-ezra-01",
+    previewImageCount: 5,
+    images: images("cori-ezra", "Cori & Ezra", [
+      [1333, 2000], [1333, 2000], [2000, 1333], [1333, 2000],
+      [2000, 1333], [1333, 2000], [1333, 2000], [1333, 2000],
+      [1333, 2000], [1333, 2000], [1333, 2000], [2000, 1333],
+      [1333, 2000],
+    ]),
+  },
+  {
+    id: "project-41e9740f-abc8-4c73-9474-245b7895236a",
+    slug: "garden-chic-styled-shoot-picnic",
+    title: "Garden chic styled shoot Picnic",
+    location: "Hudson Valley, New York",
     position: 7,
     published: true,
     featured: true,
-    featuredPosition: 7,
-    homeShape: "square",
-    coverImageId: "open-house-summer-tablescape-01",
-    previewImageCount: 3,
+    coverImageId: "garden-chic-styled-shoot-picnic-01",
+    previewImageCount: 5,
     images: images(
-      "open-house-summer-tablescape",
-      "Open House Summer Tablescape",
-      [[2000, 1126], [2000, 1126], [2000, 1126], [2000, 1126]],
+      "garden-chic-styled-shoot-picnic",
+      "Garden chic styled shoot Picnic",
+      [
+        [2000, 1334], [2000, 1334], [1334, 2000],
+        [1334, 2000], [1334, 2000], [1334, 2000],
+      ],
     ),
   },
 ];
@@ -234,25 +234,14 @@ export function getPublishedLookbookProjects(): LookbookProject[] {
 export function getFeaturedLookbookProjects(): LookbookProject[] {
   return getPublishedLookbookProjects()
     .filter((project) => project.featured)
-    .sort(
-      (a, b) =>
-        (a.featuredPosition ?? a.position) -
-        (b.featuredPosition ?? b.position),
-    );
+    .sort((a, b) => a.position - b.position)
+    .slice(0, 7);
 }
 
 export function getProjectCover(project: LookbookProject): LookbookImage {
   return (
     project.images.find((image) => image.id === project.coverImageId) ??
     project.images[0]
-  );
-}
-
-export function getHomeProjectCover(project: LookbookProject): LookbookImage {
-  return (
-    project.images.find(
-      (image) => image.id === (project.homeCoverImageId ?? project.coverImageId),
-    ) ?? getProjectCover(project)
   );
 }
 

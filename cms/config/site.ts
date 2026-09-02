@@ -2,7 +2,6 @@ import {
   faqs,
   founderStory,
   images,
-  lookbookIntro,
   process,
   quotes,
   services,
@@ -77,15 +76,15 @@ export const homeSections: readonly CmsSectionDefinition[] = [
     title: "Hero",
     description: "Opening message, actions and main photograph",
     fields: [
-      { key: "hero.eyebrow", label: "Eyebrow", type: "text" },
-      { key: "hero.lead", label: "Headline — line 1", type: "text" },
+      { key: "hero.eyebrow", label: "Small label above headline", type: "text" },
+      { key: "hero.lead", label: "Headline — first line", type: "text" },
       {
         key: "hero.feeling",
-        label: "Headline — line 2",
+        label: "Headline — emphasized line",
         type: "text",
         hint: "The final word receives the italic treatment automatically.",
       },
-      { key: "hero.tail", label: "Headline — line 3", type: "text" },
+      { key: "hero.tail", label: "Headline — final line", type: "text" },
       { key: "hero.intro", label: "Introduction", type: "textarea", wide: true },
       { key: "hero.primaryLabel", label: "Primary button", type: "text" },
       { key: "hero.secondaryLabel", label: "Secondary link", type: "text" },
@@ -104,7 +103,7 @@ export const homeSections: readonly CmsSectionDefinition[] = [
     fields: [
       { key: "philosophy.eyebrow", label: "Section label", type: "text" },
       { key: "philosophy.heading", label: "Statement — opening", type: "textarea", wide: true },
-      { key: "philosophy.emphasis", label: "Statement — italic ending", type: "text" },
+      { key: "philosophy.emphasis", label: "Statement — emphasized ending", type: "text" },
       { key: "philosophy.paragraphOne", label: "First paragraph", type: "textarea", wide: true },
       { key: "philosophy.paragraphTwo", label: "Second paragraph", type: "textarea", wide: true },
       imageField(
@@ -142,16 +141,6 @@ export const homeSections: readonly CmsSectionDefinition[] = [
         ),
       ],
     })),
-  },
-  {
-    id: "look-book",
-    title: "Featured Look Book",
-    description: "Home introduction; project imagery is managed separately",
-    fields: [
-      { key: "lookbook.eyebrow", label: "Section label", type: "text" },
-      { key: "lookbook.heading", label: "Heading", type: "textarea", wide: true },
-      { key: "lookbook.description", label: "Description", type: "textarea", wide: true },
-    ],
   },
   {
     id: "process",
@@ -236,7 +225,7 @@ export const homeSections: readonly CmsSectionDefinition[] = [
     fields: [
       { key: "testimonials.eyebrow", label: "Section label", type: "text" },
       { key: "testimonials.lead", label: "Heading — opening", type: "text" },
-      { key: "testimonials.emphasis", label: "Heading — italic word", type: "text" },
+      { key: "testimonials.emphasis", label: "Heading — emphasized word", type: "text" },
       { key: "testimonials.tail", label: "Heading — closing", type: "text" },
     ],
   },
@@ -300,9 +289,6 @@ export const defaultHomeDocument: HomeDocument = {
       [`expertise.items.${index + 1}.imageAlt`, service.name],
     ]),
   ),
-  "lookbook.eyebrow": lookbookIntro.eyebrow,
-  "lookbook.heading": lookbookIntro.heading,
-  "lookbook.description": lookbookIntro.description,
   "process.eyebrow": process.eyebrow,
   "process.heading": process.heading,
   "process.intro": process.intro,

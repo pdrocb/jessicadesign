@@ -1,16 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CmsIcon } from "@/cms/components/CmsIcon";
+import { CmsPageHeader } from "@/cms/components/ui/CmsPageHeader";
+import { ProjectHomeToggle } from "@/cms/components/ProjectHomeToggle";
 import { ProjectPublishedToggle } from "@/cms/components/ProjectPublishedToggle";
 import { moveProject } from "@/cms/projects/actions";
 import type { LookbookProject } from "@/lib/lookbook";
 
 export function ProjectsEditor({ projects, connected }: { projects: LookbookProject[]; connected: boolean }) {
+  const homeProjectCount = projects.filter((project) => project.featured).length;
+  const homeLimitReached = homeProjectCount >= 7;
+
   return (
     <div>
-      <div className="cms-page-heading">
-        <div><h1>Look Book</h1><p>Manage project visibility and display order, or open a project to edit it.</p></div>
-      </div>
+      <CmsPageHeader
+        title="Look Book"
+        description={`Manage publication, Home visibility and the shared display order. ${homeProjectCount} of 7 projects are shown on Home.`}
+        actions={
+          <>
+            <a className="cms-secondary-link" href="/look-book" target="_blank" rel="noreferrer">View live page</a>
+            {connected ? <Link className="cms-primary-link" href="/admin/projects/new">New project</Link> : null}
+          </>
+        }
+      />
       {!connected ? (
         <p className="cms-connection-note">Previewing the current projects. Connect Neon to enable editing, publishing and ordering.</p>
       ) : null}
@@ -31,10 +43,29 @@ export function ProjectsEditor({ projects, connected }: { projects: LookbookProj
                 <span className="cms-project-disclosure"><CmsIcon name="down" /></span>
               </Link>
               <div className="cms-project-index-actions">
-                <ProjectPublishedToggle projectId={project.id} published={project.published} disabled={!connected} />
+                <div className="cms-project-visibility-controls">
+                  <ProjectPublishedToggle
+                    key={`published-${project.published}`}
+                    projectId={project.id}
+                    published={project.published}
+                    disabled={!connected}
+                  />
+                  <ProjectHomeToggle
+                    key={`home-${project.published}-${project.featured}`}
+                    projectId={project.id}
+                    featured={project.featured}
+                    published={project.published}
+                    disabled={!connected}
+                    limitReached={homeLimitReached}
+                  />
+                </div>
                 <div className="cms-project-order">
-                  <form action={moveProject.bind(null, project.id, "up")}><button disabled={!connected || index === 0}>Move up</button></form>
-                  <form action={moveProject.bind(null, project.id, "down")}><button disabled={!connected || index === projects.length - 1}>Move down</button></form>
+                  <form action={moveProject.bind(null, project.id, "up")}>
+                    <button aria-label={`Move ${project.title} up`} title="Move up" disabled={!connected || index === 0}><CmsIcon name="up" /></button>
+                  </form>
+                  <form action={moveProject.bind(null, project.id, "down")}>
+                    <button aria-label={`Move ${project.title} down`} title="Move down" disabled={!connected || index === projects.length - 1}><CmsIcon name="down" /></button>
+                  </form>
                 </div>
               </div>
             </article>

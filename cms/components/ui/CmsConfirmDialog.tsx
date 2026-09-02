@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { CmsIcon } from "@/cms/components/CmsIcon";
+import { CmsIcon, type CmsIconName } from "@/cms/components/CmsIcon";
 
 type CmsConfirmDialogProps = {
   open: boolean;
@@ -9,6 +9,9 @@ type CmsConfirmDialogProps = {
   description: string;
   confirmLabel: string;
   pending?: boolean;
+  pendingLabel?: string;
+  tone?: "danger" | "neutral";
+  icon?: CmsIconName;
   onCancel: () => void;
   onConfirm: () => void;
 };
@@ -19,6 +22,9 @@ export function CmsConfirmDialog({
   description,
   confirmLabel,
   pending = false,
+  pendingLabel = "Working…",
+  tone = "danger",
+  icon = "trash",
   onCancel,
   onConfirm,
 }: CmsConfirmDialogProps) {
@@ -50,6 +56,7 @@ export function CmsConfirmDialog({
     <dialog
       ref={dialogRef}
       className="cms-confirm-dialog"
+      data-tone={tone}
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
       onCancel={(event) => {
@@ -60,14 +67,14 @@ export function CmsConfirmDialog({
         if (event.target === event.currentTarget && !pending) onCancel();
       }}
     >
-      <div className="cms-confirm-dialog-icon"><CmsIcon name="trash" /></div>
+      <div className="cms-confirm-dialog-icon"><CmsIcon name={icon} /></div>
       <div className="cms-confirm-dialog-copy">
         <h2 id={titleId}>{title}</h2>
         <p id={descriptionId}>{description}</p>
       </div>
       <div className="cms-confirm-dialog-actions">
         <button ref={cancelRef} className="cms-confirm-cancel" type="button" disabled={pending} onClick={onCancel}>Cancel</button>
-        <button className="cms-confirm-delete" type="button" disabled={pending} onClick={onConfirm}>{pending ? "Deleting…" : confirmLabel}</button>
+        <button className="cms-confirm-delete" type="button" disabled={pending} onClick={onConfirm}>{pending ? pendingLabel : confirmLabel}</button>
       </div>
     </dialog>
   );

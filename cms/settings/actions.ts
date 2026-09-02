@@ -12,6 +12,21 @@ import {
 export type SiteSettingsSaveState = {
   status: "idle" | "saved" | "error";
   message: string;
+  field?: string;
+};
+
+const fieldLabels: Record<string, string> = {
+  siteName: "Site name",
+  siteUrl: "Primary website address",
+  metaTitle: "Default meta title",
+  metaDescription: "Default meta description",
+  ogTitle: "Sharing title",
+  ogDescription: "Sharing description",
+  ogImageAlt: "Sharing image alternative text",
+  phone: "Contact phone",
+  publicEmail: "Public email",
+  instagram: "Instagram URL",
+  facebook: "Facebook URL",
 };
 
 const textLimits: Record<Exclude<keyof SiteSettingsDocument, "ogImageUrl" | "faviconUrl">, number> = {
@@ -83,23 +98,30 @@ export async function saveSiteSettings(
 
   for (const [key, limit] of Object.entries(textLimits) as [keyof typeof textLimits, number][]) {
     const value = textValue(formData, key);
-    if (value.length > limit) return { status: "error", message: `${key} is too long.` };
+    if (value.length > limit) {
+      return {
+        status: "error",
+        message: `${fieldLabels[key]} is too long.`,
+        field: key,
+      };
+    }
     data[key] = value;
   }
 
   if (!data.siteName || !data.siteUrl || !data.metaTitle || !data.metaDescription) {
-    return { status: "error", message: "Complete the required SEO fields before saving." };
+    const field = !data.siteName ? "siteName" : !data.siteUrl ? "siteUrl" : !data.metaTitle ? "metaTitle" : "metaDescription";
+    return { status: "error", message: "Complete the required search fields before saving.", field };
   }
   if (!isHttpUrl(data.siteUrl)) {
-    return { status: "error", message: "Site URL must be a complete http or https URL." };
+    return { status: "error", message: "Enter a complete http or https website address.", field: "siteUrl" };
   }
   for (const key of ["instagram", "facebook"] as const) {
     if (data[key] && !isHttpUrl(data[key])) {
-      return { status: "error", message: `${key} must be a complete URL.` };
+      return { status: "error", message: `Enter a complete ${fieldLabels[key]}.`, field: key };
     }
   }
   if (data.publicEmail && !/^\S+@\S+\.\S+$/.test(data.publicEmail)) {
-    return { status: "error", message: "Enter a valid public email address." };
+    return { status: "error", message: "Enter a valid public email address.", field: "publicEmail" };
   }
 
   data.ogTitle ||= data.metaTitle;
@@ -107,10 +129,10 @@ export async function saveSiteSettings(
   data.ogImageUrl = textValue(formData, "ogImageUrl");
   data.faviconUrl = textValue(formData, "faviconUrl") || defaultSiteSettings.faviconUrl;
   if (data.ogImageUrl && !isSafeMediaSource(data.ogImageUrl)) {
-    return { status: "error", message: "The current sharing image URL is invalid." };
+    return { status: "error", message: "The current sharing image address is invalid.", field: "ogImageUrl" };
   }
   if (!isSafeMediaSource(data.faviconUrl)) {
-    return { status: "error", message: "The current favicon URL is invalid." };
+    return { status: "error", message: "The current favicon address is invalid.", field: "faviconUrl" };
   }
 
   const ogImage = formData.get("ogImageFile");
@@ -127,11 +149,12 @@ export async function saveSiteSettings(
     return {
       status: "error",
       message: error instanceof Error ? error.message : "The image could not be uploaded.",
+      field: ogImage instanceof File && ogImage.size > 0 ? "ogImageFile" : "faviconFile",
     };
   }
 
   if (data.ogImageUrl && !data.ogImageAlt) {
-    return { status: "error", message: "The sharing image needs alternative text." };
+    return { status: "error", message: "The sharing image needs alternative text.", field: "ogImageAlt" };
   }
 
   const sql = getCmsDatabase();

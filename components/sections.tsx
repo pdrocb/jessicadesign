@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   founderStory,
-  homeLookbook,
   images,
   lookbookIntro,
   process,
@@ -20,6 +19,7 @@ import {
 import { TestimonialRail } from "@/components/TestimonialRail";
 import { FounderStoryDialog } from "@/components/FounderStoryDialog";
 import type { HomeDocument } from "@/cms/content/home";
+import type { HomeLookbookProject } from "@/lib/lookbook";
 import { homeTestimonials, homeText } from "@/cms/content/model";
 import { phoneHref, type SiteSettingsDocument } from "@/cms/settings/config";
 
@@ -487,7 +487,7 @@ const SPAN = {
 const RATIO = {
   wide: "aspect-[3/2]",
   tall: "aspect-[3/4] lg:aspect-auto lg:min-h-0 lg:flex-1",
-  portraitPair: "aspect-[3/4] lg:aspect-[4/5]",
+  portraitPair: "aspect-[5/4] md:aspect-[3/4] lg:aspect-[5/4]",
   square: "aspect-square",
 } as const;
 
@@ -499,7 +499,19 @@ const LOOKBOOK_IMAGE_SIZES = {
     "(min-width: 1632px) 507px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 768px) calc((100vw - 96px) / 3), calc(100vw - 48px)",
 } as const;
 
-export function LookBook({ content }: EditableSectionProps = {}) {
+const HOME_LOOKBOOK_SHAPES = [
+  "wide",
+  "tall",
+  "portraitPair",
+  "portraitPair",
+  "square",
+  "square",
+  "square",
+] as const;
+
+export function LookBook({ projects }: { projects: readonly HomeLookbookProject[] }) {
+  if (!projects.length) return null;
+
   return (
     <section
       id="look-book"
@@ -508,46 +520,51 @@ export function LookBook({ content }: EditableSectionProps = {}) {
     >
       <div className="shell">
         <header data-reveal className="flex flex-col gap-6">
-          <Eyebrow>{editable(content, "lookbook.eyebrow", lookbookIntro.eyebrow)}</Eyebrow>
+          <Eyebrow>{lookbookIntro.eyebrow}</Eyebrow>
           <h2 className="text-heading-lg max-w-[640px] font-display font-medium wide:max-w-[640px] xl:max-w-[70%]">
-            {editable(content, "lookbook.heading", lookbookIntro.heading)}
+            {lookbookIntro.heading}
           </h2>
         </header>
 
         <div data-reveal className="mt-8 flex justify-start md:justify-end">
           <p className="text-body-lg max-w-none text-left text-ink-muted md:max-w-[70%] md:text-right lg:max-w-[60%] wide:max-w-[40%]">
-            {editable(content, "lookbook.description", lookbookIntro.description)}
+            {lookbookIntro.description}
           </p>
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
-          {homeLookbook.map((album, i) => {
+          {projects.map((project, i) => {
+            const shape = HOME_LOOKBOOK_SHAPES[i];
+            const place = project.location || project.venue || "";
+            const objectPosition = project.cover.focalPoint
+              ? `${project.cover.focalPoint.x * 100}% ${project.cover.focalPoint.y * 100}%`
+              : "50% 50%";
+
             return (
               <article
-                key={album.title}
+                key={project.id}
                 data-reveal
                 style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
-                className={`group flex flex-col ${SPAN[album.shape]} ${
-                  i === 3 ? "md:hidden lg:flex" : ""
-                }`}
+                className={`group flex flex-col ${SPAN[shape]}`}
               >
                 <Link
-                  href={album.href}
+                  href={`/look-book#${project.slug}`}
                   className="flex h-full flex-col"
                 >
-                  <div className={`relative w-full overflow-hidden ${RATIO[album.shape]}`}>
+                  <div className={`relative w-full overflow-hidden ${RATIO[shape]}`}>
                     <Image
-                      src={album.cover}
-                      alt={album.alt}
+                      src={project.cover.src}
+                      alt={project.cover.alt}
                       fill
-                      sizes={LOOKBOOK_IMAGE_SIZES[album.shape]}
+                      sizes={LOOKBOOK_IMAGE_SIZES[shape]}
+                      style={{ objectPosition }}
                       className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
                     />
                   </div>
                   <div className="flex items-start justify-between gap-3 px-2 pt-3.5 text-[9px] leading-[1.4] font-medium tracking-[0.14em] text-ink-subtle uppercase md:text-[10px] md:tracking-[0.16em] lg:pt-4 wide:tracking-[0.18em]">
-                    <h3 className="shrink-0 whitespace-nowrap">{album.title}</h3>
-                    {"meta" in album && album.meta ? (
-                      <p className="whitespace-nowrap text-right">{album.meta}</p>
+                    <h3 className="min-w-0 max-w-[56%] truncate">{project.title}</h3>
+                    {place ? (
+                      <p className="min-w-0 max-w-[44%] truncate text-right">{place}</p>
                     ) : null}
                   </div>
                 </Link>

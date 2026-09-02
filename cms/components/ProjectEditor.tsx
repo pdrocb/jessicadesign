@@ -1,42 +1,68 @@
+"use client";
+
 import Link from "next/link";
+import { useActionState, useEffect } from "react";
+import { ProjectDeleteControl } from "@/cms/components/ProjectDeleteControl";
 import { ProjectImageManager } from "@/cms/components/ProjectImageManager";
-import { CmsButton } from "@/cms/components/ui/CmsButton";
+import {
+  CmsFormAlert,
+  CmsMobileSaveBar,
+  CmsSaveButton,
+  useCmsEditorState,
+} from "@/cms/components/ui/CmsEditorChrome";
 import { CmsField } from "@/cms/components/ui/CmsField";
-import { saveProject } from "@/cms/projects/actions";
+import { CmsUnsavedChangesGuard } from "@/cms/components/ui/CmsUnsavedChangesGuard";
+import { saveProject, type ProjectSaveState } from "@/cms/projects/actions";
 import type { LookbookProject } from "@/lib/lookbook";
+
+const initialState: ProjectSaveState = { status: "idle", message: "" };
 
 export function ProjectEditor({ project, connected }: { project: LookbookProject; connected: boolean }) {
   const saveAction = saveProject.bind(null, project.id);
+  const formId = `${project.id}-form`;
+  const [state, action, pending] = useActionState(saveAction, initialState);
+  const { dirty, setDirty } = useCmsEditorState(state.status);
+  const hasChanges = dirty || state.status === "error";
+
+  useEffect(() => {
+    if (state.status !== "error" || !state.field) return;
+    const frame = window.requestAnimationFrame(() => {
+      const field = window.document.querySelector<HTMLElement>(`[name="${CSS.escape(state.field ?? "")}"]`);
+      field?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [state]);
 
   return (
     <div className="cms-project-editor">
-      <header className="cms-project-editor-heading">
+      <header className="cms-project-command-bar">
         <Link className="cms-project-editor-back" href="/admin/projects">All projects</Link>
-        <div className="cms-project-editor-title">
-          <div>
-            <h1>{project.title}</h1>
-            <p>Update the project details, then arrange the gallery in its published order.</p>
-          </div>
-          <dl className="cms-project-editor-context">
-            <div>
-              <dt>Publication</dt>
-              <dd data-published={project.published || undefined}>{project.published ? "Published" : "Draft"}</dd>
-            </div>
-            <div>
-              <dt>Gallery</dt>
-              <dd>{project.images.length} photographs</dd>
-            </div>
-          </dl>
+        <div className="cms-project-command-actions">
+          <a className="cms-secondary-link" href={`/look-book#${project.slug}`} target="_blank" rel="noreferrer">View live project</a>
+          <Link className="cms-project-cancel" href="/admin/projects">Cancel</Link>
+          <CmsSaveButton
+            dirty={hasChanges}
+            pending={pending}
+            form={formId}
+            idleLabel="Save project"
+            disabled={!connected}
+          />
         </div>
       </header>
       {!connected ? (
         <p className="cms-connection-note">Previewing the current project. Connect Neon to enable editing.</p>
       ) : null}
-      <form action={saveAction} className="cms-project-form">
+      {state.status === "error" ? <CmsFormAlert message={state.message} /> : null}
+      <form
+        id={formId}
+        action={action}
+        className="cms-project-form"
+        onChange={() => setDirty(true)}
+      >
         <section className="cms-project-metadata" aria-labelledby={`${project.id}-details-heading`}>
           <div className="cms-project-section-heading">
             <div>
-              <h2 id={`${project.id}-details-heading`}>Project details</h2>
+              <h1 id={`${project.id}-details-heading`}>Project details</h1>
               <p>These details appear alongside the project in the public Look Book.</p>
             </div>
           </div>
@@ -54,14 +80,29 @@ export function ProjectEditor({ project, connected }: { project: LookbookProject
           images={project.images}
           connected={connected}
         />
-        <footer className="cms-project-actions">
-          <p>Changes to project details and alternative text are saved together.</p>
-          <div className="cms-project-action-buttons">
-            <Link href="/admin/projects">Cancel</Link>
-            <CmsButton type="submit" disabled={!connected}>Save project</CmsButton>
-          </div>
-        </footer>
       </form>
+      <CmsMobileSaveBar
+        dirty={hasChanges}
+        pending={pending}
+        status={state.status}
+        message={state.message}
+        form={formId}
+        idleLabel="Save project"
+        disabled={!connected}
+      />
+      <CmsUnsavedChangesGuard when={dirty && !pending} />
+      <section className="cms-project-danger-zone" aria-labelledby={`${project.id}-delete-heading`}>
+        <div>
+          <h2 id={`${project.id}-delete-heading`}>Delete project</h2>
+          <p>Permanently remove this project and all of its photographs. This action cannot be undone.</p>
+        </div>
+        <ProjectDeleteControl
+          projectId={project.id}
+          projectTitle={project.title}
+          imageCount={project.images.length}
+          disabled={!connected}
+        />
+      </section>
     </div>
   );
 }

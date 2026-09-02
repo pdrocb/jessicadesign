@@ -14,7 +14,12 @@ import {
 } from "@/cms/content/model";
 import { isPersistentCmsImageSource } from "@/cms/content/media";
 
-export type SaveState = { status: "idle" | "saved" | "error"; message: string };
+export type SaveState = {
+  status: "idle" | "saved" | "error";
+  message: string;
+  field?: string;
+  section?: string;
+};
 
 const imageFields = homeFieldDefinitions.filter((field) => field.type === "image");
 const imageKeys = new Set(imageFields.map((field) => field.key));
@@ -105,7 +110,7 @@ export async function saveHome(
     if (collectionKeys.has(key) || !allowedKeys.has(key) || typeof value !== "string") continue;
     const normalized = value.trim();
     if (normalized.length > 5000) {
-      return { status: "error", message: "One of the fields is too long." };
+      return { status: "error", message: "Shorten this field before saving.", field: key };
     }
     if (imageKeys.has(key) && !isPersistentCmsImageSource(normalized)) continue;
     data[key] = normalized;
@@ -117,17 +122,31 @@ export async function saveHome(
       HOME_TESTIMONIALS_KEY,
       normalizeTestimonial,
     );
+  } catch (error) {
+    return {
+      status: "error",
+      message: error instanceof Error ? error.message : "A collection could not be saved.",
+      section: "testimonials",
+    };
+  }
+
+  try {
     data[HOME_FAQS_KEY] = parseCollection(formData, HOME_FAQS_KEY, normalizeFaq);
   } catch (error) {
     return {
       status: "error",
       message: error instanceof Error ? error.message : "A collection could not be saved.",
+      section: "faqs",
     };
   }
 
   for (const field of imageFields) {
     if (typeof data[field.altKey] !== "string" || !data[field.altKey]) {
-      return { status: "error", message: `${field.label} needs alternative text.` };
+      return {
+        status: "error",
+        message: `${field.label} needs alternative text.`,
+        field: field.altKey,
+      };
     }
     const file = formData.get(`${field.key}File`);
     if (!(file instanceof File) || file.size === 0) continue;
@@ -138,6 +157,7 @@ export async function saveHome(
       return {
         status: "error",
         message: error instanceof Error ? error.message : "The image could not be uploaded.",
+        field: `${field.key}File`,
       };
     }
   }

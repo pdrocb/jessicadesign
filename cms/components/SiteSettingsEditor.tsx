@@ -1,28 +1,68 @@
 "use client";
 
-import { useActionState, useState, type ReactNode } from "react";
+import { useActionState, useEffect, useState, type ReactNode } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
-import { CmsButton } from "@/cms/components/ui/CmsButton";
 import { CmsField } from "@/cms/components/ui/CmsField";
 import { CmsImageField } from "@/cms/components/ui/CmsImageField";
+import {
+  CmsFormAlert,
+  CmsMobileSaveBar,
+  CmsSaveButton,
+  useCmsEditorState,
+} from "@/cms/components/ui/CmsEditorChrome";
+import { CmsPageHeader } from "@/cms/components/ui/CmsPageHeader";
+import { CmsUnsavedChangesGuard } from "@/cms/components/ui/CmsUnsavedChangesGuard";
 import { saveSiteSettings, type SiteSettingsSaveState } from "@/cms/settings/actions";
 import { siteSettingsSections, type SiteSettingsDocument } from "@/cms/settings/config";
 
 const initialState: SiteSettingsSaveState = { status: "idle", message: "" };
+
+const settingsFieldSections = {
+  siteName: "seo",
+  siteUrl: "seo",
+  metaTitle: "seo",
+  metaDescription: "seo",
+  ogTitle: "sharing",
+  ogDescription: "sharing",
+  ogImageUrl: "sharing",
+  ogImageFile: "sharing",
+  ogImageAlt: "sharing",
+  faviconUrl: "browser",
+  faviconFile: "browser",
+  phone: "contact",
+  publicEmail: "contact",
+  instagram: "contact",
+  facebook: "contact",
+} as const;
 
 export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocument }) {
   const [state, action, pending] = useActionState(saveSiteSettings, initialState);
   const [openSection, setOpenSection] = useState<
     (typeof siteSettingsSections)[number]["id"] | ""
   >(siteSettingsSections[0].id);
-  const [dirty, setDirty] = useState(false);
+  const { dirty, setDirty } = useCmsEditorState(state.status);
   const hasChanges = dirty || state.status === "error";
+
+  useEffect(() => {
+    if (state.status !== "error" || !state.field) return;
+    const section = settingsFieldSections[state.field as keyof typeof settingsFieldSections];
+    if (section) setOpenSection(section);
+  }, [state]);
+
+  useEffect(() => {
+    if (state.status !== "error" || !state.field) return;
+    const frame = window.requestAnimationFrame(() => {
+      const field = window.document.querySelector<HTMLElement>(`[name="${CSS.escape(state.field ?? "")}"]`);
+      field?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [openSection, state]);
 
   const sectionFields = {
     seo: (
       <>
         <CmsField id="cms-siteName" name="siteName" label="Site name" defaultValue={settings.siteName} required maxLength={80} />
-        <CmsField id="cms-siteUrl" name="siteUrl" label="Canonical site URL" defaultValue={settings.siteUrl} type="url" required maxLength={500} />
+        <CmsField id="cms-siteUrl" name="siteUrl" label="Primary website address" defaultValue={settings.siteUrl} type="url" required maxLength={500} />
         <CmsField id="cms-metaTitle" name="metaTitle" label="Default meta title" defaultValue={settings.metaTitle} required maxLength={80} wide hint="Aim for 50–60 characters. Used by the home page and as the site-wide fallback." />
         <CmsField id="cms-metaDescription" name="metaDescription" label="Default meta description" defaultValue={settings.metaDescription} type="textarea" required maxLength={320} wide hint="Aim for 140–160 characters. Describe the service and location clearly." />
       </>
@@ -33,7 +73,7 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
         <CmsField id="cms-ogDescription" name="ogDescription" label="Sharing description" defaultValue={settings.ogDescription} type="textarea" maxLength={320} wide hint="Leave blank to use the default meta description." />
         <CmsImageField
           id="cms-ogImage"
-          label="Open Graph image"
+          label="Social sharing image"
           currentUrl={settings.ogImageUrl}
           urlName="ogImageUrl"
           fileName="ogImageFile"
@@ -68,17 +108,20 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
     <form
       action={action}
       onChange={() => setDirty(true)}
-      onSubmit={() => setDirty(false)}
       className="cms-editor-form"
     >
-      <div className="cms-page-heading">
-        <div><h1>Site settings</h1><p>Manage search, sharing and global contact information.</p></div>
-        <CmsButton className="cms-desktop-save" disabled={pending || !hasChanges} type="submit">
-          {pending ? "Saving…" : hasChanges ? "Save changes" : "Saved"}
-        </CmsButton>
-      </div>
+      <CmsPageHeader
+        title="Site settings"
+        description="Manage search, sharing and global contact information."
+        actions={
+          <>
+            <a className="cms-secondary-link" href="/" target="_blank" rel="noreferrer">View live site</a>
+            <CmsSaveButton className="cms-desktop-save" dirty={hasChanges} pending={pending} />
+          </>
+        }
+      />
 
-      {state.status === "error" ? <p className="cms-form-alert" role="alert">{state.message}</p> : null}
+      {state.status === "error" ? <CmsFormAlert message={state.message} /> : null}
 
       <div className="cms-section-list">
         {siteSettingsSections.map((section) => {
@@ -95,12 +138,13 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
         })}
       </div>
 
-      <div className="cms-save-bar">
-        <span data-dirty={hasChanges || undefined}>{hasChanges ? "Unsaved changes" : state.status === "saved" ? state.message : "Up to date"}</span>
-        <CmsButton disabled={pending || !hasChanges} type="submit">
-          {pending ? "Saving…" : hasChanges ? "Save changes" : "Saved"}
-        </CmsButton>
-      </div>
+      <CmsMobileSaveBar
+        dirty={hasChanges}
+        pending={pending}
+        status={state.status}
+        message={state.message}
+      />
+      <CmsUnsavedChangesGuard when={dirty && !pending} />
     </form>
   );
 }

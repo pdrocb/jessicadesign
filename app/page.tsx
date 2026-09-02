@@ -15,6 +15,7 @@ import {
   Testimonials,
 } from "@/components/sections";
 import { getHomeDocument } from "@/cms/content/home";
+import { getHomeLookbookProjects } from "@/cms/projects/repository";
 import { getSiteSettings } from "@/cms/settings/repository";
 import { createPageMetadata } from "@/lib/seo";
 
@@ -31,9 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const [content, settings] = await Promise.all([
+  const [content, settings, homeProjects] = await Promise.all([
     getHomeDocument(),
     getSiteSettings(),
+    getHomeLookbookProjects(),
   ]);
   return (
     <>
@@ -43,7 +45,7 @@ export default async function Page() {
         <Hero content={content} />
         <Manifesto content={content} />
         <Services content={content} />
-        <LookBook content={content} />
+        <LookBook projects={homeProjects} />
         <Process content={content} />
         <SilkFlorals content={content} />
         <About content={content} />

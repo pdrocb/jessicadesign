@@ -9,6 +9,7 @@ export type CmsIconName =
   | "projects"
   | "settings"
   | "trash"
+  | "warning"
   | "up"
   | "toggle";
 
@@ -41,6 +42,8 @@ export function CmsIcon({ name }: { name: CmsIconName }) {
         <path {...common} d="M10 4v12M4 10h12" />
       ) : name === "trash" ? (
         <><path {...common} d="M4.5 6h11M8 3.5h4M6 6l.7 10.5h6.6L14 6M8.5 9v4.5M11.5 9v4.5" /></>
+      ) : name === "warning" ? (
+        <><path {...common} d="M10 2.8 18 17H2z" /><path {...common} d="M10 7v4.5M10 14.5h.01" /></>
       ) : name === "up" ? (
         <path {...common} d="m5 12 5-5 5 5" />
       ) : name === "down" ? (

@@ -232,7 +232,7 @@ export function ProjectImageManager({
   return (
     <section className="cms-project-photo-editors" aria-busy={busy}>
       <div className="cms-project-photo-heading">
-        <div><h2>Project photographs</h2><p>The principal image is the cover and always stays first. Choose another principal to move it to the beginning of the gallery.</p></div>
+        <div><h2>Project photographs</h2><p>The cover image always stays first. Choose another cover to move it to the beginning of the gallery.</p></div>
         <span>{String(images.length).padStart(2, "0")} photographs</span>
       </div>
       {actionError ? <p className="cms-project-photo-error" role="alert">{actionError}</p> : null}
@@ -247,7 +247,7 @@ export function ProjectImageManager({
                   <div className="cms-project-photo-toolbar">
                     <div className="cms-project-photo-labels">
                       <span>{String(index + 1).padStart(2, "0")}</span>
-                      {isPrimary ? <strong>Principal</strong> : null}
+                      {isPrimary ? <strong>Cover</strong> : null}
                     </div>
                     <div className="cms-project-photo-toolbar-actions">
                       {!isPrimary ? (
@@ -275,7 +275,7 @@ export function ProjectImageManager({
                       <details className="cms-project-photo-menu">
                         <summary aria-label={`Actions for photograph ${index + 1}`}><CmsIcon name="more" /></summary>
                         <div role="menu">
-                          <button type="button" role="menuitem" disabled={!connected || busy || isPrimary} onClick={(event) => chooseAction(event, image.id, "make-primary")}>Make principal</button>
+                          <button type="button" role="menuitem" disabled={!connected || busy || isPrimary} onClick={(event) => chooseAction(event, image.id, "make-primary")}>Make cover image</button>
                           <button className="cms-project-photo-delete" type="button" role="menuitem" disabled={!connected || busy || images.length === 1} onClick={(event) => chooseAction(event, image.id, "delete")}>Delete</button>
                         </div>
                       </details>

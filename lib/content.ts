@@ -7,15 +7,11 @@
  * vive, ya optimizado, en Vercel Blob y se modela en `lib/lookbook.ts`.
  */
 
-import heroTablescape from "@/assets/hero-01-tablescape.jpg";
 import heroReception from "@/assets/hero-02-reception.jpg";
 import heroTerrace from "@/assets/hero-04-terrace.jpg";
 import heroTapers from "@/assets/hero-05-tapers.jpg";
 import jessicaFounderStory from "@/assets/jessica-founder-story.webp";
 import jessica from "@/assets/jessica-salomon.jpg";
-import lookbookGoldenHour from "@/assets/lookbook-golden-hour.jpg";
-import lookbookIsabelleMarshall from "@/assets/lookbook-isabelle-marshall.webp";
-import lookbookMorganGarrett from "@/assets/lookbook-morgan-garrett.webp";
 import philosophyOutdoorBarn from "@/assets/philosophy-outdoor-barn.webp";
 import philosophyOutdoorTablescape from "@/assets/philosophy-outdoor-tablescape.webp";
 import silkFloralsBlueCentrepiece from "@/assets/silk-florals-blue-centrepiece.webp";
@@ -23,7 +19,6 @@ import silkFloralsReceptionCentrepiece from "@/assets/silk-florals-reception-cen
 import serviceCelebrations from "@/assets/service-celebrations.jpg";
 import serviceDayOf from "@/assets/service-day-of.jpg";
 import serviceLuxuryPicnics from "@/assets/service-luxury-picnics.webp";
-import servicePicnics from "@/assets/service-picnics.jpg";
 import serviceWeddings from "@/assets/service-weddings.jpg";
 
 export const site = {
@@ -191,70 +186,6 @@ export const lookbookIntro = {
   description:
     "Recent weddings, private dinners, and styled gatherings across the Hudson Valley and beyond.",
 } as const;
-
-/**
- * Curaduría editorial exclusiva de la home. No se deriva de los proyectos
- * publicados: la portada de entrada y el archivo completo cumplen funciones
- * distintas y deben poder ordenarse de manera independiente en el futuro CMS.
- * Solo enlazamos a un capítulo cuando la correspondencia está confirmada.
- */
-export const homeLookbook = [
-  {
-    cover: heroTerrace,
-    shape: "wide",
-    title: "Wedding dinner party",
-    meta: "Hopewell Junction, NY",
-    alt: "Two grooms beside a long terrace table set with white florals, taper candles and a welcome sign",
-    href: "/look-book#lucas-will",
-  },
-  {
-    cover: heroTablescape,
-    shape: "tall",
-    title: "Hudson Valley Wedding",
-    meta: "Gardnier NY",
-    alt: "Couple walking through tall grasses, in black and white",
-    href: "/look-book",
-  },
-  {
-    cover: lookbookMorganGarrett,
-    shape: "portraitPair",
-    title: "Morgan & Garrett",
-    meta: "Port Chester, NY",
-    alt: "Morgan and Garrett standing together beside a floral reception tablescape",
-    href: "/look-book",
-  },
-  {
-    cover: lookbookIsabelleMarshall,
-    shape: "portraitPair",
-    title: "Isabelle & Marshall",
-    meta: "New York, NY",
-    alt: "Candlelit reception table beneath suspended greenery in New York City",
-    href: "/look-book#isabelle-marshall",
-  },
-  {
-    cover: serviceDayOf,
-    shape: "square",
-    title: "Dinner reception",
-    meta: "B Social Port Chester NY",
-    alt: "Place setting with gold-rimmed charger and menu card against exposed brick",
-    href: "/look-book#custom-tablescape",
-  },
-  {
-    cover: lookbookGoldenHour,
-    shape: "square",
-    title: "Cori & Ezra",
-    meta: "Blackwalnut Farm, Saugerties NY",
-    alt: "Bud vases and taper candles down a gauze runner on a wooden table in late afternoon light",
-    href: "/look-book",
-  },
-  {
-    cover: servicePicnics,
-    shape: "square",
-    title: "Citrus Picnic",
-    alt: "Low picnic table with lemon-print china, rattan chargers and cushions",
-    href: "/look-book",
-  },
-] as const;
 
 /**
  * Formulario de inquiry (`/inquire`). Los campos replican el formulario

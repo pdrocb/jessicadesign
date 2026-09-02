@@ -5,7 +5,13 @@ import {
   isCmsDatabaseConfigured,
   isCmsDatabaseConnectionError,
 } from "@/cms/database/client";
-import { getPublishedLookbookProjects, type LookbookProject } from "@/lib/lookbook";
+import {
+  getFeaturedLookbookProjects,
+  getProjectCover,
+  getPublishedLookbookProjects,
+  type HomeLookbookProject,
+  type LookbookProject,
+} from "@/lib/lookbook";
 
 type ProjectRow = {
   id: string;
@@ -18,9 +24,6 @@ type ProjectRow = {
   position: number;
   published: boolean;
   featured: boolean;
-  featured_position: number | null;
-  home_shape: LookbookProject["homeShape"];
-  home_cover_image_id: string | null;
   cover_image_id: string;
   preview_image_count: number;
 };
@@ -38,6 +41,48 @@ type ImageRow = {
   crop_tolerance: "none" | "soft" | null;
 };
 
+type HomeProjectRow = Pick<
+  ProjectRow,
+  "id" | "slug" | "title" | "venue" | "location" | "position"
+> & Omit<ImageRow, "id" | "project_id" | "position"> & {
+  image_id: string;
+};
+
+function fallbackHomeProjects(): HomeLookbookProject[] {
+  return getFeaturedLookbookProjects().map((project) => ({
+    id: project.id,
+    slug: project.slug,
+    title: project.title,
+    venue: project.venue,
+    location: project.location,
+    position: project.position,
+    cover: getProjectCover(project),
+  }));
+}
+
+function toHomeLookbookProject(row: HomeProjectRow): HomeLookbookProject {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    venue: row.venue ?? undefined,
+    location: row.location ?? undefined,
+    position: row.position,
+    cover: {
+      id: row.image_id,
+      src: row.src,
+      alt: row.alt,
+      width: row.width,
+      height: row.height,
+      position: row.position,
+      focalPoint: row.focal_x !== null && row.focal_y !== null
+        ? { x: Number(row.focal_x), y: Number(row.focal_y) }
+        : undefined,
+      cropTolerance: row.crop_tolerance ?? undefined,
+    },
+  };
+}
+
 function toLookbookProject(row: ProjectRow, imageRows: ImageRow[]): LookbookProject {
   return {
     id: row.id,
@@ -50,9 +95,6 @@ function toLookbookProject(row: ProjectRow, imageRows: ImageRow[]): LookbookProj
     position: row.position,
     published: row.published,
     featured: row.featured,
-    featuredPosition: row.featured_position ?? undefined,
-    homeShape: row.home_shape,
-    homeCoverImageId: row.home_cover_image_id ?? undefined,
     coverImageId: row.cover_image_id,
     previewImageCount: row.preview_image_count,
     images: imageRows.map((image) => ({
@@ -72,8 +114,18 @@ function toLookbookProject(row: ProjectRow, imageRows: ImageRow[]): LookbookProj
 
 async function seedCurrentProjects() {
   const sql = getCmsDatabase();
+  const seedRows = (await sql.query(
+    "SELECT content_key FROM cms_seed_state WHERE content_key = 'lookbook' LIMIT 1",
+  )) as { content_key: string }[];
+  if (seedRows[0]) return;
+
   const countRows = (await sql.query("SELECT count(*)::int AS count FROM cms_projects")) as { count: number }[];
-  if ((countRows[0]?.count ?? 0) > 0) return;
+  if ((countRows[0]?.count ?? 0) > 0) {
+    await sql.query(
+      "INSERT INTO cms_seed_state (content_key) VALUES ('lookbook') ON CONFLICT (content_key) DO NOTHING",
+    );
+    return;
+  }
 
   const projects = getPublishedLookbookProjects();
   const projectSeed = projects.map((project) => ({
@@ -87,9 +139,6 @@ async function seedCurrentProjects() {
     position: project.position,
     published: project.published,
     featured: project.featured,
-    featured_position: project.featuredPosition ?? null,
-    home_shape: project.homeShape,
-    home_cover_image_id: project.homeCoverImageId ?? null,
     cover_image_id: project.coverImageId,
     preview_image_count: project.previewImageCount,
   }));
@@ -108,26 +157,24 @@ async function seedCurrentProjects() {
     })),
   );
 
-  await sql.query(
-    `INSERT INTO cms_projects (
+  await sql.transaction((transaction) => [
+    transaction.query(
+      `INSERT INTO cms_projects (
        id, slug, title, subtitle, venue, location, photographer, position,
-       published, featured, featured_position, home_shape, home_cover_image_id,
-       cover_image_id, preview_image_count
+       published, featured, cover_image_id, preview_image_count
      )
      SELECT id, slug, title, subtitle, venue, location, photographer, position,
-            published, featured, featured_position, home_shape, home_cover_image_id,
-            cover_image_id, preview_image_count
+            published, featured, cover_image_id, preview_image_count
        FROM jsonb_to_recordset($1::jsonb) AS seed(
          id text, slug text, title text, subtitle text, venue text, location text,
          photographer text, position integer, published boolean, featured boolean,
-         featured_position integer, home_shape text, home_cover_image_id text,
          cover_image_id text, preview_image_count integer
        )
      ON CONFLICT (id) DO NOTHING`,
-    [JSON.stringify(projectSeed)],
-  );
-  await sql.query(
-    `INSERT INTO cms_project_images (
+      [JSON.stringify(projectSeed)],
+    ),
+    transaction.query(
+      `INSERT INTO cms_project_images (
        id, project_id, src, alt, width, height, position, focal_x, focal_y, crop_tolerance
      )
      SELECT id, project_id, src, alt, width, height, position, focal_x, focal_y, crop_tolerance
@@ -136,8 +183,12 @@ async function seedCurrentProjects() {
          position integer, focal_x numeric, focal_y numeric, crop_tolerance text
        )
      ON CONFLICT (id) DO NOTHING`,
-    [JSON.stringify(imageSeed)],
-  );
+      [JSON.stringify(imageSeed)],
+    ),
+    transaction.query(
+      "INSERT INTO cms_seed_state (content_key) VALUES ('lookbook') ON CONFLICT (content_key) DO NOTHING",
+    ),
+  ]);
 }
 
 export async function getCmsProjects(): Promise<{ projects: LookbookProject[]; connected: boolean }> {
@@ -167,6 +218,42 @@ export async function getCmsProjects(): Promise<{ projects: LookbookProject[]; c
   ));
 
   return { projects, connected: true };
+}
+
+export async function getHomeLookbookProjects(): Promise<HomeLookbookProject[]> {
+  if (!isCmsDatabaseConfigured()) return fallbackHomeProjects();
+
+  try {
+    await seedCurrentProjects();
+    const sql = getCmsDatabase();
+    const rows = (await sql.query(
+      `SELECT project.id,
+              project.slug,
+              project.title,
+              project.venue,
+              project.location,
+              project.position,
+              image.id AS image_id,
+              image.src,
+              image.alt,
+              image.width,
+              image.height,
+              image.focal_x,
+              image.focal_y,
+              image.crop_tolerance
+         FROM cms_projects project
+         JOIN cms_project_images image ON image.id = project.cover_image_id
+        WHERE project.published = true
+          AND project.featured = true
+        ORDER BY project.position
+        LIMIT 7`,
+    )) as HomeProjectRow[];
+
+    return rows.map(toHomeLookbookProject);
+  } catch (error) {
+    if (isCmsDatabaseConnectionError(error)) return fallbackHomeProjects();
+    throw error;
+  }
 }
 
 export async function getCmsProject(projectId: string): Promise<{ project?: LookbookProject; connected: boolean }> {

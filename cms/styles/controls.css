@@ -1,9 +1,6 @@
-.cms-primary-button {
+.cms-button {
   min-height: var(--cms-control-height);
-  border: 1px solid var(--cms-action);
   border-radius: var(--cms-control-radius);
-  background: var(--cms-action);
-  color: var(--cms-control-bg);
   cursor: pointer;
   padding: 0 22px;
   font-size: var(--cms-text-button);
@@ -12,12 +9,40 @@
   transition: background 160ms ease, border-color 160ms ease, opacity 160ms ease;
 }
 
-.cms-primary-button:hover:not(:disabled) {
+.cms-button-primary {
+  border: 1px solid var(--cms-action);
+  background: var(--cms-action);
+  color: var(--cms-control-bg);
+}
+
+.cms-button-primary:hover:not(:disabled) {
   border-color: var(--cms-action-hover);
   background: var(--cms-action-hover);
 }
 
-.cms-primary-button:disabled {
+.cms-button-secondary {
+  border: 1px solid var(--cms-line-strong);
+  background: var(--cms-surface);
+  color: var(--cms-ink-soft);
+}
+
+.cms-button-secondary:hover:not(:disabled) {
+  border-color: var(--cms-line-hover);
+  color: var(--cms-ink);
+}
+
+.cms-button-danger {
+  border: 1px solid var(--cms-danger);
+  background: var(--cms-danger);
+  color: var(--cms-control-bg);
+}
+
+.cms-button-danger:hover:not(:disabled) {
+  border-color: var(--cms-danger-hover);
+  background: var(--cms-danger-hover);
+}
+
+.cms-button:disabled {
   cursor: default;
   opacity: 0.42;
 }
@@ -43,8 +68,8 @@
   line-height: 1.5;
 }
 
-.cms-field-stack input,
-.cms-field-stack textarea {
+.cms-field-stack > input,
+.cms-field-stack > textarea {
   width: 100%;
   min-height: var(--cms-control-height);
   border: 1px solid var(--cms-line-strong);
@@ -58,23 +83,23 @@
   transition: border-color 140ms ease, box-shadow 140ms ease;
 }
 
-.cms-field-stack textarea {
+.cms-field-stack > textarea {
   min-height: 120px;
   resize: vertical;
 }
 
-.cms-field-stack input:hover,
-.cms-field-stack textarea:hover {
+.cms-field-stack > input:hover,
+.cms-field-stack > textarea:hover {
   border-color: var(--cms-line-hover);
 }
 
-.cms-field-stack input:focus,
-.cms-field-stack textarea:focus {
+.cms-field-stack > input:focus,
+.cms-field-stack > textarea:focus {
   border-color: var(--cms-focus);
   box-shadow: 0 0 0 3px var(--cms-focus-ring);
 }
 
-.cms-field-stack input::placeholder,
+.cms-field-stack > input::placeholder,
 .cms-login-page input::placeholder {
   color: var(--cms-subtle);
   opacity: 1;

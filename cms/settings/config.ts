@@ -42,7 +42,7 @@ export const siteSettingsSections = [
   {
     id: "sharing",
     title: "Social sharing",
-    description: "Open Graph copy and the image shown when a link is shared",
+    description: "Text and image shown when a page link is shared",
   },
   {
     id: "browser",

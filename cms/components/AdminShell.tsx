@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { logout } from "@/cms/auth/actions";
 import { CmsBrand } from "@/cms/components/CmsBrand";
 import { CmsIcon, type CmsIconName } from "@/cms/components/CmsIcon";
@@ -31,6 +31,7 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
             const active = pathname === item.href || (item.href === "/admin/projects" && pathname.startsWith("/admin/projects/"));
             return (
               <Link
+                aria-current={active ? "page" : undefined}
                 href={item.href}
                 key={item.href}
                 data-active={active || undefined}
@@ -55,16 +56,38 @@ export function AdminShell({
   children: React.ReactNode;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDialogElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const menu = menuRef.current;
+    if (!menu) return;
+
+    if (menuOpen && !menu.open) menu.showModal();
+    if (!menuOpen && menu.open) menu.close();
+
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+  };
 
   return (
     <div className="cms-app">
       <header className="cms-mobile-bar">
-        <button className="cms-icon-button" type="button" onClick={() => setMenuOpen(true)} aria-expanded={menuOpen} aria-label="Open menu">
+        <button ref={menuButtonRef} className="cms-icon-button" type="button" onClick={() => setMenuOpen(true)} aria-expanded={menuOpen} aria-label="Open menu">
           <CmsIcon name="menu" />
         </button>
         <CmsBrand compact priority />
         <form action={logout}>
-          <button type="submit">Exit</button>
+          <button type="submit">Log out</button>
         </form>
       </header>
 
@@ -75,21 +98,30 @@ export function AdminShell({
           <span>Signed in as</span>
           <strong>{userName}</strong>
           <form action={logout}>
-            <button type="submit">Exit CMS</button>
+            <button type="submit">Log out</button>
           </form>
         </div>
       </aside>
 
-      {menuOpen && (
-        <div className="cms-mobile-menu" role="dialog" aria-modal="true" aria-label="CMS menu">
+      <dialog
+        ref={menuRef}
+        className="cms-mobile-menu"
+        aria-label="CMS menu"
+        onCancel={(event) => {
+          event.preventDefault();
+          closeMenu();
+        }}
+        onClose={() => setMenuOpen(false)}
+      >
+        <div className="cms-mobile-menu-panel">
           <div className="cms-mobile-menu-head">
             <CmsBrand compact />
-            <button className="cms-icon-button" type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><CmsIcon name="close" /></button>
+            <button className="cms-icon-button" type="button" onClick={closeMenu} aria-label="Close menu"><CmsIcon name="close" /></button>
           </div>
-          <Navigation onNavigate={() => setMenuOpen(false)} />
+          <Navigation onNavigate={closeMenu} />
           <p className="cms-mobile-user">{userName}</p>
         </div>
-      )}
+      </dialog>
 
       <main className="cms-main">{children}</main>
     </div>
