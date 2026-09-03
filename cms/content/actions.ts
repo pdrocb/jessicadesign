@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { homeFieldDefinitions } from "@/cms/config/site";
 import { getCmsDatabase } from "@/cms/database/client";
 import { requireSession } from "@/cms/auth/session";
+import { optimizedCmsImageMetadata } from "@/cms/media/image-metadata";
 import {
   HOME_FAQS_KEY,
   HOME_TESTIMONIALS_KEY,
@@ -29,18 +30,11 @@ const allowedKeys = new Set(
   ),
 );
 const collectionKeys = new Set([HOME_TESTIMONIALS_KEY, HOME_FAQS_KEY]);
-const homeImageTypes = new Map([
-  ["image/jpeg", "jpg"],
-  ["image/webp", "webp"],
-]);
-
 async function uploadHomeImage(file: File, key: string) {
-  const extension = homeImageTypes.get(file.type);
-  if (!extension) throw new Error("Choose a JPG or WebP image.");
-  if (file.size > 4_000_000) throw new Error("The image must be under 4 MB.");
+  const metadata = await optimizedCmsImageMetadata(file);
   if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Image uploads are not configured yet.");
 
-  const blob = await put(`home/${key.replaceAll(".", "-")}.${extension}`, file, {
+  const blob = await put(`home/${key.replaceAll(".", "-")}.${metadata.extension}`, file, {
     access: "public",
     addRandomSuffix: true,
     cacheControlMaxAge: 31_536_000,

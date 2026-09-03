@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState, type ReactNode } from "react";
+import { useActionState, useCallback, useEffect, useState, type ReactNode } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsField } from "@/cms/components/ui/CmsField";
 import { CmsImageField } from "@/cms/components/ui/CmsImageField";
@@ -40,13 +40,20 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
   const [openSection, setOpenSection] = useState<
     (typeof siteSettingsSections)[number]["id"] | ""
   >(siteSettingsSections[0].id);
+  const [processingImages, setProcessingImages] = useState(0);
   const { dirty, setDirty } = useCmsEditorState(state.status);
   const hasChanges = dirty || state.status === "error";
+  const onImageProcessingChange = useCallback((processing: boolean) => {
+    setProcessingImages((current) => Math.max(0, current + (processing ? 1 : -1)));
+  }, []);
+  const imagesBusy = processingImages > 0;
 
   useEffect(() => {
     if (state.status !== "error" || !state.field) return;
     const section = settingsFieldSections[state.field as keyof typeof settingsFieldSections];
-    if (section) setOpenSection(section);
+    if (!section) return;
+    const frame = window.requestAnimationFrame(() => setOpenSection(section));
+    return () => window.cancelAnimationFrame(frame);
   }, [state]);
 
   useEffect(() => {
@@ -78,7 +85,9 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
           urlName="ogImageUrl"
           fileName="ogImageFile"
           accept="image/jpeg,image/png,image/webp"
-          hint="Current image is the site default · replace it here anytime · 1200 × 630 px · JPG, PNG or WebP · under 4 MB"
+          maximumEdge={1200}
+          onProcessingChange={onImageProcessingChange}
+          hint="Current image is the site default · 1200 × 630 px recommended · input up to 10 MB · converted to WebP before upload"
           alt={{ name: "ogImageAlt", value: settings.ogImageAlt, required: Boolean(settings.ogImageUrl) }}
         />
       </>
@@ -90,8 +99,10 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
         currentUrl={settings.faviconUrl}
         urlName="faviconUrl"
         fileName="faviconFile"
-        accept="image/png,image/x-icon,.ico"
-        hint="Recommended · square · 512 × 512 px PNG or ICO · under 1 MB"
+        accept="image/jpeg,image/png,image/webp"
+        maximumEdge={512}
+        onProcessingChange={onImageProcessingChange}
+        hint="Recommended · square · 512 × 512 px · input up to 10 MB · converted to WebP before upload"
       />
     ),
     contact: (
@@ -116,7 +127,7 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
         actions={
           <>
             <a className="cms-secondary-link" href="/" target="_blank" rel="noreferrer">View live site</a>
-            <CmsSaveButton className="cms-desktop-save" dirty={hasChanges} pending={pending} />
+            <CmsSaveButton className="cms-desktop-save" dirty={hasChanges} pending={pending} disabled={imagesBusy} />
           </>
         }
       />
@@ -143,6 +154,7 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
         pending={pending}
         status={state.status}
         message={state.message}
+        disabled={imagesBusy}
       />
       <CmsUnsavedChangesGuard when={dirty && !pending} />
     </form>

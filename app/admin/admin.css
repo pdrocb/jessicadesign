@@ -325,6 +325,7 @@
 .cms-media-copy { position: relative; display: grid; min-width: 0; gap: 7px; }
 .cms-media-copy strong { color: var(--cms-ink-soft); font-size: 13px; font-weight: 680; }
 .cms-media-copy small { color: var(--cms-muted); font-size: var(--cms-text-xs); line-height: 1.5; }
+.cms-media-copy small[role="alert"] { color: var(--cms-danger); font-weight: 620; }
 .cms-media-alt { border-top: 1px solid var(--cms-line); padding-top: 16px; }
 .cms-file-button {
   display: inline-flex;

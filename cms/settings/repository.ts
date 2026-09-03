@@ -60,7 +60,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsDocument> => 
   // precedía a la imagen OG incluida con el sitio. En ese caso la imagen
   // inicial sigue apareciendo en el CMS y en los metatags, sin migración
   // manual de la base de datos.
-  if (!settings.ogImageUrl) {
+  if (!settings.ogImageUrl || settings.ogImageUrl === "/site/open-graph.png") {
     settings.ogImageUrl = defaultSiteSettings.ogImageUrl;
     settings.ogImageAlt = defaultSiteSettings.ogImageAlt;
   }

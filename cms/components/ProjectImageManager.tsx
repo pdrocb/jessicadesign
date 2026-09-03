@@ -11,8 +11,8 @@ import {
   updateProjectImage,
   type ProjectImageAction,
 } from "@/cms/projects/actions";
-import { largeProjectImageBytes, maximumProjectImageBytes } from "@/cms/projects/image-policy";
-import { optimizeProjectImage } from "@/cms/projects/optimize-image";
+import { largeCmsImageBytes, maximumCmsImageBytes } from "@/cms/media/image-policy";
+import { optimizeCmsImage } from "@/cms/media/optimize-image";
 import type { LookbookImage } from "@/lib/lookbook";
 
 type ProjectImageManagerProps = {
@@ -138,14 +138,14 @@ export function ProjectImageManager({
         optimizationIndex += 1;
         updateUploadItem(item.id, { stage: "optimizing" });
         try {
-          const optimizedFile = await optimizeProjectImage(item.file);
-          if (optimizedFile.size > maximumProjectImageBytes) {
+          const optimizedFile = await optimizeCmsImage(item.file);
+          if (optimizedFile.size > maximumCmsImageBytes) {
             throw new Error("The optimized image must be 10 MB or smaller.");
           }
           optimizedFiles.set(item.id, optimizedFile);
           updateUploadItem(item.id, {
             stage: "queued",
-            warning: optimizedFile.size > largeProjectImageBytes
+            warning: optimizedFile.size > largeCmsImageBytes
               ? "This image is still quite large. Consider replacing it with a smaller version."
               : undefined,
           });

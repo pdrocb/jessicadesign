@@ -13,6 +13,7 @@ Cada flujo mantiene una sola dirección:
 - Las acciones validan y coordinan; los repositorios encapsulan queries y fallbacks.
 - Las integraciones externas no se importan directamente desde la UI.
 - La persistencia nunca guarda rutas internas generadas por un build (`/_next/...`). Los assets incluidos en código se resuelven como fallbacks del deployment activo; los reemplazos editoriales usan URLs públicas durables.
+- Toda imagen elegida en el CMS pasa por `cms/media/`: la fuente se limita a 10 MB, se auto-orienta, reduce y convierte a WebP en el navegador; solo ese resultado se envía. Las acciones del servidor aceptan exclusivamente el WebP normalizado y vuelven a validar peso y dimensiones. El original y los JPG nunca se persisten.
 
 El mapa concreto y sus entrypoints viven en `ARCHITECTURE_MAP.md`.
 
@@ -65,3 +66,4 @@ No se convierte cada corrección en una regla de agente. `AGENTS.md` solo cambia
 - Cambiar una variable por vez cuando la causa no está demostrada.
 - Código TypeScript: `npx tsc --noEmit`.
 - UI: revisar 1440, 834 y 390 px, sin overflow horizontal y con targets táctiles de al menos 44 px.
+- Rendimiento público: `next/image` declara `sizes` según su contenedor, solo el LCP usa carga eager/prioridad alta y el resto conserva lazy loading. Speed Insights mide los Core Web Vitals reales después del deploy.

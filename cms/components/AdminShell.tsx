@@ -85,14 +85,14 @@ export function AdminShell({
         <button ref={menuButtonRef} className="cms-icon-button" type="button" onClick={() => setMenuOpen(true)} aria-expanded={menuOpen} aria-label="Open menu">
           <CmsIcon name="menu" />
         </button>
-        <CmsBrand compact priority />
+        <CmsBrand compact />
         <form action={logout}>
           <button type="submit">Log out</button>
         </form>
       </header>
 
       <aside className="cms-sidebar">
-        <CmsBrand priority />
+        <CmsBrand />
         <Navigation />
         <div className="cms-sidebar-account">
           <span>Signed in as</span>

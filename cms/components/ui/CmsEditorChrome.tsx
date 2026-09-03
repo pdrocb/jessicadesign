@@ -9,7 +9,9 @@ export function useCmsEditorState(status: CmsEditorStatus) {
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
-    if (status === "saved") setDirty(false);
+    if (status !== "saved") return;
+    const frame = window.requestAnimationFrame(() => setDirty(false));
+    return () => window.cancelAnimationFrame(frame);
   }, [status]);
 
   return { dirty, setDirty };

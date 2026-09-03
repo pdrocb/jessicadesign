@@ -67,10 +67,25 @@ export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
         <div className="gutter shell flex h-full items-center justify-between gap-5">
           <Link
             href="/"
+            scroll
+            onClick={(event) => {
+              if (
+                pathname !== "/"
+                || event.metaKey
+                || event.ctrlKey
+                || event.shiftKey
+                || event.altKey
+              ) {
+                return;
+              }
+
+              event.preventDefault();
+              window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            }}
             aria-label={`${siteName} — home`}
             className="flex min-h-11 shrink-0 items-center"
           >
-            <Wordmark priority className="h-11 md:h-12 lg:h-13" />
+            <Wordmark className="h-11 md:h-12 lg:h-13" />
           </Link>
 
           <div className="hidden items-center gap-7 md:flex lg:gap-10">

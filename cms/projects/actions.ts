@@ -10,7 +10,7 @@ import {
   flushProjectBlobDeletions,
   isManagedBlobUrl,
 } from "@/cms/projects/blob-cleanup";
-import { projectImageMetadata } from "@/cms/projects/media";
+import { optimizedCmsImageMetadata } from "@/cms/media/image-metadata";
 import type { LookbookImage } from "@/lib/lookbook";
 
 export type ProjectImageAction =
@@ -90,7 +90,7 @@ export async function createProject(
 
   let metadata;
   try {
-    metadata = await projectImageMetadata(file);
+    metadata = await optimizedCmsImageMetadata(file);
   } catch (error) {
     return {
       status: "error",
@@ -162,7 +162,7 @@ export async function uploadProjectImage(projectId: string, formData: FormData):
   const file = formData.get("file");
   if (!(file instanceof File)) throw new Error("Choose an image before uploading.");
 
-  const metadata = await projectImageMetadata(file);
+  const metadata = await optimizedCmsImageMetadata(file);
   const sql = getCmsDatabase();
   const project = (await sql.query(
     "SELECT id FROM cms_projects WHERE id = $1 LIMIT 1",

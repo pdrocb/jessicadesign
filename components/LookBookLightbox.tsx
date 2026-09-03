@@ -111,7 +111,7 @@ export function LookBookLightbox({
               alt={image.alt}
               fill
               loading="eager"
-              sizes="100vw"
+              sizes="(min-width: 1024px) calc(100vw - 224px), (min-width: 768px) calc(100vw - 160px), calc(100vw - 32px)"
               className="object-contain"
             />
 

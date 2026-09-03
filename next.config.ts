@@ -17,12 +17,15 @@ const nextConfig: NextConfig = {
     // a 2000 de lado largo). Pedir 2560 solo generaba una transformación
     // más en Vercel que devolvía exactamente los mismos píxeles.
     deviceSizes: [390, 640, 828, 1080, 1200, 1440, 1920],
+    // El sitio usa una sola calidad editorial. Limitarla evita variantes de
+    // caché accidentales y mantiene predecible el peso de las transformaciones.
+    qualities: [75],
     // Un año de caché: el hash del archivo cambia si la imagen cambia.
     minimumCacheTTL: 31_536_000,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*.public.blob.vercel-storage.com",
+        hostname: "dk6tifq8ftcn4x0v.public.blob.vercel-storage.com",
         port: "",
         pathname: "/**",
         search: "",

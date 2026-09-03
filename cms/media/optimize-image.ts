@@ -1,11 +1,21 @@
-const maximumEdge = 2_000;
-const webpQuality = 0.82;
+import {
+  cmsImageWebpQuality,
+  maximumCmsImageBytes,
+  maximumCmsImageEdge,
+} from "@/cms/media/image-policy";
 
 function webpName(name: string) {
-  return `${name.replace(/\.[^.]+$/, "") || "project-photograph"}.webp`;
+  return `${name.replace(/\.[^.]+$/, "") || "cms-image"}.webp`;
 }
 
-export async function optimizeProjectImage(file: File): Promise<File> {
+export async function optimizeCmsImage(
+  file: File,
+  maximumEdge = maximumCmsImageEdge,
+): Promise<File> {
+  if (file.size > maximumCmsImageBytes) {
+    throw new Error("Choose an image that is 10 MB or smaller.");
+  }
+
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
   try {
     const scale = Math.min(1, maximumEdge / Math.max(bitmap.width, bitmap.height));
@@ -21,18 +31,24 @@ export async function optimizeProjectImage(file: File): Promise<File> {
 
     const blob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob(
-        (result) => result ? resolve(result) : reject(new Error("This browser could not optimize the image.")),
+        (result) => result
+          ? resolve(result)
+          : reject(new Error("This browser could not optimize the image.")),
         "image/webp",
-        webpQuality,
+        cmsImageWebpQuality,
       );
     });
 
+    // The source upload is never retained. Blob receives only this normalized
+    // WebP, even when the source file happened to contain fewer bytes.
     const optimized = new File([blob], webpName(file.name), {
       type: "image/webp",
       lastModified: file.lastModified,
     });
-
-    return optimized.size < file.size ? optimized : file;
+    if (optimized.size > maximumCmsImageBytes) {
+      throw new Error("The optimized image must be 10 MB or smaller.");
+    }
+    return optimized;
   } finally {
     bitmap.close();
   }

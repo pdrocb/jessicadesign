@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { CmsField } from "@/cms/components/ui/CmsField";
+import { largeCmsImageBytes } from "@/cms/media/image-policy";
+import { optimizeCmsImage } from "@/cms/media/optimize-image";
 
 type CmsImageFieldProps = {
   id: string;
@@ -11,6 +13,8 @@ type CmsImageFieldProps = {
   fileName: string;
   accept: string;
   hint: string;
+  maximumEdge?: number;
+  onProcessingChange?: (processing: boolean) => void;
   alt?: {
     name: string;
     value: string;
@@ -27,17 +31,61 @@ export function CmsImageField({
   fileName,
   accept,
   hint,
+  maximumEdge,
+  onProcessingChange,
   alt,
 }: CmsImageFieldProps) {
   const [preview, setPreview] = useState(currentUrl);
   const [selectedName, setSelectedName] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState("");
+  const [warning, setWarning] = useState("");
 
   useEffect(() => () => {
     if (preview.startsWith("blob:")) URL.revokeObjectURL(preview);
   }, [preview]);
 
+  async function selectImage(input: HTMLInputElement) {
+    const file = input.files?.[0];
+    if (!file) return;
+
+    setProcessing(true);
+    setError("");
+    setWarning("");
+    onProcessingChange?.(true);
+
+    try {
+      const optimized = await optimizeCmsImage(file, maximumEdge);
+      const files = new DataTransfer();
+      files.items.add(optimized);
+      input.files = files.files;
+      setSelectedName(optimized.name);
+      setWarning(
+        optimized.size > largeCmsImageBytes
+          ? "This image is still quite large. Try a smaller source image if possible."
+          : "",
+      );
+      setPreview((previous) => {
+        if (previous.startsWith("blob:")) URL.revokeObjectURL(previous);
+        return URL.createObjectURL(optimized);
+      });
+    } catch (failure) {
+      input.value = "";
+      setSelectedName("");
+      setWarning("");
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The image could not be optimized.",
+      );
+    } finally {
+      setProcessing(false);
+      onProcessingChange?.(false);
+    }
+  }
+
   return (
-    <div className="cms-field-stack cms-media-stack" data-wide>
+    <div className="cms-field-stack cms-media-stack" data-wide aria-busy={processing}>
       <label htmlFor={`${id}-file`}>{label}</label>
       <div className="cms-media-field">
         <div className="cms-media-summary">
@@ -51,8 +99,14 @@ export function CmsImageField({
             )}
           </div>
           <div className="cms-media-copy">
-            <strong>{selectedName || (currentUrl ? "Published image" : "No image published")}</strong>
+            <strong>
+              {processing
+                ? "Optimizing image…"
+                : selectedName || (currentUrl ? "Published image" : "No image published")}
+            </strong>
             <small>{hint}</small>
+            {error ? <small className="cms-field-error" role="alert">{error}</small> : null}
+            {warning ? <small role="status">{warning}</small> : null}
             <label className="cms-file-button" htmlFor={`${id}-file`}>Choose image</label>
             <input
               className="cms-file-input"
@@ -60,15 +114,8 @@ export function CmsImageField({
               name={fileName}
               type="file"
               accept={accept}
-              onChange={(event) => {
-                const file = event.currentTarget.files?.[0];
-                if (!file) return;
-                setSelectedName(file.name);
-                setPreview((previous) => {
-                  if (previous.startsWith("blob:")) URL.revokeObjectURL(previous);
-                  return URL.createObjectURL(file);
-                });
-              }}
+              disabled={processing}
+              onChange={(event) => void selectImage(event.currentTarget)}
             />
             <input type="hidden" name={urlName} value={currentUrl} />
           </div>

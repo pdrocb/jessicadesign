@@ -1,23 +1,13 @@
-import "server-only";
+import {
+  maximumCmsImageBytes,
+  maximumCmsImageEdge,
+} from "@/cms/media/image-policy";
 
-import { maximumProjectImageBytes } from "@/cms/projects/image-policy";
-
-const projectImageTypes = new Map([
-  ["image/jpeg", "jpg"],
-  ["image/webp", "webp"],
-]);
-
-const maximumImageDimension = 20_000;
-
-export type ProjectImageMetadata = {
-  extension: string;
+export type CmsImageMetadata = {
+  extension: "webp";
   width: number;
   height: number;
 };
-
-function readUint16BigEndian(bytes: Uint8Array, offset: number) {
-  return (bytes[offset] << 8) | bytes[offset + 1];
-}
 
 function readUint16LittleEndian(bytes: Uint8Array, offset: number) {
   return bytes[offset] | (bytes[offset + 1] << 8);
@@ -32,47 +22,7 @@ function readUint32LittleEndian(bytes: Uint8Array, offset: number) {
   ) >>> 0;
 }
 
-function isJpegStartOfFrame(marker: number) {
-  return (
-    (marker >= 0xc0 && marker <= 0xc3)
-    || (marker >= 0xc5 && marker <= 0xc7)
-    || (marker >= 0xc9 && marker <= 0xcb)
-    || (marker >= 0xcd && marker <= 0xcf)
-  );
-}
-
-function jpegDimensions(bytes: Uint8Array) {
-  if (bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8) {
-    throw new Error("The JPG file could not be read.");
-  }
-
-  let offset = 2;
-  while (offset < bytes.length) {
-    while (offset < bytes.length && bytes[offset] === 0xff) offset += 1;
-    const marker = bytes[offset];
-    offset += 1;
-
-    if (marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) continue;
-    if (offset + 2 > bytes.length) break;
-
-    const segmentLength = readUint16BigEndian(bytes, offset);
-    if (segmentLength < 2 || offset + segmentLength > bytes.length) break;
-
-    if (isJpegStartOfFrame(marker)) {
-      if (segmentLength < 8) break;
-      return {
-        height: readUint16BigEndian(bytes, offset + 3),
-        width: readUint16BigEndian(bytes, offset + 5),
-      };
-    }
-
-    offset += segmentLength;
-  }
-
-  throw new Error("The JPG dimensions could not be read.");
-}
-
-function webpDimensions(bytes: Uint8Array) {
+export function webpDimensions(bytes: Uint8Array) {
   if (
     bytes.length < 12
     || String.fromCharCode(...bytes.slice(0, 4)) !== "RIFF"
@@ -122,23 +72,27 @@ function webpDimensions(bytes: Uint8Array) {
   throw new Error("The WebP dimensions could not be read.");
 }
 
-export async function projectImageMetadata(file: File): Promise<ProjectImageMetadata> {
-  const extension = projectImageTypes.get(file.type);
-  if (!extension) throw new Error("Choose a JPG or WebP image.");
+export async function optimizedCmsImageMetadata(
+  file: File,
+  maximumEdge = maximumCmsImageEdge,
+): Promise<CmsImageMetadata> {
+  if (file.type !== "image/webp") {
+    throw new Error("Choose the image through the CMS so it can be optimized before upload.");
+  }
   if (file.size === 0) throw new Error("Choose an image before uploading.");
-  if (file.size > maximumProjectImageBytes) throw new Error("The image must be 10 MB or smaller.");
+  if (file.size > maximumCmsImageBytes) throw new Error("The optimized image must be 10 MB or smaller.");
 
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const dimensions = file.type === "image/jpeg" ? jpegDimensions(bytes) : webpDimensions(bytes);
+  const dimensions = webpDimensions(bytes);
 
   if (
     dimensions.width < 1
     || dimensions.height < 1
-    || dimensions.width > maximumImageDimension
-    || dimensions.height > maximumImageDimension
+    || dimensions.width > maximumEdge
+    || dimensions.height > maximumEdge
   ) {
     throw new Error("The image dimensions are not supported.");
   }
 
-  return { extension, ...dimensions };
+  return { extension: "webp", ...dimensions };
 }

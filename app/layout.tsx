@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Karla } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSiteSettings } from "@/cms/settings/repository";
 import { phoneHref } from "@/cms/settings/config";
 import "./globals.css";
@@ -99,6 +100,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
           }}
         />
+        <SpeedInsights />
       </body>
     </html>
   );

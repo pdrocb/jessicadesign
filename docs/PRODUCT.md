@@ -37,7 +37,7 @@ Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunc
 ## Operating Context
 
 - La entrada es un formulario de *inquiry* que agenda una **consulta gratuita de una hora**. Está confirmado: aparece textual en su sitio vigente — *"Head on over to our inquiry tab to schedule a free 1 hour consultation to learn more about our services!"*
-- El formulario vigente (jessicasalomondesigns.com/contact) pide: nombre, email, tipo de celebración, teléfono de contacto para la consulta, fecha del evento, nombre y ubicación del venue, número de invitados, link al tablero de Pinterest, y una descripción libre de la visión. Lleva calendario integrado para elegir horario.
+- El formulario vigente (jessicasalomondesigns.com/contact) pide: nombre, email, tipo de celebración, teléfono de contacto para la consulta, fecha del evento, nombre y ubicación del venue, número de invitados, link al tablero de Pinterest, y una descripción libre de la visión. Lleva calendario integrado para elegir horario. En el nuevo `/inquire`, los nueve datos son obligatorios y el horario se acuerda posteriormente en la respuesta.
 - **El tablero de Pinterest es un artefacto real de su proceso**, no un adorno: lo pide en el formulario y lo menciona en su propio "about" (*"My aim is to bring your Pinterest vision board to life, while adding some of my own expertise"*).
 - La página "Book Online" del sitio vigente está vacía ("Nothing to book right now").
 
@@ -76,7 +76,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 **Restricciones de información:**
 
 - No hay precios ni mínimos publicados, ni en el sitio vigente ni acordados aquí. El sitio no debe insinuar rangos.
-- **No se conoce una dirección de correo pública.** El único canal directo publicado es el teléfono `845-375-7820`. El formulario de `/inquire` ya valida y registra cada solicitud en Neon; la entrega por Resend se conectará cuando exista el correo destino y el dominio esté verificado. La base, no el email, es la fuente de verdad del lead.
+- **No se conoce una dirección de correo pública.** El único canal directo publicado es el teléfono `845-375-7820`. El formulario de `/inquire` ya valida y registra cada solicitud en Neon. Los templates interno y de confirmación están construidos y pueden previsualizarse localmente, pero no forman parte del submit ni envían nada; Resend se conectará cuando exista el correo destino y el dominio esté verificado. La base, no el email, es la fuente de verdad del lead.
 - **El auto-agendado del Wix no se reproduce** (decisión PM, ago 2026). El calendario público de la página vigente promete una disponibilidad que nadie mantiene; el horario de la consulta se acuerda en la respuesta al inquiry.
 - Área de servicio: Hudson Valley, Nueva York — y viaja fuera.
 

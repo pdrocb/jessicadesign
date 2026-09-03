@@ -97,7 +97,7 @@ export function Hero({ content }: EditableSectionProps = {}) {
               src={editable(content, "hero.image", images.heroTapers.src)}
               alt={editable(content, "hero.imageAlt", "Long garden table set with white hydrangeas, taper candles and gold vessels at golden hour")}
               sizes="(min-width: 1440px) 50vw, 100vw"
-              priority
+              loading="eager"
               fetchPriority="high"
               fill
               className="object-cover"
@@ -395,10 +395,14 @@ export function About({ content }: EditableSectionProps = {}) {
 
   return (
     <section
+      id="about"
       aria-label="About Jessica Salomon"
-      className="gutter section-y bg-paper lg:py-30"
+      className="gutter section-y scroll-mt-28 bg-paper lg:py-30"
     >
       <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
+        <p className="text-heading-lg font-display font-medium md:hidden">
+          About Jessica
+        </p>
         <Image
           src={editable(content, "founder.primaryImage", images.jessica.src)}
           alt={editable(content, "founder.primaryImageAlt", "Jessica Salomon, founder and creative director")}

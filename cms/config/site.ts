@@ -92,7 +92,7 @@ export const homeSections: readonly CmsSectionDefinition[] = [
       imageField(
         "hero.image",
         "Hero image",
-        "Recommended · horizontal or square · 2000 px longest side · JPG or WebP · under 4 MB",
+        "Recommended · horizontal or square · 2000 px longest side · JPG or WebP input up to 10 MB · converted to WebP before upload",
       ),
     ],
   },
@@ -109,12 +109,12 @@ export const homeSections: readonly CmsSectionDefinition[] = [
       imageField(
         "philosophy.primaryImage",
         "Primary photograph",
-        "Recommended · portrait or vertical crop · 1600 × 2000 px · JPG or WebP · under 4 MB",
+        "Recommended · portrait or vertical crop · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
       ),
       imageField(
         "philosophy.secondaryImage",
         "Secondary photograph",
-        "Recommended · portrait or vertical crop · 1600 × 2000 px · JPG or WebP · under 4 MB",
+        "Recommended · portrait or vertical crop · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
       ),
     ],
   },
@@ -137,7 +137,7 @@ export const homeSections: readonly CmsSectionDefinition[] = [
         imageField(
           `expertise.items.${index + 1}.image`,
           "Photograph",
-          "Recommended · portrait · 1600 × 2000 px · JPG or WebP · under 4 MB",
+          "Recommended · portrait · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
         ),
       ],
     })),
@@ -173,12 +173,12 @@ export const homeSections: readonly CmsSectionDefinition[] = [
       imageField(
         "silk.primaryImage",
         "Primary photograph",
-        "Recommended · portrait · 1600 × 2000 px · JPG or WebP · under 4 MB",
+        "Recommended · portrait · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
       ),
       imageField(
         "silk.secondaryImage",
         "Secondary photograph",
-        "Recommended · portrait · 1600 × 2000 px · JPG or WebP · under 4 MB",
+        "Recommended · portrait · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
       ),
     ],
   },
@@ -194,7 +194,7 @@ export const homeSections: readonly CmsSectionDefinition[] = [
       imageField(
         "founder.primaryImage",
         "Founder photograph",
-        "Recommended · portrait · 1600 × 2000 px · JPG or WebP · under 4 MB",
+        "Recommended · portrait · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
       ),
     ],
     groups: [
@@ -211,7 +211,7 @@ export const homeSections: readonly CmsSectionDefinition[] = [
           imageField(
             "founder.story.image",
             "Modal photograph",
-            "Recommended · portrait · 1600 × 2000 px · JPG or WebP · under 4 MB",
+            "Recommended · portrait · 1600 × 2000 px · JPG or WebP input up to 10 MB · converted to WebP before upload",
           ),
         ],
       },

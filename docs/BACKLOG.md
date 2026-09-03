@@ -4,7 +4,7 @@ Pendientes evaluados. Los ítems resueltos **se borran**, no se marcan como hech
 
 ## Bloquean producción
 
-- **Entrega por correo de inquiries.** El formulario, endpoint, validación y persistencia en Neon ya están activos. Cuando el dominio y el remitente estén verificados, conectar Resend para enviar aviso interno y confirmación a la pareja, actualizando los campos `email_status`, `internal_email_id` y `client_email_id`.
+- **Activación de entrega por correo de inquiries.** El formulario, endpoint, validación obligatoria, persistencia en Neon y templates HTML/plain text ya están activos. Cuando existan un inbox confirmado, un remitente y el dominio verificado, conectar Resend para enviar el aviso interno y la confirmación, actualizando `email_status`, `internal_email_id` y `client_email_id`.
 - **Assets fotográficos propios.** Las fotos de `assets/` se descargaron del Wix vigente de la clienta. Sustituir por arte final optimizado antes de publicar.
 - **Dominio propio.** Producción vive en `jessicadesign.vercel.app`. Actualizar la URL canónica desde Site Settings cuando se conecte el dominio real.
 

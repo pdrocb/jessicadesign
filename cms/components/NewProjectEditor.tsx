@@ -13,10 +13,10 @@ import {
   type ProjectCreateState,
 } from "@/cms/projects/actions";
 import {
-  largeProjectImageBytes,
-  maximumProjectImageBytes,
-} from "@/cms/projects/image-policy";
-import { optimizeProjectImage } from "@/cms/projects/optimize-image";
+  largeCmsImageBytes,
+  maximumCmsImageBytes,
+} from "@/cms/media/image-policy";
+import { optimizeCmsImage } from "@/cms/media/optimize-image";
 
 const initialState: ProjectCreateState = { status: "idle", message: "" };
 
@@ -48,13 +48,13 @@ export function NewProjectEditor({ connected }: { connected: boolean }) {
       if (selected.type !== "image/jpeg" && selected.type !== "image/webp") {
         throw new Error("Choose a JPG or WebP image.");
       }
-      const optimized = await optimizeProjectImage(selected);
-      if (optimized.size > maximumProjectImageBytes) {
+      const optimized = await optimizeCmsImage(selected);
+      if (optimized.size > maximumCmsImageBytes) {
         throw new Error("The optimized image must be 10 MB or smaller.");
       }
       setFile(optimized);
       setFileMessage(
-        optimized.size > largeProjectImageBytes
+        optimized.size > largeCmsImageBytes
           ? "This image is still quite large. Consider using a smaller version."
           : "Cover photograph ready.",
       );

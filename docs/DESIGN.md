@@ -360,7 +360,7 @@ The full-width editorial plate was removed from the page composition in Aug 2026
 
 ### The founder story opens into an editorial profile
 
-About retains its portrait, **`Founder & Creative Director`** eyebrow, name and short biography. The portrait leads at 5/12 while the text begins lower in the adjacent column, breaking the generic top-aligned bio split without overlap. A text CTA, **`Meet Jessica`**, replaces the repeated signature block and opens the longer founder story in a native fullscreen dialog.
+About retains its portrait, **`Founder & Creative Director`** eyebrow, name and short biography. On mobile only, **`About Jessica`** introduces the single-column section immediately above the portrait; it disappears from tablet upward, where the side-by-side composition already supplies enough context. The portrait leads at 5/12 while the text begins lower in the adjacent column, breaking the generic top-aligned bio split without overlap. A text CTA, **`Meet Jessica`**, replaces the repeated signature block and opens the longer founder story in a native fullscreen dialog.
 
 The dialog is a 5/7 editorial split from tablet upward: its distinct working portrait shows Jessica styling a table and remains fixed at viewport height while the story scrolls independently with the page surface. The image receives a restrained editorial grade—slightly brighter, gently desaturated and with facial/lens highlights recovered—without changing identity or scene. Mobile returns to the DOM order—a 4/5 portrait, story, then a full conversion path to `/inquire`. The close control remains visible, measures 44px, Escape closes the dialog, scroll is locked behind it and focus returns to `Meet Jessica`. Its role line follows the client-supplied copy exactly: **`founder and lead designer`**; the section's existing title remains **`Founder & Creative Director`**.
 
@@ -447,7 +447,7 @@ A four-image desktop remainder resolves as `2 + 2`, never `3 + 1`; this prevents
 
 Any cover or preview opens a project-scoped fullscreen viewer on a light `paper` ground, with the image stage differentiated in `bone`, warm hairlines, and umber controls. Images use `object-contain` so the complete photograph wins over filling the viewport. Previous/next controls remain visible and at least 44px at every breakpoint, wrapping inside that project; keyboard arrows, Escape, swipe, focus return and document scroll lock complement them. The counter communicates both current position and project size.
 
-Project order, photograph order, publication state, cover and Home selection are explicit data. Home selection never carries an independent position. `lib/lookbook.ts` remains the versioned fallback; the CMS repository reads the same contract from Neon and seeds it on first connection. Project photographs are auto-oriented, capped at 2000px on the long edge and stored through Vercel Blob. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported.
+Project order, photograph order, publication state, cover and Home selection are explicit data. Home selection never carries an independent position. `lib/lookbook.ts` remains the versioned fallback; the CMS repository reads the same contract from Neon and seeds it on first connection. Every CMS image is auto-oriented, reduced to its field limit and converted to a new WebP before upload; the source original is never retained. Project photographs cap the long edge at 2000px. `next/image` and Vercel then serve responsive transformations, including AVIF/WebP negotiation where supported; only the first meaningful cover receives high fetch priority and downstream images remain lazy.
 
 ### The CMS is an operational tool, not an extension of the wedding site
 
@@ -477,16 +477,22 @@ Square corners, no fills, and **a single hairline under each field** rather than
 
 - **Field label:** `label-sm` uppercase in `ink-subtle`, above the control. Every field is labelled; no placeholder-as-label.
 - **Control:** transparent ground, `border-bottom: 1px` in `line-warm`, `body-lg` type in `ink`, 44px minimum height. On focus the rule thickens to `sage` — the accent's one job in the form, and the only place it appears outside a button.
-- **Optional fields** carry a lowercase `(optional)` beside the label in `ink-faint`; required fields are unmarked. Marking the exception rather than the rule keeps eight asterisks off the page.
+- **Every field is required.** Labels remain unmarked because the requirement applies to the complete conversation; repeating nine asterisks adds noise without information. Client and server errors use the same quiet `rose-umber` treatment beneath the affected control.
 - **Select:** the same underline; the native control, restyled — never a custom dropdown.
 - **Error:** the rule turns `rose-umber` and the message sits beneath in `body-sm` `rose-umber`, naming the problem and the fix. Rose is the system's only alarm colour, and it is deliberately quiet — this form never scolds.
 - **Success:** the form is replaced in place by a Cormorant confirmation at `heading-lg`; no toast, no modal.
+
+### Inquiry emails extend the laid table
+
+The two inquiry emails reuse the public system without turning an inbox into a miniature webpage. Both sit on `cream` with a 640px `paper` table, square corners, no shadow and warm hairlines. Cormorant/Georgia carries names and acknowledgements; Karla/Arial carries every operational detail. `Sage` is reserved for the internal arrival banner and the client-facing next-step sequence; `petal` holds gratitude, signature and the submitted vision.
+
+The internal template optimizes retrieval: name, received time, celebration and date lead; every submitted field follows in a scan-friendly table; email, phone and Pinterest remain actionable. The client template optimizes reassurance: confirmation, the complimentary one-hour conversation, a restrained three-step sequence, and a faithful summary of the inquiry. Neither template claims a proposal, quote, contract, event-planning responsibility or response window more specific than “within a few days.” Both include a plain-text equivalent and collapse summary cells into a single column below 620px.
 
 ### The inquiry page is its own room
 
 `/inquire` is a full-screen surface at every breakpoint, not a section and not a modal. It carries the **same fixed one-row navigation** as the home; on mobile its hamburger is available immediately, while tablet and desktop retain the visible destinations.
 
-A first pass gave the page row 1 only, on the theory that a conversion surface should not offer lateral escapes. That was wrong in practice (PM call, Aug 2026): **a centred logotype does not read as an exit.** Visitors did not perceive a way back at all, which is a worse failure than a few extra links — a trapped visitor leaves the site, not just the page. The Look Book is now a real route (`/look-book`); section destinations such as Expertise and Process remain root-relative (`/#expertise`) so they resolve from any page.
+A first pass gave the page row 1 only, on the theory that a conversion surface should not offer lateral escapes. That was wrong in practice (PM call, Aug 2026): **a centred logotype does not read as an exit.** Visitors did not perceive a way back at all, which is a worse failure than a few extra links — a trapped visitor leaves the site, not just the page. The Look Book is now a real route (`/look-book`); Expertise, Process and About remain root-relative (`/#expertise`, `/#process`, `/#about`) so they resolve from any page. About targets the Founder section.
 
 The content column is **centred in the document** at `max-w-[900px]`, not hung off the left rail. The wide rail exists to feed photography; a form has none, and left-aligning it stranded half the viewport empty.
 

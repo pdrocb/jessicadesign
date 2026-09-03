@@ -4,10 +4,8 @@ import { cmsSite } from "@/cms/config/site";
 
 export function CmsBrand({
   compact = false,
-  priority = false,
 }: {
   compact?: boolean;
-  priority?: boolean;
 }) {
   return (
     <div
@@ -16,7 +14,7 @@ export function CmsBrand({
       role="img"
       aria-label={`${cmsSite.name} content manager`}
     >
-      <Image src={logoMark} alt="" priority={priority} />
+      <Image src={logoMark} alt="" sizes={compact ? "40px" : "88px"} />
       <span>Content manager</span>
     </div>
   );

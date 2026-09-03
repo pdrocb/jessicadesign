@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsField } from "@/cms/components/ui/CmsField";
 import { CmsImageField } from "@/cms/components/ui/CmsImageField";
@@ -44,9 +44,11 @@ function homeSectionForField(fieldName?: string) {
 function EditorField({
   field,
   document,
+  onProcessingChange,
 }: {
   field: CmsFieldDefinition;
   document: HomeDocument;
+  onProcessingChange: (processing: boolean) => void;
 }) {
   if (field.type === "image") {
     return (
@@ -58,6 +60,7 @@ function EditorField({
         fileName={`${field.key}File`}
         accept={field.accept}
         hint={field.hint}
+        onProcessingChange={onProcessingChange}
         alt={{
           name: field.altKey,
           value: homeText(document, field.altKey),
@@ -83,8 +86,13 @@ function EditorField({
 export function HomeEditor({ document }: { document: HomeDocument }) {
   const [state, action, pending] = useActionState(saveHome, initialState);
   const [openSection, setOpenSection] = useState(homeSections[0].id);
+  const [processingImages, setProcessingImages] = useState(0);
   const { dirty, setDirty } = useCmsEditorState(state.status);
   const previousSection = useRef(openSection);
+  const onImageProcessingChange = useCallback((processing: boolean) => {
+    setProcessingImages((current) => Math.max(0, current + (processing ? 1 : -1)));
+  }, []);
+  const imagesBusy = processingImages > 0;
 
   const testimonials = homeTestimonials(document, []);
   const faqs = homeFaqs(document, []);
@@ -106,7 +114,9 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
   useEffect(() => {
     if (state.status !== "error") return;
     const section = state.section || homeSectionForField(state.field);
-    if (section) setOpenSection(section);
+    if (!section) return;
+    const frame = window.requestAnimationFrame(() => setOpenSection(section));
+    return () => window.cancelAnimationFrame(frame);
   }, [state]);
 
   useEffect(() => {
@@ -134,6 +144,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
               className="cms-desktop-save"
               dirty={dirty || state.status === "error"}
               pending={pending}
+              disabled={imagesBusy}
             />
           </>
         }
@@ -163,7 +174,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
                 </button>
                 <div className="cms-card-fields">
                   {section.fields.map((field) => (
-                    <EditorField field={field} document={document} key={field.key} />
+                    <EditorField field={field} document={document} key={field.key} onProcessingChange={onImageProcessingChange} />
                   ))}
                   {section.groups?.map((group) => (
                     <div
@@ -178,7 +189,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
                       </div>
                       <div className="cms-fixed-group-fields">
                         {group.fields.map((field) => (
-                          <EditorField field={field} document={document} key={field.key} />
+                          <EditorField field={field} document={document} key={field.key} onProcessingChange={onImageProcessingChange} />
                         ))}
                       </div>
                     </div>
@@ -223,6 +234,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
         pending={pending}
         status={state.status}
         message={state.message}
+        disabled={imagesBusy}
       />
       <CmsUnsavedChangesGuard when={dirty && !pending} />
     </form>

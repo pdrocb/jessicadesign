@@ -12,7 +12,7 @@ export default async function LoginPage() {
   return (
     <main className="cms-login-page">
       <div className="cms-login-shell">
-        <CmsBrand priority />
+        <CmsBrand />
         <section className="cms-login-card">
           <h1>Login</h1>
           <p>Sign in to manage {cmsSite.name}.</p>

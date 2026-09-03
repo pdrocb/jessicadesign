@@ -4,6 +4,7 @@ import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { requireSession } from "@/cms/auth/session";
 import { getCmsDatabase } from "@/cms/database/client";
+import { optimizedCmsImageMetadata } from "@/cms/media/image-metadata";
 import {
   defaultSiteSettings,
   type SiteSettingsDocument,
@@ -43,17 +44,6 @@ const textLimits: Record<Exclude<keyof SiteSettingsDocument, "ogImageUrl" | "fav
   facebook: 500,
 };
 
-const faviconTypes = new Map([
-  ["image/png", "png"],
-  ["image/x-icon", "ico"],
-  ["image/vnd.microsoft.icon", "ico"],
-]);
-const sharingImageTypes = new Map([
-  ["image/jpeg", "jpg"],
-  ["image/png", "png"],
-  ["image/webp", "webp"],
-]);
-
 function textValue(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -72,15 +62,12 @@ function isSafeMediaSource(value: string) {
 async function uploadMedia(
   file: File,
   kind: "favicon" | "open-graph",
-  types: Map<string, string>,
-  maximumBytes: number,
+  maximumEdge: number,
 ) {
-  if (!types.has(file.type)) throw new Error(`Choose a supported ${kind} image format.`);
-  if (file.size > maximumBytes) throw new Error(`The ${kind} image is too large.`);
+  const metadata = await optimizedCmsImageMetadata(file, maximumEdge);
   if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Image uploads are not configured yet.");
 
-  const extension = types.get(file.type);
-  const blob = await put(`site/${kind}.${extension}`, file, {
+  const blob = await put(`site/${kind}.${metadata.extension}`, file, {
     access: "public",
     addRandomSuffix: true,
     cacheControlMaxAge: 31_536_000,
@@ -140,10 +127,10 @@ export async function saveSiteSettings(
 
   try {
     if (ogImage instanceof File && ogImage.size > 0) {
-      data.ogImageUrl = await uploadMedia(ogImage, "open-graph", sharingImageTypes, 4_000_000);
+      data.ogImageUrl = await uploadMedia(ogImage, "open-graph", 1200);
     }
     if (favicon instanceof File && favicon.size > 0) {
-      data.faviconUrl = await uploadMedia(favicon, "favicon", faviconTypes, 1_000_000);
+      data.faviconUrl = await uploadMedia(favicon, "favicon", 512);
     }
   } catch (error) {
     return {

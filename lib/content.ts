@@ -47,6 +47,7 @@ export const navItems = [
   { label: "Look Book", href: "/look-book" },
   { label: "Expertise", href: "/#expertise" },
   { label: "Process", href: "/#process" },
+  { label: "About", href: "/#about" },
 ];
 
 export const images = {
@@ -192,8 +193,8 @@ export const lookbookIntro = {
  * vigente de jessicasalomondesigns.com/contact SIN el calendario de
  * auto-agendado: el horario se acuerda en la respuesta.
  *
- * `required: false` se marca en la UI con "(optional)" — se señala la
- * excepción, no la regla, para no llenar la página de asteriscos.
+ * Todos los campos son obligatorios. La UI no repite asteriscos: el
+ * formulario completo se presenta como una sola conversación requerida.
  */
 export const inquiry = {
   eyebrow: "Inquire",
@@ -201,12 +202,12 @@ export const inquiry = {
   intro:
     "A few details to start. We reply personally, and the first conversation is a complimentary hour.",
   submit: "Send Your Inquiry",
-  successHeading: "Thank you. Your inquiry is on its way.",
+  successHeading: "Thank you. Your inquiry has been received.",
   successBody:
     "We read every one personally and reply within a few days to arrange your complimentary consultation.",
   fields: [
-    { name: "name", label: "First & Last Name", type: "text", required: true, autoComplete: "name" },
-    { name: "email", label: "Email", type: "email", required: true, autoComplete: "email" },
+    { name: "name", label: "First & Last Name", type: "text", required: true, autoComplete: "name", maxLength: 160 },
+    { name: "email", label: "Email", type: "email", required: true, autoComplete: "email", maxLength: 320 },
     {
       name: "celebration",
       label: "Type of Celebration",
@@ -220,12 +221,12 @@ export const inquiry = {
         "Something else",
       ],
     },
-    { name: "phone", label: "Contact Number", type: "tel", required: true, autoComplete: "tel" },
-    { name: "date", label: "Date of the Event", type: "date", required: false },
-    { name: "venue", label: "Name & Location of Venue", type: "text", required: false },
-    { name: "guests", label: "How Many Guests", type: "number", required: false },
-    { name: "pinterest", label: "Pinterest Board", type: "url", required: false },
-    { name: "vision", label: "Share Your Vision", type: "textarea", required: false },
+    { name: "phone", label: "Contact Number", type: "tel", required: true, autoComplete: "tel", maxLength: 80 },
+    { name: "date", label: "Date of the Event", type: "date", required: true },
+    { name: "venue", label: "Name & Location of Venue", type: "text", required: true, maxLength: 500 },
+    { name: "guests", label: "How Many Guests", type: "number", required: true, min: 1, max: 10000 },
+    { name: "pinterest", label: "Pinterest Board", type: "url", required: true, maxLength: 2000 },
+    { name: "vision", label: "Share Your Vision", type: "textarea", required: true, maxLength: 5000 },
   ],
 } as const;
 

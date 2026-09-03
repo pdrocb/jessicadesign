@@ -9,6 +9,7 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 | `/` | `app/page.tsx` → `components/sections.tsx` | `cms/content/home.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
 | `/look-book` | `app/look-book/page.tsx` → `components/LookBookExperience.tsx` | `cms/projects/repository.ts` y `cms/settings/repository.ts` |
 | `/inquire` | `app/inquire/page.tsx` → `components/InquiryForm.tsx` | `app/api/inquiry/route.ts` → `handler.ts` → `cms/inquiries/delivery.ts` |
+| `/api/emails/preview` | Preview local de `InquiryConfirmation` o `NewInquiry` | `emails/` → `@react-email/render`; responde 404 en producción y no envía correo |
 
 ## CMS
 
@@ -32,6 +33,8 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 - `cms/styles/controls.css`: geometría y estados de controles.
 - `app/admin/admin.css`: shell, navegación y layouts específicos de las pantallas actuales.
 - `cms/database/client.ts`: acceso común a Neon.
+- `cms/media/`: política única de entrada, conversión WebP en navegador y validación defensiva previa a Blob.
+- `emails/`: templates responsive, tipos compartidos y alternativas plain text; no contiene integración de entrega.
 
 ## Límites
 

@@ -342,6 +342,7 @@ export function LookBookExperience({
                     alt=""
                     fill
                     loading={projectIndex === 0 ? "eager" : "lazy"}
+                    fetchPriority={projectIndex === 0 ? "high" : "auto"}
                     sizes="(min-width: 1536px) 1008px, (min-width: 768px) 66vw, 100vw"
                     className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.02]"
                   />

@@ -1,6 +1,6 @@
 import { validateInquiry, type InquiryPayload } from "@/cms/inquiries/validation";
 
-type Delivery = (inquiry: InquiryPayload) => Promise<void>;
+type Delivery = (inquiry: InquiryPayload) => Promise<string>;
 
 export function createInquiryPost(deliver: Delivery) {
   return async function POST(request: Request) {
@@ -16,7 +16,10 @@ export function createInquiryPost(deliver: Delivery) {
 
     const result = validateInquiry(body);
     if (!result.ok) {
-      return Response.json({ message: result.message }, { status: 400 });
+      return Response.json(
+        { message: result.message, field: result.field },
+        { status: 400 },
+      );
     }
 
     try {

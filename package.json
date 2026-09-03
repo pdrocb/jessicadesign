@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --import tsx --test app/api/inquiry/handler.test.ts cms/media/image-metadata.test.ts emails/emails.test.tsx",
     "assets": "node scripts/optimize-assets.mjs",
     "db:init": "node --env-file-if-exists=.env.local db/init.mjs",
     "cms:user": "node --env-file-if-exists=.env.local scripts/create-cms-user.mjs",
@@ -15,7 +16,10 @@
   "dependencies": {
     "@neondatabase/auth": "^0.5.0-beta",
     "@neondatabase/serverless": "^1.1.0",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0",
     "@vercel/blob": "^2.8.0",
+    "@vercel/speed-insights": "^2.0.0",
     "better-auth": "1.6.23",
     "next": "16.3.0",
     "react": "19.2.8",
@@ -30,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }

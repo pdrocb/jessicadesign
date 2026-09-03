@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export default async function LookBookPage() {
   const [{ projects: allProjects }, settings] = await Promise.all([
