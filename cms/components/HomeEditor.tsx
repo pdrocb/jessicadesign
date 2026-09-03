@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useCallback, useEffect, useRef, useState } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsField } from "@/cms/components/ui/CmsField";
 import { CmsImageField } from "@/cms/components/ui/CmsImageField";
@@ -9,6 +9,7 @@ import {
   CmsFormAlert,
   CmsMobileSaveBar,
   CmsSaveButton,
+  cmsNativeValidationMessage,
   useCmsEditorState,
 } from "@/cms/components/ui/CmsEditorChrome";
 import { CmsPageHeader } from "@/cms/components/ui/CmsPageHeader";
@@ -35,20 +36,41 @@ const homeChapters = new Map([
 
 function homeSectionForField(fieldName?: string) {
   if (!fieldName) return "";
+  if (fieldName.startsWith(`${HOME_TESTIMONIALS_KEY}-`)) {
+    return homeSections.find((section) => section.collection === "testimonials")?.id ?? "";
+  }
+  if (fieldName.startsWith(`${HOME_FAQS_KEY}-`)) {
+    return homeSections.find((section) => section.collection === "faqs")?.id ?? "";
+  }
   return homeSections.find((section) => (
     section.fields.some((field) => field.key === fieldName || (field.type === "image" && (`${field.key}File` === fieldName || field.altKey === fieldName)))
     || section.groups?.some((group) => group.fields.some((field) => field.key === fieldName || (field.type === "image" && (`${field.key}File` === fieldName || field.altKey === fieldName))))
   ))?.id ?? "";
 }
 
+function homeFocusableField(fieldName?: string) {
+  if (!fieldName) return "";
+  const imageField = homeSections
+    .flatMap((section) => [
+      ...section.fields,
+      ...(section.groups?.flatMap((group) => group.fields) ?? []),
+    ])
+    .find((field) => field.type === "image" && field.key === fieldName);
+  return imageField ? `${imageField.key}File` : fieldName;
+}
+
 function EditorField({
   field,
   document,
   onProcessingChange,
+  errorField,
+  errorMessage,
 }: {
   field: CmsFieldDefinition;
   document: HomeDocument;
   onProcessingChange: (processing: boolean) => void;
+  errorField?: string;
+  errorMessage?: string;
 }) {
   if (field.type === "image") {
     return (
@@ -60,11 +82,13 @@ function EditorField({
         fileName={`${field.key}File`}
         accept={field.accept}
         hint={field.hint}
+        error={errorField === field.key || errorField === `${field.key}File` ? errorMessage : undefined}
         onProcessingChange={onProcessingChange}
         alt={{
           name: field.altKey,
           value: homeText(document, field.altKey),
           required: true,
+          error: errorField === field.altKey ? errorMessage : undefined,
         }}
       />
     );
@@ -78,6 +102,7 @@ function EditorField({
       defaultValue={homeText(document, field.key)}
       type={field.type}
       hint={field.hint}
+      error={errorField === field.key ? errorMessage : undefined}
       wide={field.wide}
       required={field.required}
       maxLength={field.maxLength}
@@ -89,12 +114,16 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
   const [state, action, pending] = useActionState(saveHome, initialState);
   const [openSection, setOpenSection] = useState(homeSections[0].id);
   const [processingImages, setProcessingImages] = useState(0);
+  const [clientError, setClientError] = useState<{ field: string; message: string } | null>(null);
   const { dirty, setDirty } = useCmsEditorState(state.status);
   const previousSection = useRef(openSection);
+  const invalidHandled = useRef(false);
   const onImageProcessingChange = useCallback((processing: boolean) => {
     setProcessingImages((current) => Math.max(0, current + (processing ? 1 : -1)));
   }, []);
   const imagesBusy = processingImages > 0;
+  const errorField = clientError?.field ?? (state.status === "error" ? state.field : undefined);
+  const errorMessage = clientError?.message ?? (state.status === "error" ? state.message : undefined);
 
   const testimonials = homeTestimonials(document, []);
   const faqs = homeFaqs(document, []);
@@ -114,26 +143,47 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
   }, [openSection]);
 
   useEffect(() => {
-    if (state.status !== "error") return;
-    const section = state.section || homeSectionForField(state.field);
+    const section = state.status === "error" && state.section
+      ? state.section
+      : homeSectionForField(errorField);
     if (!section) return;
     const frame = window.requestAnimationFrame(() => setOpenSection(section));
     return () => window.cancelAnimationFrame(frame);
-  }, [state]);
+  }, [errorField, state]);
 
   useEffect(() => {
-    if (state.status !== "error" || !state.field) return;
+    if (!errorField) return;
     const frame = window.requestAnimationFrame(() => {
-      const field = window.document.querySelector<HTMLElement>(`[name="${CSS.escape(state.field ?? "")}"]`);
+      const field = window.document.querySelector<HTMLElement>(`[name="${CSS.escape(homeFocusableField(errorField))}"]`);
       field?.focus();
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [openSection, state]);
+  }, [errorField, openSection]);
+
+  function handleInvalid(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const control = event.target;
+    if (invalidHandled.current || (!(control instanceof HTMLInputElement) && !(control instanceof HTMLTextAreaElement))) return;
+    invalidHandled.current = true;
+    setClientError({ field: control.name, message: cmsNativeValidationMessage(control) });
+    const section = homeSectionForField(control.name);
+    if (section) setOpenSection(section);
+    window.requestAnimationFrame(() => {
+      invalidHandled.current = false;
+    });
+  }
 
   return (
     <form
       action={action}
-      onChange={() => setDirty(true)}
+      onChange={(event) => {
+        setDirty(true);
+        const control = event.target;
+        if (clientError && control instanceof HTMLElement && control.getAttribute("name") === clientError.field) {
+          setClientError(null);
+        }
+      }}
+      onInvalidCapture={handleInvalid}
       className="cms-editor-form"
     >
       <CmsPageHeader
@@ -152,7 +202,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
         }
       />
 
-      {state.status === "error" ? <CmsFormAlert message={state.message} /> : null}
+      {errorMessage ? <CmsFormAlert focusOnMount={!errorField} heading={errorField ? "Check the highlighted field" : "Couldn’t save"} message={errorMessage} /> : null}
 
       <div className="cms-section-list">
         {homeSections.map((section) => {
@@ -176,7 +226,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
                 </button>
                 <div className="cms-card-fields">
                   {section.fields.map((field) => (
-                    <EditorField field={field} document={document} key={field.key} onProcessingChange={onImageProcessingChange} />
+                    <EditorField field={field} document={document} key={field.key} onProcessingChange={onImageProcessingChange} errorField={errorField} errorMessage={errorMessage} />
                   ))}
                   {section.groups?.map((group) => (
                     <div
@@ -191,7 +241,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
                       </div>
                       <div className="cms-fixed-group-fields">
                         {group.fields.map((field) => (
-                          <EditorField field={field} document={document} key={field.key} onProcessingChange={onImageProcessingChange} />
+                          <EditorField field={field} document={document} key={field.key} onProcessingChange={onImageProcessingChange} errorField={errorField} errorMessage={errorMessage} />
                         ))}
                       </div>
                     </div>
@@ -208,6 +258,8 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
                       ]}
                       createItem={(id) => ({ id, text: "", who: "" })}
                       onDirty={() => setDirty(true)}
+                      errorField={errorField}
+                      errorMessage={errorMessage}
                     />
                   ) : null}
                   {section.collection === "faqs" ? (
@@ -222,6 +274,8 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
                       ]}
                       createItem={(id) => ({ id, q: "", a: "" })}
                       onDirty={() => setDirty(true)}
+                      errorField={errorField}
+                      errorMessage={errorMessage}
                     />
                   ) : null}
                 </div>
@@ -238,7 +292,7 @@ export function HomeEditor({ document }: { document: HomeDocument }) {
         message={state.message}
         disabled={imagesBusy}
       />
-      <CmsUnsavedChangesGuard when={dirty && !pending} />
+      <CmsUnsavedChangesGuard when={dirty || state.status === "error"} />
     </form>
   );
 }

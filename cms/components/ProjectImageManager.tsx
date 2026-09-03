@@ -20,6 +20,8 @@ type ProjectImageManagerProps = {
   coverImageId: string;
   images: readonly LookbookImage[];
   connected: boolean;
+  errorField?: string;
+  errorMessage?: string;
 };
 
 type UploadStage = "queued" | "optimizing" | "uploading" | "error";
@@ -73,6 +75,8 @@ export function ProjectImageManager({
   coverImageId,
   images: projectImages,
   connected,
+  errorField,
+  errorMessage,
 }: ProjectImageManagerProps) {
   const router = useRouter();
   const [images, setImages] = useState(() => orderedImages(projectImages, coverImageId));
@@ -81,6 +85,7 @@ export function ProjectImageManager({
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
   const [actionError, setActionError] = useState("");
   const previewUrls = useRef(new Set<string>());
+  const imageCardRefs = useRef(new Map<string, HTMLElement>());
   const [pending, startTransition] = useTransition();
   const uploading = uploadItems.some((item) => item.stage !== "error");
   const busy = pending || uploading;
@@ -196,22 +201,34 @@ export function ProjectImageManager({
 
     const previousImages = images;
     const previousPrimaryId = primaryId;
+    const previousIndex = images.findIndex((image) => image.id === imageId);
     const nextImages = applyImageAction(images, imageId, action);
     const nextPrimaryId = nextImages[0]?.id ?? primaryId;
+    const nextFocusId = action === "delete"
+      ? nextImages[Math.min(previousIndex, nextImages.length - 1)]?.id
+      : undefined;
     setImages(nextImages);
     setPrimaryId(nextPrimaryId);
     setActionError("");
 
     startTransition(async () => {
+      let succeeded = false;
       try {
         await updateProjectImage(projectId, imageId, action);
+        succeeded = true;
         router.refresh();
       } catch (actionError) {
         setImages(previousImages);
         setPrimaryId(previousPrimaryId);
         setActionError(actionError instanceof Error ? actionError.message : "The photograph could not be updated.");
       } finally {
-        if (action === "delete") setDeleteTargetId(null);
+        if (action === "delete") {
+          setDeleteTargetId(null);
+          const focusId = succeeded ? nextFocusId : imageId;
+          window.requestAnimationFrame(() => {
+            if (focusId) imageCardRefs.current.get(focusId)?.focus();
+          });
+        }
       }
     });
   }
@@ -240,7 +257,17 @@ export function ProjectImageManager({
         {images.map((image, index) => {
           const isPrimary = image.id === primaryId;
           return (
-            <article className="cms-project-photo-editor" data-primary={isPrimary || undefined} key={image.id}>
+            <article
+              ref={(node) => {
+                if (node) imageCardRefs.current.set(image.id, node);
+                else imageCardRefs.current.delete(image.id);
+              }}
+              aria-label={`Photograph ${index + 1}${isPrimary ? ", cover image" : ""}`}
+              className="cms-project-photo-editor"
+              data-primary={isPrimary || undefined}
+              key={image.id}
+              tabIndex={-1}
+            >
               <div className="cms-project-photo-visual">
                 <div className="cms-project-photo-preview">
                   <Image src={image.src} alt="" fill sizes="(min-width: 1180px) 24vw, (min-width: 760px) 38vw, calc(100vw - 48px)" />
@@ -274,9 +301,9 @@ export function ProjectImageManager({
                       ) : null}
                       <details className="cms-project-photo-menu">
                         <summary aria-label={`Actions for photograph ${index + 1}`}><CmsIcon name="more" /></summary>
-                        <div role="menu">
-                          <button type="button" role="menuitem" disabled={!connected || busy || isPrimary} onClick={(event) => chooseAction(event, image.id, "make-primary")}>Make cover image</button>
-                          <button className="cms-project-photo-delete" type="button" role="menuitem" disabled={!connected || busy || images.length === 1} onClick={(event) => chooseAction(event, image.id, "delete")}>Delete</button>
+                        <div>
+                          <button type="button" disabled={!connected || busy || isPrimary} onClick={(event) => chooseAction(event, image.id, "make-primary")}>Make cover image</button>
+                          <button className="cms-project-photo-delete" type="button" disabled={!connected || busy || images.length === 1} onClick={(event) => chooseAction(event, image.id, "delete")}>Delete</button>
                         </div>
                       </details>
                     </div>
@@ -293,6 +320,7 @@ export function ProjectImageManager({
                 maxLength={500}
                 required
                 disabled={!connected}
+                error={errorField === `imageAlt:${image.id}` ? errorMessage : undefined}
               />
             </article>
           );
@@ -323,7 +351,12 @@ export function ProjectImageManager({
           </article>
         ))}
         <article className="cms-project-photo-editor cms-project-photo-upload">
-          <label className="cms-project-photo-upload-trigger" htmlFor={`${projectId}-new-image`}>
+          <label
+            aria-disabled={!connected || busy || undefined}
+            className="cms-project-photo-upload-trigger"
+            data-disabled={!connected || busy || undefined}
+            htmlFor={`${projectId}-new-image`}
+          >
             <div className="cms-project-photo-preview">
               <span aria-hidden><CmsIcon name="plus" /></span>
             </div>

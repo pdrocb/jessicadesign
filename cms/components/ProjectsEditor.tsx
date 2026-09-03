@@ -1,11 +1,63 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useTransition } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsPageHeader } from "@/cms/components/ui/CmsPageHeader";
 import { ProjectHomeToggle } from "@/cms/components/ProjectHomeToggle";
 import { ProjectPublishedToggle } from "@/cms/components/ProjectPublishedToggle";
 import { moveProject } from "@/cms/projects/actions";
 import type { LookbookProject } from "@/lib/lookbook";
+
+function ProjectOrderControls({
+  projectId,
+  projectTitle,
+  connected,
+  canMoveUp,
+  canMoveDown,
+}: {
+  projectId: string;
+  projectTitle: string;
+  connected: boolean;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
+}) {
+  const [message, setMessage] = useState("");
+  const [pending, startTransition] = useTransition();
+
+  function run(direction: "up" | "down") {
+    setMessage("");
+    startTransition(async () => {
+      const result = await moveProject(projectId, direction);
+      if (!result.ok) setMessage(result.message ?? "The project could not be moved. Try again.");
+    });
+  }
+
+  return (
+    <div className="cms-project-order" aria-busy={pending}>
+      <button
+        aria-label={`Move ${projectTitle} up`}
+        title="Move up"
+        type="button"
+        disabled={!connected || !canMoveUp || pending}
+        onClick={() => run("up")}
+      >
+        <CmsIcon name="up" />
+      </button>
+      <button
+        aria-label={`Move ${projectTitle} down`}
+        title="Move down"
+        type="button"
+        disabled={!connected || !canMoveDown || pending}
+        onClick={() => run("down")}
+      >
+        <CmsIcon name="down" />
+      </button>
+      {message ? <span className="cms-project-order-error" role="alert">{message}</span> : null}
+    </div>
+  );
+}
 
 export function ProjectsEditor({ projects, connected }: { projects: LookbookProject[]; connected: boolean }) {
   const homeProjectCount = projects.filter((project) => project.featured).length;
@@ -59,14 +111,13 @@ export function ProjectsEditor({ projects, connected }: { projects: LookbookProj
                     limitReached={homeLimitReached}
                   />
                 </div>
-                <div className="cms-project-order">
-                  <form action={moveProject.bind(null, project.id, "up")}>
-                    <button aria-label={`Move ${project.title} up`} title="Move up" disabled={!connected || index === 0}><CmsIcon name="up" /></button>
-                  </form>
-                  <form action={moveProject.bind(null, project.id, "down")}>
-                    <button aria-label={`Move ${project.title} down`} title="Move down" disabled={!connected || index === projects.length - 1}><CmsIcon name="down" /></button>
-                  </form>
-                </div>
+                <ProjectOrderControls
+                  projectId={project.id}
+                  projectTitle={project.title}
+                  connected={connected}
+                  canMoveUp={index > 0}
+                  canMoveDown={index < projects.length - 1}
+                />
               </div>
             </article>
           );

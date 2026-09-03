@@ -292,6 +292,10 @@
   line-height: 1.5;
 }
 
+.cms-form-alert:focus { outline: 2px solid var(--cms-focus); outline-offset: 2px; }
+.cms-form-alert strong { display: block; font-size: 14px; }
+.cms-form-alert p { margin: 4px 0 0; }
+
 .cms-media-stack { gap: 10px; }
 .cms-media-field {
   display: grid;
@@ -346,6 +350,13 @@
   font-weight: 650;
 }
 
+.cms-file-button[data-disabled],
+.cms-project-photo-upload-trigger[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.52;
+  pointer-events: none;
+}
+
 .cms-file-input {
   position: absolute;
   width: 1px !important;
@@ -363,6 +374,11 @@
   outline-offset: 2px;
 }
 
+.cms-file-button:has(.cms-file-input:focus-visible) {
+  outline: 3px solid var(--cms-focus-ring);
+  outline-offset: 2px;
+}
+
 .cms-collection-editor {
   display: grid;
   min-width: 0;
@@ -376,6 +392,12 @@
   border: 1px solid var(--cms-line);
   border-radius: var(--cms-radius-lg);
   background: var(--cms-surface-muted);
+}
+
+.cms-collection-item:focus,
+.cms-project-photo-editor:focus {
+  outline: 3px solid var(--cms-focus-ring);
+  outline-offset: 2px;
 }
 
 .cms-collection-heading {
@@ -584,7 +606,22 @@
 .cms-project-index-published { position: relative; display: flex; min-height: 44px; align-items: center; gap: 9px; color: var(--cms-ink-soft); font-size: 13px; font-weight: 650; }
 .cms-project-index-published input { width: 18px; height: 18px; accent-color: var(--cms-action); }
 .cms-project-index-published small { position: absolute; top: calc(100% - 4px); left: 27px; width: max-content; max-width: 220px; color: var(--cms-danger); font-size: var(--cms-text-xs); font-weight: 600; }
-.cms-project-order { display: flex; flex-wrap: wrap; gap: 8px; }
+.cms-project-order { position: relative; display: flex; flex-wrap: wrap; gap: 8px; }
+.cms-project-order-error {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 4;
+  width: max-content;
+  max-width: min(280px, calc(100vw - 40px));
+  border: 1px solid var(--cms-danger-line);
+  border-radius: var(--cms-radius-sm);
+  background: var(--cms-danger-bg);
+  padding: 6px 8px;
+  color: var(--cms-danger);
+  font-size: var(--cms-text-xs);
+  line-height: 1.4;
+}
 .cms-project-delete {
   display: inline-flex;
   min-height: 44px;
@@ -950,6 +987,10 @@
 .cms-inquiry-filters button[data-active] { border-color: var(--cms-action); background: var(--cms-action); color: var(--cms-control-bg); }
 .cms-inquiry-workspace { display: grid; min-width: 0; }
 .cms-inquiry-list { display: grid; min-width: 0; align-content: start; }
+.cms-inquiries-shell[data-mobile-view="list"] .cms-inquiry-detail { display: none; }
+.cms-inquiries-shell[data-mobile-view="detail"] .cms-inquiry-toolbar,
+.cms-inquiries-shell[data-mobile-view="detail"] .cms-inquiry-list { display: none; }
+.cms-inquiry-back { width: fit-content; min-height: 44px; }
 .cms-inquiry-list > button {
   display: grid;
   min-width: 0;
@@ -1128,12 +1169,14 @@
   .cms-login-card h1 { font-size: 32px; }
   .cms-media-summary { grid-template-columns: 120px minmax(0, 1fr); }
   .cms-media-preview { width: 120px; height: 96px; }
-  .cms-new-project-panel { grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr); gap: 48px; }
-  .cms-new-project-cover { grid-template-columns: minmax(240px, 1fr) minmax(180px, 0.8fr); align-items: start; }
   .cms-new-project-mobile-actions { display: none; }
   .cms-inquiry-toolbar { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
   .cms-inquiry-workspace { grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1.4fr); min-height: 520px; }
   .cms-inquiry-list { border-right: 1px solid var(--cms-line); }
+  .cms-inquiries-shell[data-mobile-view] .cms-inquiry-toolbar,
+  .cms-inquiries-shell[data-mobile-view] .cms-inquiry-list,
+  .cms-inquiries-shell[data-mobile-view] .cms-inquiry-detail { display: grid; }
+  .cms-inquiry-back { display: none; }
   .cms-inquiry-list > button:last-child { border-bottom: 0; }
   .cms-inquiry-detail { padding: 30px 32px; }
   .cms-inquiry-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1152,6 +1195,8 @@
   .cms-project-metadata-fields .cms-field-stack[data-wide] { grid-column: 1 / -1; }
   .cms-fixed-group-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 20px; }
   .cms-collection-fields { padding: 20px; }
+  .cms-new-project-panel { grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr); gap: 48px; }
+  .cms-new-project-cover { grid-template-columns: minmax(240px, 1fr) minmax(180px, 0.8fr); align-items: start; }
 }
 
 @media (min-width: 1180px) {

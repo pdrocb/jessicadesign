@@ -1,12 +1,15 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { CmsButton } from "@/cms/components/ui/CmsButton";
 import { CmsPageHeader } from "@/cms/components/ui/CmsPageHeader";
 import { setInquiryRead } from "@/cms/inquiries/actions";
 import type { CmsInquiry } from "@/cms/inquiries/repository";
 
 type InquiryFilter = "all" | "new" | "read";
+type InquiryMobileView = "list" | "detail";
+
+const mobileInquiryQuery = "(max-width: 759px)";
 
 function eventSummary(inquiry: CmsInquiry) {
   return [inquiry.celebration || "Celebration", inquiry.event_date, inquiry.venue]
@@ -25,8 +28,13 @@ export function InquiriesEditor({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<InquiryFilter>("all");
   const [selectedId, setSelectedId] = useState<number | null>(initialInquiries[0]?.id ?? null);
+  const [mobileView, setMobileView] = useState<InquiryMobileView>("list");
   const [message, setMessage] = useState("");
   const [pending, startTransition] = useTransition();
+  const detailHeadingRef = useRef<HTMLHeadingElement>(null);
+  const inquiryButtonRefs = useRef(new Map<number, HTMLButtonElement>());
+  const listScrollPositionRef = useRef(0);
+  const returnFocusIdRef = useRef<number | null>(null);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -42,6 +50,41 @@ export function InquiriesEditor({
 
   const selected = filtered.find((inquiry) => inquiry.id === selectedId) ?? filtered[0] ?? null;
   const newCount = inquiries.filter((inquiry) => !inquiry.is_read).length;
+
+  useEffect(() => {
+    if (!window.matchMedia(mobileInquiryQuery).matches) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      if (mobileView === "detail") {
+        detailHeadingRef.current?.focus();
+        return;
+      }
+
+      const returnFocusId = returnFocusIdRef.current;
+      if (returnFocusId === null) return;
+
+      window.scrollTo({ top: listScrollPositionRef.current, behavior: "auto" });
+      inquiryButtonRefs.current.get(returnFocusId)?.focus({ preventScroll: true });
+      returnFocusIdRef.current = null;
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [mobileView, selected?.id]);
+
+  function openInquiry(inquiryId: number) {
+    if (window.matchMedia(mobileInquiryQuery).matches) {
+      listScrollPositionRef.current = window.scrollY;
+    }
+    setSelectedId(inquiryId);
+    setMobileView("detail");
+    setMessage("");
+  }
+
+  function returnToInquiryList() {
+    returnFocusIdRef.current = selected?.id ?? null;
+    setMobileView("list");
+    setMessage("");
+  }
 
   function changeRead(inquiry: CmsInquiry) {
     const nextRead = !inquiry.is_read;
@@ -74,7 +117,7 @@ export function InquiriesEditor({
           <p>New requests submitted through the website will appear here.</p>
         </div>
       ) : (
-        <div className="cms-inquiries-shell">
+        <div className="cms-inquiries-shell" data-mobile-view={mobileView}>
           <div className="cms-inquiry-toolbar">
             <label className="cms-inquiry-search">
               <span className="sr-only">Search inquiries</span>
@@ -112,11 +155,13 @@ export function InquiriesEditor({
                   <button
                     key={inquiry.id}
                     type="button"
-                    data-active={selected?.id === inquiry.id || undefined}
-                    onClick={() => {
-                      setSelectedId(inquiry.id);
-                      setMessage("");
+                    ref={(node) => {
+                      if (node) inquiryButtonRefs.current.set(inquiry.id, node);
+                      else inquiryButtonRefs.current.delete(inquiry.id);
                     }}
+                    data-active={selected?.id === inquiry.id || undefined}
+                    aria-current={selected?.id === inquiry.id ? "true" : undefined}
+                    onClick={() => openInquiry(inquiry.id)}
                   >
                     <span className="cms-inquiry-list-heading">
                       <strong>{inquiry.name}</strong>
@@ -129,10 +174,22 @@ export function InquiriesEditor({
               </div>
 
               {selected ? (
-                <article className="cms-inquiry-detail" aria-labelledby={`cms-inquiry-${selected.id}`}>
+                <article
+                  id={`cms-inquiry-detail-${selected.id}`}
+                  className="cms-inquiry-detail"
+                  aria-labelledby={`cms-inquiry-${selected.id}`}
+                >
+                  <CmsButton
+                    className="cms-inquiry-back"
+                    variant="secondary"
+                    type="button"
+                    onClick={returnToInquiryList}
+                  >
+                    Back to inquiries
+                  </CmsButton>
                   <header>
                     <div>
-                      <h2 id={`cms-inquiry-${selected.id}`}>{selected.name}</h2>
+                      <h2 ref={detailHeadingRef} id={`cms-inquiry-${selected.id}`} tabIndex={-1}>{selected.name}</h2>
                       <p>Received {new Date(selected.created_at).toLocaleDateString("en-US", { dateStyle: "long" })}</p>
                     </div>
                     <CmsButton variant="secondary" disabled={pending} type="button" onClick={() => changeRead(selected)}>

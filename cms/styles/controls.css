@@ -68,6 +68,11 @@
   line-height: 1.5;
 }
 
+.cms-field-stack > .cms-field-error {
+  color: var(--cms-danger);
+  font-weight: 620;
+}
+
 .cms-field-stack > input,
 .cms-field-stack > textarea {
   width: 100%;
@@ -97,6 +102,16 @@
 .cms-field-stack > textarea:focus {
   border-color: var(--cms-focus);
   box-shadow: 0 0 0 3px var(--cms-focus-ring);
+}
+
+.cms-field-stack > input[aria-invalid="true"],
+.cms-field-stack > textarea[aria-invalid="true"] {
+  border-color: var(--cms-danger);
+}
+
+.cms-field-stack > input,
+.cms-field-stack > textarea {
+  scroll-margin-block: 112px 128px;
 }
 
 .cms-field-stack > input::placeholder,

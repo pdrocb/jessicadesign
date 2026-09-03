@@ -48,7 +48,7 @@ export function LookBookPageEditor({ document }: { document: LookBookDocument })
         }
       />
 
-      {state.status === "error" ? <CmsFormAlert message={state.message} /> : null}
+      {state.status === "error" ? <CmsFormAlert focusOnMount={!state.field} heading={state.field ? "Check the highlighted field" : "Couldn’t save"} message={state.message} /> : null}
 
       <div className="cms-section-list">
         <section className="cms-editor-card" data-open>
@@ -56,8 +56,8 @@ export function LookBookPageEditor({ document }: { document: LookBookDocument })
             <span><strong>Page introduction</strong><small>These lines appear above the projects.</small></span>
           </div>
           <div className="cms-card-fields">
-            <CmsField id="cms-look-book-heading" name="heading" label="Heading" defaultValue={document.heading} required maxLength={160} wide />
-            <CmsField id="cms-look-book-introduction" name="introduction" label="Introduction" defaultValue={document.introduction} type="textarea" rows={3} required maxLength={500} wide />
+            <CmsField id="cms-look-book-heading" name="heading" label="Heading" defaultValue={document.heading} required maxLength={160} wide error={state.status === "error" && state.field === "heading" ? state.message : undefined} />
+            <CmsField id="cms-look-book-introduction" name="introduction" label="Introduction" defaultValue={document.introduction} type="textarea" rows={3} required maxLength={500} wide error={state.status === "error" && state.field === "introduction" ? state.message : undefined} />
           </div>
         </section>
 
@@ -66,14 +66,14 @@ export function LookBookPageEditor({ document }: { document: LookBookDocument })
             <span><strong>SEO</strong><small>Title and description shown in search results.</small></span>
           </div>
           <div className="cms-card-fields">
-            <CmsField id="cms-look-book-meta-title" name="metaTitle" label="Meta title" defaultValue={document.metaTitle} required maxLength={80} wide hint="Aim for 50–60 characters." />
-            <CmsField id="cms-look-book-meta-description" name="metaDescription" label="Meta description" defaultValue={document.metaDescription} type="textarea" rows={3} required maxLength={320} wide hint="Aim for 140–160 characters." />
+            <CmsField id="cms-look-book-meta-title" name="metaTitle" label="Meta title" defaultValue={document.metaTitle} required maxLength={80} wide hint="Aim for 50–60 characters." error={state.status === "error" && state.field === "metaTitle" ? state.message : undefined} />
+            <CmsField id="cms-look-book-meta-description" name="metaDescription" label="Meta description" defaultValue={document.metaDescription} type="textarea" rows={3} required maxLength={320} wide hint="Aim for 140–160 characters." error={state.status === "error" && state.field === "metaDescription" ? state.message : undefined} />
           </div>
         </section>
       </div>
 
       <CmsMobileSaveBar dirty={hasChanges} pending={pending} status={state.status} message={state.message} />
-      <CmsUnsavedChangesGuard when={dirty && !pending} />
+      <CmsUnsavedChangesGuard when={hasChanges} />
     </form>
   );
 }

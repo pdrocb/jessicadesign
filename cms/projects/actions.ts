@@ -28,6 +28,7 @@ export type ProjectSaveState = {
 export type ProjectCreateState = {
   status: "idle" | "error";
   message: string;
+  field?: "title" | "file";
 };
 
 type ProjectImageRow = {
@@ -78,14 +79,14 @@ export async function createProject(
 ): Promise<ProjectCreateState> {
   await requireSession();
   const title = String(formData.get("title") ?? "").trim();
-  if (!title) return { status: "error", message: "Enter a project title." };
+  if (!title) return { status: "error", message: "Enter a project title.", field: "title" };
   if (title.length > 160) {
-    return { status: "error", message: "Keep the project title under 160 characters." };
+    return { status: "error", message: "Keep the project title under 160 characters.", field: "title" };
   }
 
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
-    return { status: "error", message: "Choose the first cover photograph." };
+    return { status: "error", message: "Choose the first cover photograph.", field: "file" };
   }
 
   let metadata;
@@ -95,22 +96,40 @@ export async function createProject(
     return {
       status: "error",
       message: error instanceof Error ? error.message : "The cover photograph could not be read.",
+      field: "file",
     };
   }
 
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return { status: "error", message: "Image uploads are not configured yet." };
+    return { status: "error", message: "Image uploads are not configured yet.", field: "file" };
   }
 
   const projectId = `project-${randomUUID()}`;
   const imageId = `project-image-${randomUUID()}`;
-  const slug = await availableProjectSlug(title);
-  const blob = await put(`projects/${projectId}/${imageId}.${metadata.extension}`, file, {
-    access: "public",
-    addRandomSuffix: true,
-    cacheControlMaxAge: 31_536_000,
-    contentType: file.type,
-  });
+  const upload = await (async () => {
+    try {
+      const slug = await availableProjectSlug(title);
+      const blob = await put(`projects/${projectId}/${imageId}.${metadata.extension}`, file, {
+        access: "public",
+        addRandomSuffix: true,
+        cacheControlMaxAge: 31_536_000,
+        contentType: file.type,
+      });
+      return { blob, slug };
+    } catch {
+      return null;
+    }
+  })();
+
+  if (!upload) {
+    return {
+      status: "error",
+      message: "The cover photograph could not be uploaded. Check your connection and try again.",
+      field: "file",
+    };
+  }
+
+  const { blob, slug } = upload;
 
   try {
     const sql = getCmsDatabase();
@@ -348,33 +367,50 @@ export async function setProjectFeatured(
   return { ok: true };
 }
 
-export async function moveProject(projectId: string, direction: "up" | "down") {
+export type ProjectMoveResult = {
+  ok: boolean;
+  message?: string;
+};
+
+export async function moveProject(
+  projectId: string,
+  direction: "up" | "down",
+): Promise<ProjectMoveResult> {
   await requireSession();
   const operator = direction === "up" ? "<" : ">";
   const order = direction === "up" ? "DESC" : "ASC";
-  const sql = getCmsDatabase();
-  await sql.query(
-    `WITH current_project AS (
-       SELECT id, position FROM cms_projects WHERE id = $1
-     ), target_project AS (
-       SELECT p.id, p.position
-         FROM cms_projects p, current_project c
-        WHERE p.position ${operator} c.position
-        ORDER BY p.position ${order}
-        LIMIT 1
-     )
-     UPDATE cms_projects p
-        SET position = CASE
-          WHEN p.id = c.id THEN t.position
-          WHEN p.id = t.id THEN c.position
-          ELSE p.position
-        END,
-        updated_at = now()
-       FROM current_project c, target_project t
-      WHERE p.id IN (c.id, t.id)`,
-    [projectId],
-  );
+  try {
+    const sql = getCmsDatabase();
+    await sql.query(
+      `WITH current_project AS (
+         SELECT id, position FROM cms_projects WHERE id = $1
+       ), target_project AS (
+         SELECT p.id, p.position
+           FROM cms_projects p, current_project c
+          WHERE p.position ${operator} c.position
+          ORDER BY p.position ${order}
+          LIMIT 1
+       )
+       UPDATE cms_projects p
+          SET position = CASE
+            WHEN p.id = c.id THEN t.position
+            WHEN p.id = t.id THEN c.position
+            ELSE p.position
+          END,
+          updated_at = now()
+         FROM current_project c, target_project t
+        WHERE p.id IN (c.id, t.id)`,
+      [projectId],
+    );
+  } catch {
+    return {
+      ok: false,
+      message: "The project could not be moved. Check your connection and try again.",
+    };
+  }
+
   revalidateProject(projectId);
+  return { ok: true };
 }
 
 export async function deleteProject(projectId: string) {

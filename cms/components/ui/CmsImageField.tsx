@@ -13,6 +13,7 @@ type CmsImageFieldProps = {
   fileName: string;
   accept: string;
   hint: string;
+  error?: string;
   maximumEdge?: number;
   onProcessingChange?: (processing: boolean) => void;
   alt?: {
@@ -20,6 +21,7 @@ type CmsImageFieldProps = {
     value: string;
     label?: string;
     required?: boolean;
+    error?: string;
   };
 };
 
@@ -31,6 +33,7 @@ export function CmsImageField({
   fileName,
   accept,
   hint,
+  error: externalError,
   maximumEdge,
   onProcessingChange,
   alt,
@@ -38,7 +41,7 @@ export function CmsImageField({
   const [preview, setPreview] = useState(currentUrl);
   const [selectedName, setSelectedName] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState("");
+  const [processingError, setProcessingError] = useState("");
   const [warning, setWarning] = useState("");
 
   useEffect(() => () => {
@@ -50,7 +53,7 @@ export function CmsImageField({
     if (!file) return;
 
     setProcessing(true);
-    setError("");
+    setProcessingError("");
     setWarning("");
     onProcessingChange?.(true);
 
@@ -73,7 +76,7 @@ export function CmsImageField({
       input.value = "";
       setSelectedName("");
       setWarning("");
-      setError(
+      setProcessingError(
         failure instanceof Error
           ? failure.message
           : "The image could not be optimized.",
@@ -84,9 +87,17 @@ export function CmsImageField({
     }
   }
 
+  const error = externalError || processingError;
+  const fileId = `${id}-file`;
+  const statusId = `${id}-status`;
+  const hintId = `${id}-hint`;
+  const errorId = error ? `${id}-error` : undefined;
+  const warningId = warning ? `${id}-warning` : undefined;
+  const describedBy = [statusId, hintId, errorId, warningId].filter(Boolean).join(" ");
+
   return (
     <div className="cms-field-stack cms-media-stack" data-wide aria-busy={processing}>
-      <label htmlFor={`${id}-file`}>{label}</label>
+      <label htmlFor={fileId}>{label}</label>
       <div className="cms-media-field">
         <div className="cms-media-summary">
           <div className="cms-media-preview">
@@ -99,18 +110,29 @@ export function CmsImageField({
             )}
           </div>
           <div className="cms-media-copy">
-            <strong>
+            <strong id={statusId} role="status">
               {processing
                 ? "Optimizing image…"
                 : selectedName || (currentUrl ? "Published image" : "No image published")}
             </strong>
-            <small>{hint}</small>
-            {error ? <small className="cms-field-error" role="alert">{error}</small> : null}
-            {warning ? <small role="status">{warning}</small> : null}
-            <label className="cms-file-button" htmlFor={`${id}-file`}>Choose image</label>
+            <small id={hintId}>{hint}</small>
+            {error ? <small className="cms-field-error" id={errorId} role="alert">{error}</small> : null}
+            {warning ? <small id={warningId} role="status">{warning}</small> : null}
+            <label
+              aria-disabled={processing || undefined}
+              className="cms-file-button"
+              data-disabled={processing || undefined}
+              htmlFor={fileId}
+            >
+              Choose image
+            </label>
             <input
+              aria-busy={processing || undefined}
+              aria-describedby={describedBy}
+              aria-errormessage={errorId}
+              aria-invalid={error ? true : undefined}
               className="cms-file-input"
-              id={`${id}-file`}
+              id={fileId}
               name={fileName}
               type="file"
               accept={accept}
@@ -129,6 +151,7 @@ export function CmsImageField({
               defaultValue={alt.value}
               maxLength={500}
               required={alt.required}
+              error={alt.error}
               hint="Describe what matters in the image for someone who cannot see it."
             />
           </div>

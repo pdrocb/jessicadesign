@@ -62,6 +62,7 @@ export function AdminShell({
   userName: string;
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDialogElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -80,6 +81,28 @@ export function AdminShell({
       document.body.style.overflow = previousOverflow;
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const currentLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const currentState = window.history.state && typeof window.history.state === "object"
+      ? window.history.state as Record<string, unknown>
+      : {};
+    const currentIndex = currentState.__cmsHistoryIndex;
+    const currentPath = currentState.__cmsHistoryPath;
+    if (typeof currentIndex === "number" && currentPath === currentLocation) {
+      window.sessionStorage.setItem("cms-history-index", String(currentIndex));
+      return;
+    }
+
+    const storedIndex = Number(window.sessionStorage.getItem("cms-history-index") ?? "0");
+    const nextIndex = Number.isFinite(storedIndex) ? storedIndex + 1 : 1;
+    window.history.replaceState(
+      { ...currentState, __cmsHistoryIndex: nextIndex, __cmsHistoryPath: currentLocation },
+      "",
+      window.location.href,
+    );
+    window.sessionStorage.setItem("cms-history-index", String(nextIndex));
+  }, [pathname]);
 
   const closeMenu = () => {
     setMenuOpen(false);

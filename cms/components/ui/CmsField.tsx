@@ -9,6 +9,7 @@ type CmsFieldProps = {
   onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   type?: Exclude<HTMLInputTypeAttribute, "file"> | "textarea";
   hint?: string;
+  error?: string;
   required?: boolean;
   wide?: boolean;
   rows?: number;
@@ -29,6 +30,7 @@ export function CmsField({
   onChange,
   type = "text",
   hint,
+  error,
   required,
   wide,
   rows = 4,
@@ -40,6 +42,8 @@ export function CmsField({
   autoFocus,
 }: CmsFieldProps) {
   const hintId = hint ? `${id}-hint` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
+  const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
   const sharedProps = {
     id,
     name,
@@ -51,7 +55,9 @@ export function CmsField({
     autoComplete,
     placeholder,
     autoFocus,
-    "aria-describedby": hintId,
+    "aria-describedby": describedBy,
+    "aria-errormessage": errorId,
+    "aria-invalid": error ? true : undefined,
   };
 
   return (
@@ -66,6 +72,11 @@ export function CmsField({
         <input {...sharedProps} type={type} inputMode={inputMode} />
       )}
       {hint ? <small id={hintId}>{hint}</small> : null}
+      {error ? (
+        <small className="cms-field-error" id={errorId} role="alert">
+          {error}
+        </small>
+      ) : null}
     </div>
   );
 }

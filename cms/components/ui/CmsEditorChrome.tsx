@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { CmsButton } from "@/cms/components/ui/CmsButton";
 
 export type CmsEditorStatus = "idle" | "saved" | "error";
@@ -48,6 +48,8 @@ export function CmsSaveButton({
 }) {
   return (
     <CmsButton
+      aria-busy={pending || undefined}
+      aria-live="polite"
       className={className}
       disabled={disabled || pending || !dirty}
       form={form}
@@ -56,6 +58,16 @@ export function CmsSaveButton({
       {saveLabel({ dirty, pending, idleLabel })}
     </CmsButton>
   );
+}
+
+export function cmsNativeValidationMessage(
+  control: HTMLInputElement | HTMLTextAreaElement,
+) {
+  if (control.validity.valueMissing) return "Complete this required field.";
+  if (control.validity.typeMismatch && control.type === "email") return "Enter a valid email address.";
+  if (control.validity.typeMismatch && control.type === "url") return "Enter a complete http or https address.";
+  if (control.validity.tooLong) return `Keep this field under ${control.maxLength} characters.`;
+  return control.validationMessage || "Check this field and try again.";
 }
 
 export function CmsMobileSaveBar({
@@ -99,6 +111,44 @@ export function CmsMobileSaveBar({
   );
 }
 
-export function CmsFormAlert({ message }: { message: string }) {
-  return <p className="cms-form-alert" role="alert">{message}</p>;
+export function CmsFormAlert({
+  message,
+  id,
+  heading,
+  focusOnMount = false,
+}: {
+  message: string;
+  id?: string;
+  heading?: string;
+  focusOnMount?: boolean;
+}) {
+  const generatedId = useId();
+  const headingId = heading ? `${id ?? generatedId}-heading` : undefined;
+  const alertRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (focusOnMount) alertRef.current?.focus();
+  }, [focusOnMount, message]);
+
+  if (heading) {
+    return (
+      <div
+        aria-labelledby={headingId}
+        className="cms-form-alert"
+        id={id}
+        ref={alertRef}
+        role="alert"
+        tabIndex={-1}
+      >
+        <strong id={headingId}>{heading}</strong>
+        <p>{message}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cms-form-alert" id={id} ref={alertRef} role="alert" tabIndex={-1}>
+      {message}
+    </div>
+  );
 }

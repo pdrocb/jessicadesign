@@ -52,7 +52,7 @@ export function InquireEditor({ document }: { document: InquireDocument }) {
         }
       />
 
-      {state.status === "error" ? <CmsFormAlert message={state.message} /> : null}
+      {state.status === "error" ? <CmsFormAlert focusOnMount={!state.field} heading={state.field ? "Check the highlighted field" : "Couldn’t save"} message={state.message} /> : null}
 
       <div className="cms-section-list">
         <section className="cms-editor-card" data-open>
@@ -71,6 +71,7 @@ export function InquireEditor({ document }: { document: InquireDocument }) {
               required
               maxLength={160}
               wide
+              error={state.status === "error" && state.field === "heading" ? state.message : undefined}
             />
             <CmsField
               id="cms-inquire-introduction"
@@ -82,6 +83,7 @@ export function InquireEditor({ document }: { document: InquireDocument }) {
               required
               maxLength={500}
               wide
+              error={state.status === "error" && state.field === "introduction" ? state.message : undefined}
             />
           </div>
         </section>
@@ -103,6 +105,7 @@ export function InquireEditor({ document }: { document: InquireDocument }) {
               maxLength={80}
               wide
               hint="Aim for 50–60 characters."
+              error={state.status === "error" && state.field === "metaTitle" ? state.message : undefined}
             />
             <CmsField
               id="cms-inquire-meta-description"
@@ -115,6 +118,7 @@ export function InquireEditor({ document }: { document: InquireDocument }) {
               maxLength={320}
               wide
               hint="Aim for 140–160 characters."
+              error={state.status === "error" && state.field === "metaDescription" ? state.message : undefined}
             />
           </div>
         </section>
@@ -126,7 +130,7 @@ export function InquireEditor({ document }: { document: InquireDocument }) {
         status={state.status}
         message={state.message}
       />
-      <CmsUnsavedChangesGuard when={dirty && !pending} />
+      <CmsUnsavedChangesGuard when={hasChanges} />
     </form>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CmsIcon } from "@/cms/components/CmsIcon";
 import { CmsConfirmDialog } from "@/cms/components/ui/CmsConfirmDialog";
 import { CmsField } from "@/cms/components/ui/CmsField";
@@ -21,6 +21,8 @@ type CmsCollectionEditorProps<T extends { id: string }> = {
   fields: readonly CollectionField<T>[];
   createItem: (id: string) => T;
   onDirty: () => void;
+  errorField?: string;
+  errorMessage?: string;
 };
 
 const MAX_ITEMS = 24;
@@ -37,9 +39,12 @@ export function CmsCollectionEditor<T extends { id: string }>({
   fields,
   createItem,
   onDirty,
+  errorField,
+  errorMessage,
 }: CmsCollectionEditorProps<T>) {
   const [items, setItems] = useState<T[]>(() => initialItems.map((item) => ({ ...item })));
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; position: number } | null>(null);
+  const itemRefs = useRef(new Map<string, HTMLElement>());
 
   const updateItems = (next: T[]) => {
     setItems(next);
@@ -59,10 +64,19 @@ export function CmsCollectionEditor<T extends { id: string }>({
       <input type="hidden" name={name} value={JSON.stringify(items)} />
       <div className="cms-collection-list">
         {items.map((item, index) => (
-          <section className="cms-collection-item" key={item.id}>
+          <section
+            ref={(node) => {
+              if (node) itemRefs.current.set(item.id, node);
+              else itemRefs.current.delete(item.id);
+            }}
+            aria-labelledby={`${name}-${item.id}-heading`}
+            className="cms-collection-item"
+            key={item.id}
+            tabIndex={-1}
+          >
             <header className="cms-collection-heading">
               <div>
-                <strong>{itemLabel} {index + 1}</strong>
+                <strong id={`${name}-${item.id}-heading`}>{itemLabel} {index + 1}</strong>
                 <small>Position {index + 1} of {items.length}</small>
               </div>
               <div className="cms-collection-actions">
@@ -115,6 +129,7 @@ export function CmsCollectionEditor<T extends { id: string }>({
                     ));
                     updateItems(next);
                   }}
+                  error={errorField === `${name}-${item.id}-${field.key}` ? errorMessage : undefined}
                 />
               ))}
             </div>
@@ -141,8 +156,14 @@ export function CmsCollectionEditor<T extends { id: string }>({
         onCancel={() => setDeleteTarget(null)}
         onConfirm={() => {
           if (!deleteTarget) return;
-          updateItems(items.filter((candidate) => candidate.id !== deleteTarget.id));
+          const remainingItems = items.filter((candidate) => candidate.id !== deleteTarget.id);
+          const focusIndex = Math.min(deleteTarget.position - 1, remainingItems.length - 1);
+          const focusId = remainingItems[focusIndex]?.id;
+          updateItems(remainingItems);
           setDeleteTarget(null);
+          window.requestAnimationFrame(() => {
+            if (focusId) itemRefs.current.get(focusId)?.focus();
+          });
         }}
       />
     </div>

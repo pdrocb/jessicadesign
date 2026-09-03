@@ -136,16 +136,23 @@ export async function saveSiteSettings(
     return { status: "error", message: "The sharing image needs alternative text.", field: "ogImageAlt" };
   }
 
-  const sql = getCmsDatabase();
-  await sql.query(
-    `INSERT INTO cms_documents (key, data, updated_by)
-     VALUES ('site_settings', $1::jsonb, $2)
-     ON CONFLICT (key) DO UPDATE
-       SET data = EXCLUDED.data,
-           updated_by = EXCLUDED.updated_by,
-           updated_at = now()`,
-    [JSON.stringify(data), user.id],
-  );
+  try {
+    const sql = getCmsDatabase();
+    await sql.query(
+      `INSERT INTO cms_documents (key, data, updated_by)
+       VALUES ('site_settings', $1::jsonb, $2)
+       ON CONFLICT (key) DO UPDATE
+         SET data = EXCLUDED.data,
+             updated_by = EXCLUDED.updated_by,
+             updated_at = now()`,
+      [JSON.stringify(data), user.id],
+    );
+  } catch {
+    return {
+      status: "error",
+      message: "Site settings could not be saved. Check your connection and try again.",
+    };
+  }
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/settings");

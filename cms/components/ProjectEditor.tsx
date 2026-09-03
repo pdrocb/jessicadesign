@@ -52,7 +52,7 @@ export function ProjectEditor({ project, connected }: { project: LookbookProject
       {!connected ? (
         <p className="cms-connection-note">Previewing the current project. Connect Neon to enable editing.</p>
       ) : null}
-      {state.status === "error" ? <CmsFormAlert message={state.message} /> : null}
+      {state.status === "error" ? <CmsFormAlert focusOnMount={!state.field} heading={state.field ? "Check the highlighted field" : "Couldn’t save"} message={state.message} /> : null}
       <form
         id={formId}
         action={action}
@@ -67,11 +67,11 @@ export function ProjectEditor({ project, connected }: { project: LookbookProject
             </div>
           </div>
           <div className="cms-project-metadata-fields">
-            <CmsField id={`${project.id}-title`} name="title" label="Title" defaultValue={project.title} disabled={!connected} wide />
-            <CmsField id={`${project.id}-subtitle`} name="subtitle" label="Subtitle" defaultValue={project.subtitle ?? ""} disabled={!connected} />
-            <CmsField id={`${project.id}-venue`} name="venue" label="Venue" defaultValue={project.venue ?? ""} disabled={!connected} />
-            <CmsField id={`${project.id}-location`} name="location" label="Location" defaultValue={project.location ?? ""} disabled={!connected} />
-            <CmsField id={`${project.id}-photographer`} name="photographer" label="Photography" defaultValue={project.photographer ?? ""} disabled={!connected} />
+            <CmsField id={`${project.id}-title`} name="title" label="Title" defaultValue={project.title} disabled={!connected} wide error={state.status === "error" && state.field === "title" ? state.message : undefined} />
+            <CmsField id={`${project.id}-subtitle`} name="subtitle" label="Subtitle" defaultValue={project.subtitle ?? ""} disabled={!connected} error={state.status === "error" && state.field === "subtitle" ? state.message : undefined} />
+            <CmsField id={`${project.id}-venue`} name="venue" label="Venue" defaultValue={project.venue ?? ""} disabled={!connected} error={state.status === "error" && state.field === "venue" ? state.message : undefined} />
+            <CmsField id={`${project.id}-location`} name="location" label="Location" defaultValue={project.location ?? ""} disabled={!connected} error={state.status === "error" && state.field === "location" ? state.message : undefined} />
+            <CmsField id={`${project.id}-photographer`} name="photographer" label="Photography" defaultValue={project.photographer ?? ""} disabled={!connected} error={state.status === "error" && state.field === "photographer" ? state.message : undefined} />
           </div>
         </section>
         <ProjectImageManager
@@ -79,6 +79,8 @@ export function ProjectEditor({ project, connected }: { project: LookbookProject
           coverImageId={project.coverImageId}
           images={project.images}
           connected={connected}
+          errorField={state.status === "error" ? state.field : undefined}
+          errorMessage={state.status === "error" ? state.message : undefined}
         />
       </form>
       <CmsMobileSaveBar
@@ -90,7 +92,7 @@ export function ProjectEditor({ project, connected }: { project: LookbookProject
         idleLabel="Save project"
         disabled={!connected}
       />
-      <CmsUnsavedChangesGuard when={dirty && !pending} />
+      <CmsUnsavedChangesGuard when={hasChanges} />
       <section className="cms-project-danger-zone" aria-labelledby={`${project.id}-delete-heading`}>
         <div>
           <h2 id={`${project.id}-delete-heading`}>Delete project</h2>

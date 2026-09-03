@@ -37,16 +37,23 @@ export async function saveInquire(
     data[field] = value;
   }
 
-  const sql = getCmsDatabase();
-  await sql.query(
-    `INSERT INTO cms_documents (key, data, updated_by)
-     VALUES ('inquire', $1::jsonb, $2)
-     ON CONFLICT (key) DO UPDATE
-       SET data = EXCLUDED.data,
-           updated_by = EXCLUDED.updated_by,
-           updated_at = now()`,
-    [JSON.stringify(data), user.id],
-  );
+  try {
+    const sql = getCmsDatabase();
+    await sql.query(
+      `INSERT INTO cms_documents (key, data, updated_by)
+       VALUES ('inquire', $1::jsonb, $2)
+       ON CONFLICT (key) DO UPDATE
+         SET data = EXCLUDED.data,
+             updated_by = EXCLUDED.updated_by,
+             updated_at = now()`,
+      [JSON.stringify(data), user.id],
+    );
+  } catch {
+    return {
+      status: "error",
+      message: "The Inquire page could not be saved. Check your connection and try again.",
+    };
+  }
 
   revalidatePath("/inquire");
   revalidatePath("/admin/inquire");
