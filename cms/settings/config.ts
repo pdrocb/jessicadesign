@@ -1,10 +1,7 @@
 export type SiteSettingsDocument = {
   siteName: string;
   siteUrl: string;
-  metaTitle: string;
-  metaDescription: string;
   ogTitle: string;
-  ogDescription: string;
   ogImageUrl: string;
   ogImageAlt: string;
   faviconUrl: string;
@@ -17,12 +14,7 @@ export type SiteSettingsDocument = {
 export const defaultSiteSettings: SiteSettingsDocument = {
   siteName: "Jessica S. Designs",
   siteUrl: "https://jessicadesign.vercel.app",
-  metaTitle: "Jessica S. Designs | Hudson Valley Wedding & Event Design",
-  metaDescription:
-    "Wedding and event design & styling in the Hudson Valley, New York. We design how your celebration looks and feels: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.",
   ogTitle: "Jessica S. Designs | Wedding & Event Design",
-  ogDescription:
-    "Boutique wedding design and styling for thoughtfully created celebrations in the Hudson Valley, NYC, and Connecticut.",
   ogImageUrl: "/site/open-graph.webp",
   ogImageAlt:
     "Outdoor wedding dinner table designed with white florals, taper candles and warm wooden chairs",
@@ -35,14 +27,14 @@ export const defaultSiteSettings: SiteSettingsDocument = {
 
 export const siteSettingsSections = [
   {
-    id: "seo",
-    title: "SEO defaults",
-    description: "Search titles, descriptions and canonical site identity",
+    id: "identity",
+    title: "Site identity",
+    description: "Name and canonical website address",
   },
   {
     id: "sharing",
     title: "Social sharing",
-    description: "Text and image shown when a page link is shared",
+    description: "Global title and image shown when any page link is shared",
   },
   {
     id: "browser",

@@ -8,10 +8,11 @@ El sitio incluye un CMS mobile-first en `/admin`. Vive en `cms/` como un módulo
 - Lista privada `cms_access`: tener una identidad en Neon Auth no concede acceso al CMS.
 - Varios usuarios con el mismo nivel operativo; no existen roles ni permisos en la interfaz.
 - Edición integral de Home: copy, fotografías, textos alternativos y contenido del modal de Founder.
+- Editores de página para Look Book e Inquire: encabezado, introducción, meta title y meta description; sus componentes operativos permanecen versionados.
 - Colecciones fijas para Expertise y Process: sus elementos se editan, pero no se crean, eliminan ni reordenan.
 - Colecciones ordenadas para Testimonials y FAQs: permiten editar, crear, eliminar y mover elementos sin copiar contenido entre campos.
 - Creación, edición, publicación y orden de proyectos del Look Book, incluida la portada, la carga, el orden y la eliminación de fotografías.
-- Site Settings global para SEO, Open Graph, favicon y datos públicos de contacto/social.
+- SEO por página para Home, Look Book e Inquire; Site Settings conserva la identidad canónica, un solo título e imagen Open Graph, favicon y datos públicos de contacto/social.
 - Formulario público con sus nueve campos obligatorios conectado a `leads`, más bandeja operativa de inquiries con búsqueda, filtros, detalle, contacto y estado leído/nuevo.
 - Fallback al contenido local si la base no está disponible, para que el sitio público siga funcionando.
 
@@ -33,7 +34,7 @@ cms/
   inquiries/                validación, persistencia y consultas
   media/                    política, conversión WebP y validación compartida
   projects/                 repositorio y acciones del Look Book
-  settings/                 documento global, uploads y validación SEO/contacto
+  settings/                 identidad global, Open Graph, favicon y contacto
   styles/                   tokens semánticos y geometría de controles
 db/migrations/              esquema SQL versionado
 db/init.mjs                 inicialización idempotente
@@ -58,11 +59,15 @@ El índice de Look Book es una superficie operativa: desde cada fila se cambia e
 
 En cada proyecto, la fotografía en posición 1 es también `cover_image_id` y aparece como `Principal`. Las fotografías se presentan como una galería operativa —una columna en móvil, dos en tablet y tres en desktop— con la imagen completa, su orden, el alt y las acciones dentro de una sola unidad. La última tarjeta es `Add photographs`: acepta una o varias imágenes JPG o WebP de hasta 10 MB y crea inmediatamente una tarjeta de progreso por archivo. Optimiza hasta tres imágenes en paralelo mediante la política compartida y después publica los WebP secuencialmente en Vercel Blob para conservar el orden seleccionado y evitar colisiones de posición en Neon. Si un resultado todavía supera 1 MB, su tarjeta muestra una recomendación no bloqueante para usar una imagen menor. Al terminar, cada foto aparece como una tarjeta ordinaria con su alt editable. El número de posición, `Principal`, subir, bajar y los tres puntos forman una barra superpuesta dentro de la fotografía; el menú conserva únicamente `Make principal` y `Delete`. La principal permanece anclada; para reemplazarla se usa `Make principal`. Al eliminar una foto se borra tanto de `cms_project_images` como de Vercel Blob; si era principal, la siguiente ocupa la posición 1. Un proyecto nunca puede quedarse sin fotografías. La interfaz aplica el cambio inmediatamente y revierte el estado si Neon rechaza la operación.
 
-`homeSections` es el contrato único del editor de copy e imágenes propias de Home. Cada sección declara campos generales, grupos fijos con etiqueta operativa (`Expertise 1`, `Step 1`) o una colección ordenada. `HomeEditor`, la lista de claves permitidas, la validación de imágenes y la sanitización de lectura se derivan de ese mismo contrato. Testimonials y FAQs se guardan como arrays nativos dentro del JSONB `home`, con IDs estables y orden explícito; los registros planos de la versión anterior se migran durante la lectura. Los controles subir/bajar reemplazan el drag and drop para conservar accesibilidad y precisión táctil. El mosaico Look Book no aparece en este editor: sus proyectos, portadas y orden se administran desde Look Book, mientras su encabezado permanece como copy versionado.
+`homeSections` es el contrato único del editor de SEO, copy e imágenes propias de Home. Cada sección declara campos generales, grupos fijos con etiqueta operativa (`Expertise 1`, `Step 1`) o una colección ordenada. `HomeEditor`, la lista de claves permitidas, la validación de imágenes y la sanitización de lectura se derivan de ese mismo contrato. Testimonials y FAQs se guardan como arrays nativos dentro del JSONB `home`, con IDs estables y orden explícito; los registros planos de la versión anterior se migran durante la lectura. Los controles subir/bajar reemplazan el drag and drop para conservar accesibilidad y precisión táctil. El mosaico Look Book no aparece en este editor: sus proyectos, portadas y orden se administran desde Projects.
+
+Las páginas `Look Book` e `Inquire` tienen documentos independientes en `cms_documents`, con `heading`, `introduction`, `metaTitle` y `metaDescription`. El CMS los presenta bajo Pages; `Projects` administra el archivo fotográfico y `Inquiries` la bandeja operativa. Si un documento no existe o Neon no está disponible, la ruta pública usa su copy versionado. Guardar invalida tanto la página pública como su editor.
+
+`createPageMetadata` recibe el meta title y la meta description del documento de cada página. Site Settings aporta un único `ogTitle` y una sola `ogImageUrl` para todo el sitio; la descripción Open Graph reutiliza la meta description de la ruta, de modo que compartir mantiene una identidad visual global sin perder contexto de página. Las instalaciones anteriores conservan en Home los valores `metaTitle` y `metaDescription` que estuvieran guardados en el documento histórico de Site Settings hasta que Home se vuelva a guardar.
 
 Toda eliminación iniciada desde el CMS pasa por `CmsConfirmDialog`; no se usan diálogos del navegador. El componente nombra el objeto y la consecuencia, enfoca `Cancel` al abrir, conserva Escape y clic exterior, bloquea un segundo envío mientras una operación remota está pendiente y devuelve el foco al cerrar. Testimonials y FAQs aclaran que el cambio permanece en el borrador hasta guardar Home; las fotografías y los proyectos aclaran que la eliminación en Neon es inmediata. Las futuras eliminaciones de galerías reutilizarán el mismo contrato.
 
-Home se presenta en cuatro capítulos operativos —Opening, Services, Story & Proof y Closing— sin modificar el orden ni la forma del documento persistido. Home, Site Settings y Project Editor conservan cambios fallidos, abren la sección que contiene el campo inválido y enfocan ese control para corregirlo. Los enlaces internos interceptan una salida con cambios pendientes mediante una confirmación neutral; `beforeunload` cubre recargas y cierres de pestaña.
+Home presenta SEO como sección propia y el contenido en cuatro capítulos operativos —Opening, Services, Story & Proof y Closing— sin modificar el resto del documento persistido. Home, Site Settings y Project Editor conservan cambios fallidos, abren la sección que contiene el campo inválido y enfocan ese control para corregirlo. Los enlaces internos interceptan una salida con cambios pendientes mediante una confirmación neutral; `beforeunload` cubre recargas y cierres de pestaña.
 
 Inquiries carga hasta 100 registros recientes y filtra en cliente por nombre, email, teléfono, celebración o venue. La lista separa `New` y `Read`; el detalle reúne hechos, notas, moodboard y acciones `mailto:`/`tel:`. Cambiar el estado es una operación optimista que revierte y explica el fallo si Neon rechaza la actualización. Resend no es requisito para revisar o responder manualmente.
 

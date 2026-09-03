@@ -7,8 +7,8 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 | Ruta | Composición | Datos y efectos |
 | --- | --- | --- |
 | `/` | `app/page.tsx` → `components/sections.tsx` | `cms/content/home.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
-| `/look-book` | `app/look-book/page.tsx` → `components/LookBookExperience.tsx` | `cms/projects/repository.ts` y `cms/settings/repository.ts` |
-| `/inquire` | `app/inquire/page.tsx` → `components/InquiryForm.tsx` | `app/api/inquiry/route.ts` → `handler.ts` → `cms/inquiries/delivery.ts` |
+| `/look-book` | `app/look-book/page.tsx` → introducción CMS + `components/LookBookExperience.tsx` | `cms/content/look-book.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
+| `/inquire` | `app/inquire/page.tsx` → introducción CMS + `components/InquiryForm.tsx` | `cms/content/inquire.ts`, `cms/settings/repository.ts`; submit: `app/api/inquiry/route.ts` → `handler.ts` → `cms/inquiries/delivery.ts` |
 | `/api/emails/preview` | Preview local de `InquiryConfirmation` o `NewInquiry` | `emails/` → `@react-email/render`; responde 404 en producción y no envía correo |
 
 ## CMS
@@ -17,6 +17,8 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 | --- | --- | --- |
 | `/admin/login` | `cms/components/LoginForm.tsx` | `cms/auth/actions.ts` → Neon Auth |
 | `/admin` | `cms/components/HomeEditor.tsx` | `cms/content/actions.ts` → documento `home` + Blob para imágenes |
+| `/admin/look-book` | `cms/components/LookBookPageEditor.tsx` | `cms/content/look-book-actions.ts` → documento `look_book` |
+| `/admin/inquire` | `cms/components/InquireEditor.tsx` | `cms/content/inquire-actions.ts` → documento `inquire` |
 | `/admin/projects` | `cms/components/ProjectsEditor.tsx` | Índice de orden/visibilidad: `cms/projects/actions.ts` y `repository.ts` |
 | `/admin/projects/new` | `cms/components/NewProjectEditor.tsx` | Creación draft + primera portada: `cms/projects/actions.ts` → Neon + Blob |
 | `/admin/projects/[projectId]` | `cms/components/ProjectEditor.tsx` | Detalle, fotografías y guardado: `cms/projects/actions.ts` y `repository.ts` |
@@ -34,6 +36,7 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 - `app/admin/admin.css`: shell, navegación y layouts específicos de las pantallas actuales.
 - `cms/database/client.ts`: acceso común a Neon.
 - `cms/media/`: política única de entrada, conversión WebP en navegador y validación defensiva previa a Blob.
+- `lib/seo.ts`: composición de metadata con SEO por documento y Open Graph global desde Site Settings.
 - `emails/`: templates responsive, tipos compartidos y alternativas plain text; no contiene integración de entrega.
 
 ## Límites

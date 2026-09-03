@@ -5,6 +5,7 @@ export type CmsIconName =
   | "inquiries"
   | "menu"
   | "more"
+  | "page"
   | "plus"
   | "projects"
   | "settings"
@@ -32,6 +33,8 @@ export function CmsIcon({ name }: { name: CmsIconName }) {
         <><rect {...common} x="2.5" y="3" width="15" height="14" rx="1" /><path {...common} d="m5 13 3.2-3.2 2.2 2.2 1.8-1.8L15 13M13.5 6.5h.01" /></>
       ) : name === "inquiries" ? (
         <><path {...common} d="M3 4.5h14v11H3z" /><path {...common} d="m3.5 5 6.5 5 6.5-5" /></>
+      ) : name === "page" ? (
+        <><path {...common} d="M5 2.5h7l3 3v12H5z" /><path {...common} d="M12 2.5v3h3M7.5 9h5M7.5 12h5" /></>
       ) : name === "menu" ? (
         <path {...common} d="M3 5.5h14M3 10h14M3 14.5h14" />
       ) : name === "more" ? (

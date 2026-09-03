@@ -5,8 +5,6 @@ type PageSeo = {
   title: string;
   description: string;
   pathname: string;
-  openGraphTitle?: string;
-  openGraphDescription?: string;
 };
 
 function sharingImages(settings: SiteSettingsDocument) {
@@ -21,16 +19,16 @@ function sharingImages(settings: SiteSettingsDocument) {
 }
 
 /**
- * Mantiene las señales de búsqueda y de compartido sincronizadas por ruta.
- * La imagen y los valores por defecto pertenecen a Site Settings para que la
- * clienta pueda actualizarlos desde el CMS sin tocar el código.
+ * Cada página aporta sus señales de búsqueda. Site Settings aporta una sola
+ * identidad visual de compartido: título e imagen globales. La descripción de
+ * Open Graph reutiliza la descripción de la página para conservar contexto.
  */
 export function createPageMetadata(
   settings: SiteSettingsDocument,
   page: PageSeo,
 ): Metadata {
-  const openGraphTitle = page.openGraphTitle ?? page.title;
-  const openGraphDescription = page.openGraphDescription ?? page.description;
+  const openGraphTitle = settings.ogTitle;
+  const openGraphDescription = page.description;
 
   return {
     title: page.title,

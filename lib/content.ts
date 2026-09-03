@@ -27,6 +27,8 @@ export const site = {
   // `legalName` NO cambia: es la razón social de la LLC, otra cosa.
   name: "Jessica S. Designs",
   tagline: "Wedding & Event Design & Styling",
+  description:
+    "Wedding and event design & styling in the Hudson Valley, New York. We design how your celebration looks and feels: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.",
   location: "Hudson Valley, New York",
   phone: "845 · 375 · 7820",
   phoneHref: "tel:+18453757820",

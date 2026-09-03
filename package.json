@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test app/api/inquiry/handler.test.ts cms/media/image-metadata.test.ts emails/emails.test.tsx",
+    "test": "node --import tsx --test app/api/inquiry/handler.test.ts cms/media/image-metadata.test.ts emails/emails.test.tsx lib/seo.test.ts",
     "assets": "node scripts/optimize-assets.mjs",
     "db:init": "node --env-file-if-exists=.env.local db/init.mjs",
     "cms:user": "node --env-file-if-exists=.env.local scripts/create-cms-user.mjs",

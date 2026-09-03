@@ -29,6 +29,11 @@ const allowedKeys = new Set(
     field.type === "image" ? [field.key, field.altKey] : [field.key],
   ),
 );
+const requiredTextFields = homeFieldDefinitions.flatMap((field) =>
+  field.type !== "image" && field.required
+    ? [{ key: field.key, label: field.label, maxLength: field.maxLength }]
+    : [],
+);
 const collectionKeys = new Set([HOME_TESTIMONIALS_KEY, HOME_FAQS_KEY]);
 async function uploadHomeImage(file: File, key: string) {
   const metadata = await optimizedCmsImageMetadata(file);
@@ -108,6 +113,24 @@ export async function saveHome(
     }
     if (imageKeys.has(key) && !isPersistentCmsImageSource(normalized)) continue;
     data[key] = normalized;
+  }
+
+  for (const field of requiredTextFields) {
+    const value = typeof data[field.key] === "string" ? data[field.key] : "";
+    if (!value) {
+      return {
+        status: "error",
+        message: `${field.label} is required.`,
+        field: field.key,
+      };
+    }
+    if (field.maxLength && value.length > field.maxLength) {
+      return {
+        status: "error",
+        message: `${field.label} is too long.`,
+        field: field.key,
+      };
+    }
   }
 
   try {

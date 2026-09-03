@@ -79,6 +79,8 @@ function EditorField({
       type={field.type}
       hint={field.hint}
       wide={field.wide}
+      required={field.required}
+      maxLength={field.maxLength}
     />
   );
 }

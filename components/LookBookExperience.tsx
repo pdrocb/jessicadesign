@@ -222,8 +222,12 @@ function PreviewRows({
 
 export function LookBookExperience({
   projects,
+  heading,
+  introduction,
 }: {
   projects: LookbookProject[];
+  heading: string;
+  introduction: string;
 }) {
   const [activeGallery, setActiveGallery] = useState<ActiveGallery>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -272,10 +276,10 @@ export function LookBookExperience({
         <div className="shell">
           <div className="grid gap-8 border-b border-line pb-12 md:grid-cols-12 md:items-end md:pb-16">
             <h1 className="text-display-hero font-display font-medium md:col-span-7">
-              The Look Book
+              {heading}
             </h1>
             <p className="text-body-lg max-w-[52ch] text-ink-muted md:col-span-5 md:justify-self-end">
-              Weddings, dinner receptions, and thoughtfully styled gatherings across the Hudson Valley, New York City, and beyond.
+              {introduction}
             </p>
           </div>
         </div>

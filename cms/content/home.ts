@@ -103,17 +103,18 @@ function migrateFaqs(stored: Record<string, unknown>) {
 export async function getHomeDocument(): Promise<HomeDocument> {
   if (!isCmsDatabaseConfigured()) return { ...defaultHomeDocument };
 
-  let rows: { data: Record<string, unknown> }[];
+  let rows: { key: string; data: Record<string, unknown> }[];
   try {
     const sql = getCmsDatabase();
     rows = (await sql.query(
-      "SELECT data FROM cms_documents WHERE key = 'home' LIMIT 1",
-    )) as { data: Record<string, unknown> }[];
+      "SELECT key, data FROM cms_documents WHERE key IN ('home', 'site_settings')",
+    )) as { key: string; data: Record<string, unknown> }[];
   } catch (error) {
     if (isCmsDatabaseConnectionError(error)) return { ...defaultHomeDocument };
     throw error;
   }
-  const stored = rows[0]?.data ?? {};
+  const stored = rows.find((row) => row.key === "home")?.data ?? {};
+  const legacySettings = rows.find((row) => row.key === "site_settings")?.data ?? {};
   const sanitized = Object.fromEntries(
     Object.entries(stored).filter(
       (entry): entry is [string, string] =>
@@ -124,6 +125,12 @@ export async function getHomeDocument(): Promise<HomeDocument> {
 
   return {
     ...defaultHomeDocument,
+    ...(typeof stored["seo.metaTitle"] !== "string" && typeof legacySettings.metaTitle === "string" && legacySettings.metaTitle.trim()
+      ? { "seo.metaTitle": legacySettings.metaTitle }
+      : {}),
+    ...(typeof stored["seo.metaDescription"] !== "string" && typeof legacySettings.metaDescription === "string" && legacySettings.metaDescription.trim()
+      ? { "seo.metaDescription": legacySettings.metaDescription }
+      : {}),
     ...migrateLegacyHero(sanitized),
     [HOME_TESTIMONIALS_KEY]: migrateTestimonials(stored),
     [HOME_FAQS_KEY]: migrateFaqs(stored),

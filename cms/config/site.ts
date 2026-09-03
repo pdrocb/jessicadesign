@@ -20,6 +20,8 @@ type CmsTextFieldDefinition = {
   type: "text" | "textarea";
   hint?: string;
   wide?: boolean;
+  required?: boolean;
+  maxLength?: number;
 };
 
 type CmsImageFieldDefinition = {
@@ -251,6 +253,31 @@ export const homeSections: readonly CmsSectionDefinition[] = [
       { key: "cta.label", label: "Button label", type: "text" },
     ],
   },
+  {
+    id: "seo",
+    title: "SEO",
+    description: "Search result title and description for the Home page",
+    fields: [
+      {
+        key: "seo.metaTitle",
+        label: "Meta title",
+        type: "text",
+        hint: "Aim for 50–60 characters.",
+        wide: true,
+        required: true,
+        maxLength: 80,
+      },
+      {
+        key: "seo.metaDescription",
+        label: "Meta description",
+        type: "textarea",
+        hint: "Aim for 140–160 characters. Describe the service and location clearly.",
+        wide: true,
+        required: true,
+        maxLength: 320,
+      },
+    ],
+  },
 ];
 
 export const homeFieldDefinitions = homeSections.flatMap((section) => [
@@ -259,6 +286,8 @@ export const homeFieldDefinitions = homeSections.flatMap((section) => [
 ]);
 
 export const defaultHomeDocument: HomeDocument = {
+  "seo.metaTitle": "Jessica S. Designs | Hudson Valley Wedding & Event Design",
+  "seo.metaDescription": "Wedding and event design & styling in the Hudson Valley, New York. We design how your celebration looks and feels: tablescapes, linens, candles, florals, signage and stationery, composed as one idea.",
   "hero.eyebrow": site.tagline,
   "hero.lead": "You know how",
   "hero.feeling": "it should feel.",

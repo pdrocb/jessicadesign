@@ -3,20 +3,20 @@ import { InquiryForm } from "@/components/InquiryForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Eyebrow } from "@/components/ui";
 import { inquiry } from "@/lib/content";
+import { getInquireDocument } from "@/cms/content/inquire";
 import { getSiteSettings } from "@/cms/settings/repository";
 import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
+  const [settings, document] = await Promise.all([
+    getSiteSettings(),
+    getInquireDocument(),
+  ]);
 
   return createPageMetadata(settings, {
-    title: `Inquire | ${settings.siteName}`,
-    description:
-      "Tell Jessica S. Designs about your wedding or celebration. Every inquiry begins with a complimentary one-hour design consultation.",
+    title: document.metaTitle,
+    description: document.metaDescription,
     pathname: "/inquire",
-    openGraphTitle: `Start a Conversation | ${settings.siteName}`,
-    openGraphDescription:
-      "Tell us about your wedding or celebration and begin with a complimentary one-hour design consultation.",
   });
 }
 
@@ -32,7 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
  * columna alineada a la izquierda dejaba medio viewport vacío.
  */
 export default async function InquirePage() {
-  const settings = await getSiteSettings();
+  const [settings, document] = await Promise.all([
+    getSiteSettings(),
+    getInquireDocument(),
+  ]);
   return (
     <>
       <SiteHeader settings={settings} />
@@ -41,10 +44,10 @@ export default async function InquirePage() {
           <div className="flex flex-col gap-4 md:gap-5">
             <Eyebrow>{inquiry.eyebrow}</Eyebrow>
             <h1 className="text-display-md max-w-[18ch] font-display font-medium">
-              {inquiry.heading}
+              {document.heading}
             </h1>
             <p className="text-body-lg max-w-[62ch] text-ink-muted">
-              {inquiry.intro}
+              {document.introduction}
             </p>
           </div>
 

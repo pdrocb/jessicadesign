@@ -9,11 +9,18 @@ import { CmsIcon, type CmsIconName } from "@/cms/components/CmsIcon";
 
 const groups = [
   { label: "Site", items: [{ label: "Site settings", href: "/admin/settings", icon: "settings" }] },
-  { label: "Pages", items: [{ label: "Home", href: "/admin", icon: "home" }] },
+  {
+    label: "Pages",
+    items: [
+      { label: "Home", href: "/admin", icon: "home" },
+      { label: "Look Book", href: "/admin/look-book", icon: "page" },
+      { label: "Inquire", href: "/admin/inquire", icon: "page" },
+    ],
+  },
   {
     label: "Content",
     items: [
-      { label: "Look Book", href: "/admin/projects", icon: "projects" },
+      { label: "Projects", href: "/admin/projects", icon: "projects" },
       { label: "Inquiries", href: "/admin/inquiries", icon: "inquiries" },
     ],
   },

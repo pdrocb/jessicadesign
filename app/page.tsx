@@ -17,17 +17,19 @@ import {
 import { getHomeDocument } from "@/cms/content/home";
 import { getHomeLookbookProjects } from "@/cms/projects/repository";
 import { getSiteSettings } from "@/cms/settings/repository";
+import { homeText } from "@/cms/content/model";
 import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
+  const [settings, content] = await Promise.all([
+    getSiteSettings(),
+    getHomeDocument(),
+  ]);
 
   return createPageMetadata(settings, {
-    title: settings.metaTitle,
-    description: settings.metaDescription,
+    title: homeText(content, "seo.metaTitle"),
+    description: homeText(content, "seo.metaDescription"),
     pathname: "/",
-    openGraphTitle: settings.ogTitle || settings.metaTitle,
-    openGraphDescription: settings.ogDescription || settings.metaDescription,
   });
 }
 

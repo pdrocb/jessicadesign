@@ -19,10 +19,7 @@ export type SiteSettingsSaveState = {
 const fieldLabels: Record<string, string> = {
   siteName: "Site name",
   siteUrl: "Primary website address",
-  metaTitle: "Default meta title",
-  metaDescription: "Default meta description",
   ogTitle: "Sharing title",
-  ogDescription: "Sharing description",
   ogImageAlt: "Sharing image alternative text",
   phone: "Contact phone",
   publicEmail: "Public email",
@@ -33,10 +30,7 @@ const fieldLabels: Record<string, string> = {
 const textLimits: Record<Exclude<keyof SiteSettingsDocument, "ogImageUrl" | "faviconUrl">, number> = {
   siteName: 80,
   siteUrl: 500,
-  metaTitle: 80,
-  metaDescription: 320,
   ogTitle: 100,
-  ogDescription: 320,
   ogImageAlt: 500,
   phone: 40,
   publicEmail: 160,
@@ -95,9 +89,9 @@ export async function saveSiteSettings(
     data[key] = value;
   }
 
-  if (!data.siteName || !data.siteUrl || !data.metaTitle || !data.metaDescription) {
-    const field = !data.siteName ? "siteName" : !data.siteUrl ? "siteUrl" : !data.metaTitle ? "metaTitle" : "metaDescription";
-    return { status: "error", message: "Complete the required search fields before saving.", field };
+  if (!data.siteName || !data.siteUrl || !data.ogTitle) {
+    const field = !data.siteName ? "siteName" : !data.siteUrl ? "siteUrl" : "ogTitle";
+    return { status: "error", message: "Complete the required site fields before saving.", field };
   }
   if (!isHttpUrl(data.siteUrl)) {
     return { status: "error", message: "Enter a complete http or https website address.", field: "siteUrl" };
@@ -111,8 +105,6 @@ export async function saveSiteSettings(
     return { status: "error", message: "Enter a valid public email address.", field: "publicEmail" };
   }
 
-  data.ogTitle ||= data.metaTitle;
-  data.ogDescription ||= data.metaDescription;
   data.ogImageUrl = textValue(formData, "ogImageUrl");
   data.faviconUrl = textValue(formData, "faviconUrl") || defaultSiteSettings.faviconUrl;
   if (data.ogImageUrl && !isSafeMediaSource(data.ogImageUrl)) {

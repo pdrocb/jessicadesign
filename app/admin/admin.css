@@ -208,6 +208,8 @@
 }
 
 .cms-card-heading:hover { background: var(--cms-surface-muted); }
+.cms-card-heading-static { cursor: default; }
+.cms-card-heading-static:hover { background: var(--cms-surface); }
 .cms-card-heading > span:first-child { display: grid; gap: 4px; }
 .cms-card-heading strong { font-size: 15px; font-weight: 680; letter-spacing: -0.01em; }
 .cms-card-heading small { color: var(--cms-muted); font-size: 13px; font-weight: 400; line-height: 1.35; }

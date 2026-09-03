@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Karla } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSiteSettings } from "@/cms/settings/repository";
 import { phoneHref } from "@/cms/settings/config";
+import { site } from "@/lib/content";
 import "./globals.css";
 
 // La pareja aprobada por la clienta se aloja localmente en el build por
@@ -67,7 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     "@type": "LocalBusiness",
     name: settings.siteName,
     legalName: "J|S Events, Event Styling & Decorating Co. LLC",
-    description: settings.metaDescription,
+    description: site.description,
     url: settings.siteUrl,
     telephone: phoneHref(settings.phone).replace("tel:", "") || undefined,
     email: settings.publicEmail || undefined,

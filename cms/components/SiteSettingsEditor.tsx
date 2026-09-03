@@ -18,12 +18,9 @@ import { siteSettingsSections, type SiteSettingsDocument } from "@/cms/settings/
 const initialState: SiteSettingsSaveState = { status: "idle", message: "" };
 
 const settingsFieldSections = {
-  siteName: "seo",
-  siteUrl: "seo",
-  metaTitle: "seo",
-  metaDescription: "seo",
+  siteName: "identity",
+  siteUrl: "identity",
   ogTitle: "sharing",
-  ogDescription: "sharing",
   ogImageUrl: "sharing",
   ogImageFile: "sharing",
   ogImageAlt: "sharing",
@@ -66,18 +63,15 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
   }, [openSection, state]);
 
   const sectionFields = {
-    seo: (
+    identity: (
       <>
         <CmsField id="cms-siteName" name="siteName" label="Site name" defaultValue={settings.siteName} required maxLength={80} />
         <CmsField id="cms-siteUrl" name="siteUrl" label="Primary website address" defaultValue={settings.siteUrl} type="url" required maxLength={500} />
-        <CmsField id="cms-metaTitle" name="metaTitle" label="Default meta title" defaultValue={settings.metaTitle} required maxLength={80} wide hint="Aim for 50–60 characters. Used by the home page and as the site-wide fallback." />
-        <CmsField id="cms-metaDescription" name="metaDescription" label="Default meta description" defaultValue={settings.metaDescription} type="textarea" required maxLength={320} wide hint="Aim for 140–160 characters. Describe the service and location clearly." />
       </>
     ),
     sharing: (
       <>
-        <CmsField id="cms-ogTitle" name="ogTitle" label="Sharing title" defaultValue={settings.ogTitle} maxLength={100} hint="Leave blank to use the default meta title." />
-        <CmsField id="cms-ogDescription" name="ogDescription" label="Sharing description" defaultValue={settings.ogDescription} type="textarea" maxLength={320} wide hint="Leave blank to use the default meta description." />
+        <CmsField id="cms-ogTitle" name="ogTitle" label="Sharing title" defaultValue={settings.ogTitle} required maxLength={100} wide hint="Used for every page when its link is shared." />
         <CmsImageField
           id="cms-ogImage"
           label="Social sharing image"
@@ -123,7 +117,7 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
     >
       <CmsPageHeader
         title="Site settings"
-        description="Manage search, sharing and global contact information."
+        description="Manage site identity, global sharing media and contact information."
         actions={
           <>
             <a className="cms-secondary-link" href="/" target="_blank" rel="noreferrer">View live site</a>
