@@ -67,6 +67,9 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsDocument> => 
   if (settings.faviconUrl === "/favicon.ico") {
     settings.faviconUrl = defaultSiteSettings.faviconUrl;
   }
+  if (!settings.publicEmail) {
+    settings.publicEmail = defaultSiteSettings.publicEmail;
+  }
 
   return settings;
 });

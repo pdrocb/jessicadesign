@@ -20,7 +20,7 @@ export const defaultSiteSettings: SiteSettingsDocument = {
     "Outdoor wedding dinner table designed with white florals, taper candles and warm wooden chairs",
   faviconUrl: "/favicon.png",
   phone: "845 · 375 · 7820",
-  publicEmail: "",
+  publicEmail: "celebrate@jessicasalomonevents.com",
   instagram: "https://www.instagram.com/jessicasalomondesigns__",
   facebook: "https://www.facebook.com/celebratewithJess",
 };

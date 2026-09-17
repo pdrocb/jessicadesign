@@ -12,7 +12,7 @@ export function createInquiryPost(deliver: Delivery) {
     }
 
     const raw = body as Record<string, unknown> | null;
-    if (raw?.company) return Response.json({ ok: true });
+    if (raw?.company) return Response.json({ ok: true, accepted: false });
 
     const result = validateInquiry(body);
     if (!result.ok) {
@@ -24,11 +24,11 @@ export function createInquiryPost(deliver: Delivery) {
 
     try {
       await deliver(result.value);
-      return Response.json({ ok: true }, { status: 201 });
+      return Response.json({ ok: true, accepted: true }, { status: 201 });
     } catch (error) {
       console.error("Inquiry delivery failed", error);
       return Response.json(
-        { message: "We could not send your inquiry. Please try again." },
+        { message: "We could not save your inquiry. Please try again." },
         { status: 503 },
       );
     }

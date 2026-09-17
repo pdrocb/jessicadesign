@@ -41,6 +41,7 @@ test("normalizes and delivers a complete inquiry", async () => {
   });
 
   assert.equal(response.status, 201);
+  assert.deepEqual(await response.json(), { ok: true, accepted: true });
   assert.deepEqual(delivered, {
     name: "Maya Thompson",
     email: "maya@example.com",
@@ -94,6 +95,7 @@ test("honeypot returns success without storing a lead", async () => {
     return "123";
   });
   assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { ok: true, accepted: false });
   assert.equal(called, false);
 });
 

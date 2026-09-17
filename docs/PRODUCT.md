@@ -76,7 +76,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 **Restricciones de información:**
 
 - No hay precios ni mínimos publicados, ni en el sitio vigente ni acordados aquí. El sitio no debe insinuar rangos.
-- **No se conoce una dirección de correo pública.** El único canal directo publicado es el teléfono `845-375-7820`. El formulario de `/inquire` ya valida y registra cada solicitud en Neon. Los templates interno y de confirmación están construidos y pueden previsualizarse localmente, pero no forman parte del submit ni envían nada; Resend se conectará cuando exista el correo destino y el dominio esté verificado. La base, no el email, es la fuente de verdad del lead.
+- El inbox operativo confirmado para inquiries es `celebrate@jessicasalomonevents.com`; Site Settings gobierna ese dato y cualquier exposición pública. El remitente transaccional es `Jessica S. Designs <celebrate@jessicasalomonevents.com>`. El formulario de `/inquire` valida y registra primero cada solicitud en Neon, luego envía por Resend el aviso interno y la confirmación. La base, no el email, sigue siendo la fuente de verdad del lead.
 - **El auto-agendado del Wix no se reproduce** (decisión PM, ago 2026). El calendario público de la página vigente promete una disponibilidad que nadie mantiene; el horario de la consulta se acuerda en la respuesta al inquiry.
 - Área de servicio: Hudson Valley, Nueva York — y viaja fuera.
 

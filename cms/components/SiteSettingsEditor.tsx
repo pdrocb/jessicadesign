@@ -128,7 +128,7 @@ export function SiteSettingsEditor({ settings }: { settings: SiteSettingsDocumen
     contact: (
       <>
         <CmsField id="cms-phone" name="phone" label="Contact phone" defaultValue={settings.phone} maxLength={40} error={errorField === "phone" ? errorMessage : undefined} />
-        <CmsField id="cms-publicEmail" name="publicEmail" label="Public email" defaultValue={settings.publicEmail} type="email" maxLength={160} hint="Optional. Leave blank until a public inbox is confirmed." error={errorField === "publicEmail" ? errorMessage : undefined} />
+        <CmsField id="cms-publicEmail" name="publicEmail" label="Public email" defaultValue={settings.publicEmail} type="email" maxLength={160} hint="Receives new inquiries and replies to confirmation emails." error={errorField === "publicEmail" ? errorMessage : undefined} />
         <CmsField id="cms-instagram" name="instagram" label="Instagram URL" defaultValue={settings.instagram} type="url" maxLength={500} error={errorField === "instagram" ? errorMessage : undefined} />
         <CmsField id="cms-facebook" name="facebook" label="Facebook URL" defaultValue={settings.facebook} type="url" maxLength={500} error={errorField === "facebook" ? errorMessage : undefined} />
       </>

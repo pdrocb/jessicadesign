@@ -16,7 +16,7 @@ El sitio incluye un CMS mobile-first en `/admin`. Vive en `cms/` como un módulo
 - Formulario público con sus nueve campos obligatorios conectado a `leads`, más bandeja operativa de inquiries con búsqueda, filtros, detalle, contacto y estado leído/nuevo.
 - Fallback al contenido local si la base no está disponible, para que el sitio público siga funcionando.
 
-Vercel Blob almacena todas las fotografías que se sustituyen desde el CMS: Home, Look Book, favicon y Open Graph. El sitio incluye un favicon inicial PNG en `public/favicon.png` y una imagen Open Graph inicial optimizada en `public/site/open-graph.webp`; Site Settings permite sustituir ambos sin cambios de código. Home reutiliza las portadas del mismo store de proyectos. Resend se conectará junto con el dominio para entregar inquiries y, posteriormente, recuperación de contraseña.
+Vercel Blob almacena todas las fotografías que se sustituyen desde el CMS: Home, Look Book, favicon y Open Graph. El sitio incluye un favicon inicial PNG en `public/favicon.png` y una imagen Open Graph inicial optimizada en `public/site/open-graph.webp`; Site Settings permite sustituir ambos sin cambios de código. Home reutiliza las portadas del mismo store de proyectos. Resend entrega los inquiries; posteriormente podrá reutilizarse para recuperación de contraseña.
 
 ## Estructura reutilizable
 
@@ -78,7 +78,7 @@ Eliminar un proyecto borra su registro y, mediante `ON DELETE CASCADE`, todas su
 - Recurso Vercel Marketplace: `jessicadesign-db`.
 - Neon project: `holy-forest-13064413`, región IAD, plan Free.
 - Vercel Blob store público: `jessicadesign-media`, región IAD.
-- Variables: `DATABASE_URL`, `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET` y `BLOB_READ_WRITE_TOKEN`.
+- Variables: `DATABASE_URL`, `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET`, `BLOB_READ_WRITE_TOKEN` y `RESEND_API_KEY`.
 - `CMS_SITE_URL` es opcional para scripts locales; por defecto usa `http://localhost:3000` como origen, permitido por la configuración local de Neon Auth.
 - Producción y Preview guardan el secreto como Sensitive. Vercel no permite esa marca en Development; en `NODE_ENV=development` la aplicación usa una clave local limitada a localhost, que nunca se emplea en un deployment.
 - Neon Auth valida las credenciales. Después del login, el CMS emite una cookie `HttpOnly`, `SameSite=Lax` y firmada con `NEON_AUTH_COOKIE_SECRET`, válida durante 30 días. Cada request vuelve a comprobar `cms_access` y la fecha del hash de credenciales, por lo que desactivar el acceso o cambiar la contraseña revoca una cookie aunque todavía no haya vencido.
@@ -117,9 +117,9 @@ El comando reemplaza el hash de la cuenta `credential` con el algoritmo de Bette
 
 ## Leads y Resend
 
-El endpoint `/api/inquiry` exige nombre, email, teléfono, celebración, fecha, venue, invitados, Pinterest y visión; filtra un honeypot básico y escribe primero en `leads`. Los límites y formatos se validan también en servidor, y la respuesta solo confirma éxito después de que Neon devuelve el ID insertado. Los registros nuevos permanecen con `email_status = 'not_configured'`; no se fuerza un `NOT NULL` retroactivo sobre las columnas históricas porque los leads capturados bajo el contrato anterior pueden contener valores nulos legítimos.
+El endpoint `/api/inquiry` exige nombre, email, teléfono, celebración, fecha, venue, invitados, Pinterest y visión; filtra un honeypot básico y escribe primero en `leads`. Los límites y formatos se validan también en servidor. Neon sigue siendo la fuente de verdad: después de obtener el ID insertado, el servicio intenta entregar los dos correos en un batch idempotente. Un fallo de Resend deja el lead guardado, registra `email_status = 'failed'` y no convierte el submit en un error que invite a crear duplicados. Si falta configuración, conserva `not_configured`; al completar la entrega guarda `sent`, `internal_email_id` y `client_email_id`.
 
-`emails/` contiene un aviso interno y una confirmación a la persona interesada, ambos con HTML responsive y alternativa plain text. `/api/emails/preview` permite revisarlos únicamente fuera de producción. Estos templates no se importan desde el submit y el proyecto no incluye un cliente de Resend, así que hoy no existe ninguna ruta de envío. Cuando se configuren dominio, inbox y remitente, la entrega actualizará `email_status`, `internal_email_id` y `client_email_id` sin cambiar el contrato DB-first del formulario.
+`emails/` contiene el aviso interno y la confirmación a la persona interesada, ambos con HTML responsive y alternativa plain text. `/api/emails/preview` permite revisarlos únicamente fuera de producción. Los dos salen como `Jessica S. Designs <celebrate@jessicasalomonevents.com>`. El aviso interno se dirige al `publicEmail` administrado en Site Settings y permite responder directamente al email del lead; la confirmación va al lead y su respuesta vuelve a ese mismo inbox operativo. La única credencial de entorno es `RESEND_API_KEY`; debe existir localmente en `.env.local` y en Vercel para cada ambiente donde se habilite el envío.
 
 ## Evolución prevista
 
