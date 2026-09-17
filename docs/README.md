@@ -15,6 +15,7 @@ Se editan in-place y deben reflejar el estado actual del proyecto.
 | `ARCHITECTURE_MAP.md` | Mapa de rutas, componentes, acciones y persistencia      | Antes de modificar un flujo de datos existente                    |
 | `BACKLOG.md`          | Trabajo futuro evaluado de producto/diseño               | Al buscar qué sigue; los ítems resueltos se **borran**            |
 | `TECH_DEBT.md`        | Problemas técnicos conocidos aún no resueltos            | Antes de un upgrade o al encontrar una limitación intencional     |
+| `ANALYTICS.md`        | Contrato de eventos, routing TEST/PROD y receta de GTM/GA4 | Antes de cambiar medición, eventos, conversiones o Tag Manager |
 
 ## Convención de ciclo de vida
 

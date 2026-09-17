@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { InquiryFieldName } from "@/cms/inquiries/validation";
 import { inquiry } from "@/lib/content";
+import { eventType, guestRange, trackEvent } from "@/lib/analytics";
 
 /**
  * Formulario de inquiry (DESIGN.md §Inputs): campos subrayados con
@@ -41,7 +42,20 @@ function clientValidationMessage(
   return "Review this field and try again.";
 }
 
+function validationErrorType(
+  control: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+) {
+  if (control.validity.valueMissing) return "required" as const;
+  if (control.validity.typeMismatch) return "format" as const;
+  if (control.validity.rangeUnderflow || control.validity.rangeOverflow) {
+    return "range" as const;
+  }
+  if (control.validity.tooLong) return "length" as const;
+  return "format" as const;
+}
+
 export function InquiryForm() {
+  const started = useRef(false);
   const [sent, setSent] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
@@ -54,10 +68,22 @@ export function InquiryForm() {
     setFieldError((current) => current?.field === field ? null : current);
   }
 
+  function handleFieldInteraction(field: InquiryFieldName) {
+    clearFieldError(field);
+    if (started.current) return;
+    started.current = true;
+    trackEvent({ event: "form_start", form_field: field });
+  }
+
   function handleInvalid(event: React.InvalidEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const firstInvalid = event.currentTarget.form?.querySelector(":invalid");
     if (firstInvalid && firstInvalid !== event.currentTarget) return;
     const field = event.currentTarget.name as InquiryFieldName;
+    trackEvent({
+      event: "form_error",
+      error_type: validationErrorType(event.currentTarget),
+      error_field: field,
+    });
     setFieldError({
       field,
       message: clientValidationMessage(event.currentTarget, field),
@@ -66,24 +92,39 @@ export function InquiryForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    trackEvent({ event: "form_submit" });
     setPending(true);
     setError("");
     setFieldError(null);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const response = await fetch("/api/inquiry", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.fromEntries(formData.entries())),
-    });
+    let response: Response;
+    try {
+      response = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
+      });
+    } catch {
+      trackEvent({ event: "form_error", error_type: "delivery" });
+      setError("We could not send your inquiry. Please try again.");
+      setPending(false);
+      return;
+    }
     const result = (await response.json().catch(() => null)) as {
+      accepted?: boolean;
       message?: string;
       field?: InquiryFieldName;
     } | null;
 
     if (!response.ok) {
       const message = result?.message ?? "We could not send your inquiry. Please try again.";
+      trackEvent({
+        event: "form_error",
+        error_type: result?.field ? "server_validation" : "delivery",
+        error_field: result?.field,
+      });
       if (result?.field) {
         setFieldError({ field: result.field, message });
         const control = form.elements.namedItem(result.field);
@@ -95,6 +136,13 @@ export function InquiryForm() {
       return;
     }
 
+    if (result?.accepted) {
+      trackEvent({
+        event: "generate_lead",
+        event_type: eventType(formData.get("celebration")),
+        guest_range: guestRange(Number(formData.get("guests"))),
+      });
+    }
     setSent(true);
   }
 
@@ -112,7 +160,11 @@ export function InquiryForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8 md:gap-9">
+    <form
+      onSubmit={handleSubmit}
+      data-analytics-form-view
+      className="flex flex-col gap-8 md:gap-9"
+    >
       <div className="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor="inquiry-company">Company</label>
         <input id="inquiry-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
@@ -147,7 +199,7 @@ export function InquiryForm() {
                   aria-invalid={invalid || undefined}
                   aria-describedby={invalid ? errorId : undefined}
                   onInvalid={handleInvalid}
-                  onInput={() => clearFieldError(field.name)}
+                  onInput={() => handleFieldInteraction(field.name)}
                   className={`${FIELD} resize-y ${invalid ? "border-rose-umber focus:border-rose-umber" : ""}`}
                 />
               ) : field.type === "select" ? (
@@ -159,7 +211,7 @@ export function InquiryForm() {
                   aria-invalid={invalid || undefined}
                   aria-describedby={invalid ? errorId : undefined}
                   onInvalid={handleInvalid}
-                  onChange={() => clearFieldError(field.name)}
+                  onChange={() => handleFieldInteraction(field.name)}
                   // Sin `appearance-none`: el select conserva la flecha
                   // nativa. Quitarla dejaba un campo idéntico a un input
                   // de texto — nadie sabía que se desplegaba.
@@ -187,7 +239,7 @@ export function InquiryForm() {
                   aria-invalid={invalid || undefined}
                   aria-describedby={invalid ? errorId : undefined}
                   onInvalid={handleInvalid}
-                  onInput={() => clearFieldError(field.name)}
+                  onInput={() => handleFieldInteraction(field.name)}
                   className={`${FIELD} ${invalid ? "border-rose-umber focus:border-rose-umber" : ""}`}
                 />
               )}

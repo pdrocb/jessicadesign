@@ -6,9 +6,9 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 
 | Ruta | Composición | Datos y efectos |
 | --- | --- | --- |
-| `/` | `app/page.tsx` → `components/sections.tsx` | `cms/content/home.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
-| `/look-book` | `app/look-book/page.tsx` → introducción CMS + `components/LookBookExperience.tsx` | `cms/content/look-book.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
-| `/inquire` | `app/inquire/page.tsx` → introducción CMS + `components/InquiryForm.tsx` | `cms/content/inquire.ts`, `cms/settings/repository.ts`; submit: `app/api/inquiry/route.ts` → `handler.ts` → `cms/inquiries/delivery.ts` |
+| `/` | `app/(site)/page.tsx` → `components/sections.tsx` | `cms/content/home.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
+| `/look-book` | `app/(site)/look-book/page.tsx` → introducción CMS + `components/LookBookExperience.tsx` | `cms/content/look-book.ts`, `cms/projects/repository.ts` y `cms/settings/repository.ts` |
+| `/inquire` | `app/(site)/inquire/page.tsx` → introducción CMS + `components/InquiryForm.tsx` | `cms/content/inquire.ts`, `cms/settings/repository.ts`; submit DB-first: `app/api/inquiry/route.ts` → `handler.ts` → `cms/inquiries/delivery.ts` → Neon + batch idempotente de Resend mediante `emails/delivery.ts` |
 | `/api/emails/preview` | Preview local de `InquiryConfirmation` o `NewInquiry` | `emails/` → `@react-email/render`; responde 404 en producción y no envía correo |
 
 ## CMS
@@ -37,7 +37,8 @@ Mapa operativo de entrypoints. Se actualiza cuando una ruta cambia de responsabi
 - `cms/database/client.ts`: acceso común a Neon.
 - `cms/media/`: política única de entrada, conversión WebP en navegador y validación defensiva previa a Blob.
 - `lib/seo.ts`: composición de metadata con SEO por documento y Open Graph global desde Site Settings.
-- `emails/`: templates responsive, tipos compartidos y alternativas plain text; no contiene integración de entrega.
+- `lib/analytics.ts`: contrato tipado y sin PII para eventos `dataLayer`; `app/(site)/layout.tsx` carga GTM solo en el sitio público y `components/AnalyticsRuntime.tsx` observa interacciones declarativas.
+- `emails/`: templates responsive, tipos compartidos, alternativas plain text e integración batch de entrega por Resend.
 
 ## Límites
 

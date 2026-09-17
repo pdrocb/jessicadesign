@@ -128,6 +128,8 @@ export function FounderStoryDialog({
                   href="/inquire"
                   onClick={closeDialog}
                   className="w-full md:w-auto"
+                  analyticsEvent="inquire_click"
+                  analyticsLocation="founder_story"
                 >
                   {ctaLabel}
                 </ButtonPrimary>

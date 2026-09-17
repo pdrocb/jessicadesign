@@ -51,6 +51,7 @@ export function Hero({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Introduction"
+      data-analytics-section="hero"
       className="gutter bg-paper pt-8 pb-4 md:py-16 wide:py-20"
     >
       <div className="shell grid gap-7 md:gap-12 wide:grid-cols-2 wide:items-center wide:gap-16">
@@ -79,12 +80,22 @@ export function Hero({ content }: EditableSectionProps = {}) {
 
           <div className="mt-1 flex items-center gap-9">
             <div id="hero-primary-cta" className="w-full md:w-auto">
-              <ButtonPrimary href="/inquire" className="w-full md:w-auto">
+              <ButtonPrimary
+                href="/inquire"
+                className="w-full md:w-auto"
+                analyticsEvent="inquire_click"
+                analyticsLocation="hero"
+              >
                 {editable(content, "hero.primaryLabel", "Start With a Conversation")}
               </ButtonPrimary>
             </div>
             <div className="hidden md:block">
-              <LinkUnderline href="/look-book" className="!self-center">
+              <LinkUnderline
+                href="/look-book"
+                className="!self-center"
+                analyticsEvent="look_book_click"
+                analyticsLocation="hero"
+              >
                 {editable(content, "hero.secondaryLabel", "See the Work")}
               </LinkUnderline>
             </div>
@@ -107,7 +118,12 @@ export function Hero({ content }: EditableSectionProps = {}) {
             {editable(content, "hero.caption", "Terrace welcome dinner · Hudson Valley, NY")}
           </figcaption>
           <div className="flex justify-center md:hidden">
-            <LinkUnderline href="/look-book" className="!self-center">
+            <LinkUnderline
+              href="/look-book"
+              className="!self-center"
+              analyticsEvent="look_book_click"
+              analyticsLocation="hero"
+            >
               {editable(content, "hero.secondaryLabel", "See the Work")}
             </LinkUnderline>
           </div>
@@ -125,6 +141,7 @@ export function Manifesto({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Our philosophy"
+      data-analytics-section="philosophy"
       className="gutter section-y border-t border-line bg-bone lg:py-30"
     >
       <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-8 md:gap-y-10 lg:gap-x-12 lg:gap-y-12">
@@ -190,6 +207,7 @@ export function Services({ content }: EditableSectionProps = {}) {
     <section
       id="expertise"
       aria-label="Expertise"
+      data-analytics-section="expertise"
       className="gutter section-y shell scroll-mt-28 border-t border-line"
     >
       <div data-reveal className="mb-8 md:mb-12 lg:mb-14">
@@ -256,6 +274,7 @@ export function Process({ content }: EditableSectionProps = {}) {
     <section
       id="process"
       aria-label="Our design process"
+      data-analytics-section="process"
       className="gutter section-y scroll-mt-28 border-t border-line bg-paper lg:py-24"
     >
       <div className="shell">
@@ -317,6 +336,7 @@ export function SilkFlorals({ content }: EditableSectionProps = {}) {
     <section
       id="silk-florals"
       aria-label="Silk florals"
+      data-analytics-section="silk_florals"
       className="gutter section-y scroll-mt-28 border-t border-line bg-bone lg:py-30"
     >
       <div className="shell grid items-start gap-8 md:grid-cols-[1fr_0.8fr] md:gap-12 lg:grid-cols-[1fr_0.7fr_0.7fr] lg:gap-16">
@@ -329,7 +349,12 @@ export function SilkFlorals({ content }: EditableSectionProps = {}) {
             {editable(content, "silk.copy", silkFlorals.copy)}
           </p>
           <div className="mt-1">
-            <ButtonPrimary href="/inquire" className="w-full md:w-auto">
+            <ButtonPrimary
+              href="/inquire"
+              className="w-full md:w-auto"
+              analyticsEvent="inquire_click"
+              analyticsLocation="silk_florals"
+            >
               {editable(content, "silk.ctaLabel", "Start With a Conversation")}
             </ButtonPrimary>
           </div>
@@ -397,6 +422,7 @@ export function About({ content }: EditableSectionProps = {}) {
     <section
       id="about"
       aria-label="About Jessica Salomon"
+      data-analytics-section="about"
       className="gutter section-y scroll-mt-28 bg-paper lg:py-30"
     >
       <div className="shell grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-x-10 lg:gap-x-16">
@@ -453,6 +479,7 @@ export function Testimonials({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Testimonials"
+      data-analytics-section="testimonials"
       className="gutter section-y bg-petal lg:py-24"
     >
       <div className="shell">
@@ -520,6 +547,7 @@ export function LookBook({ projects }: { projects: readonly HomeLookbookProject[
     <section
       id="look-book"
       aria-label="Look book"
+      data-analytics-section="look_book"
       className="w-full scroll-mt-28 bg-bone px-6 pt-20 pb-16 md:px-8 md:pt-22 md:pb-18 lg:px-12 lg:pt-28 lg:pb-24"
     >
       <div className="shell">
@@ -553,6 +581,8 @@ export function LookBook({ projects }: { projects: readonly HomeLookbookProject[
               >
                 <Link
                   href={`/look-book#${project.slug}`}
+                  data-analytics-event="look_book_click"
+                  data-link-location="home_project"
                   className="flex h-full flex-col"
                 >
                   <div className={`relative w-full overflow-hidden ${RATIO[shape]}`}>
@@ -578,7 +608,13 @@ export function LookBook({ projects }: { projects: readonly HomeLookbookProject[
         </div>
 
         <div data-reveal className="mt-10 flex justify-center md:mt-14">
-          <LinkUnderline href="/look-book">View the full Look Book</LinkUnderline>
+          <LinkUnderline
+            href="/look-book"
+            analyticsEvent="look_book_click"
+            analyticsLocation="look_book_section"
+          >
+            View the full Look Book
+          </LinkUnderline>
         </div>
       </div>
     </section>
@@ -590,6 +626,7 @@ export function Cta({ content }: EditableSectionProps = {}) {
   return (
     <section
       aria-label="Begin the experience"
+      data-analytics-section="closing_cta"
       className="gutter section-y border-t border-line bg-cream lg:py-32"
     >
       {/* El reveal va en el contenido, no en la sección: transformar la
@@ -606,7 +643,12 @@ export function Cta({ content }: EditableSectionProps = {}) {
         <p className="text-body-lg max-w-[46ch] text-ink-subtle">
           {editable(content, "cta.copy", "A complimentary hour together, and no obligation after it.")}
         </p>
-        <ButtonPrimary href="/inquire" className="w-full md:w-auto">
+        <ButtonPrimary
+          href="/inquire"
+          className="w-full md:w-auto"
+          analyticsEvent="inquire_click"
+          analyticsLocation="closing_cta"
+        >
           {editable(content, "cta.label", "Start With a Conversation")}
         </ButtonPrimary>
       </div>
@@ -650,6 +692,18 @@ export function SiteFooter({ settings }: { settings?: SiteSettingsDocument } = {
               <Link
                 key={item.label}
                 href={item.href}
+                data-analytics-event={
+                  item.href === "/look-book"
+                    ? "look_book_click"
+                    : item.href === "/inquire"
+                      ? "inquire_click"
+                      : undefined
+                }
+                data-link-location={
+                  item.href === "/look-book" || item.href === "/inquire"
+                    ? "footer"
+                    : undefined
+                }
                 // Igual que el nav: 44px de área táctil en mobile sin gap
                 // extra — el propio padding hace la separación visual.
                 className="py-[15px] transition-colors duration-[180ms] hover:text-ink-faint md:py-0"
@@ -663,6 +717,9 @@ export function SiteFooter({ settings }: { settings?: SiteSettingsDocument } = {
             <div>{site.location}</div>
             <a
               href={contactPhoneHref}
+              data-analytics-event="contact_click"
+              data-contact-method="phone"
+              data-link-location="footer"
               className="py-[15px] transition-colors duration-[180ms] hover:text-bone md:py-0"
             >
               Tel: {contactPhone}
@@ -670,6 +727,9 @@ export function SiteFooter({ settings }: { settings?: SiteSettingsDocument } = {
             {settings?.publicEmail ? (
               <a
                 href={`mailto:${settings.publicEmail}`}
+                data-analytics-event="contact_click"
+                data-contact-method="email"
+                data-link-location="footer"
                 className="py-[15px] transition-colors duration-[180ms] hover:text-bone md:py-0"
               >
                 {settings.publicEmail}
@@ -680,6 +740,9 @@ export function SiteFooter({ settings }: { settings?: SiteSettingsDocument } = {
                 href={instagram}
                 target="_blank"
                 rel="noreferrer"
+                data-analytics-event="social_click"
+                data-social-network="instagram"
+                data-link-location="footer"
                 className="py-[15px] text-bone transition-colors duration-[180ms] hover:text-ink-faint md:py-0"
               >
                 Instagram
@@ -688,6 +751,9 @@ export function SiteFooter({ settings }: { settings?: SiteSettingsDocument } = {
                 href={facebook}
                 target="_blank"
                 rel="noreferrer"
+                data-analytics-event="social_click"
+                data-social-network="facebook"
+                data-link-location="footer"
                 className="py-[15px] text-bone transition-colors duration-[180ms] hover:text-ink-faint md:py-0"
               >
                 Facebook

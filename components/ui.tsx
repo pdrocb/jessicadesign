@@ -9,6 +9,11 @@ import logoMarkLight from "@/assets/logo-mark-light.png";
 
 type Props = { children: React.ReactNode; className?: string };
 
+type TrackedActionProps = {
+  analyticsEvent?: "inquire_click" | "look_book_click";
+  analyticsLocation?: string;
+};
+
 /** Eyebrow de sección: label 11px/500, tracking .34em, --ink-subtle. */
 export function Eyebrow({ children, className = "" }: Props) {
   return (
@@ -27,11 +32,15 @@ export function ButtonPrimary({
   children,
   className = "",
   onClick,
-}: Props & { href: string; onClick?: () => void }) {
+  analyticsEvent,
+  analyticsLocation,
+}: Props & { href: string; onClick?: () => void } & TrackedActionProps) {
   return (
     <a
       href={href}
       onClick={onClick}
+      data-analytics-event={analyticsEvent}
+      data-link-location={analyticsLocation}
       className={`text-label inline-block bg-sage px-14 py-[18px] text-center font-medium text-bone uppercase transition-colors duration-[180ms] hover:bg-sage-deep ${className}`}
     >
       {children}
@@ -52,10 +61,14 @@ export function ButtonOutline({
   href,
   children,
   className = "",
-}: Props & { href: string }) {
+  analyticsEvent,
+  analyticsLocation,
+}: Props & { href: string } & TrackedActionProps) {
   return (
     <a
       href={href}
+      data-analytics-event={analyticsEvent}
+      data-link-location={analyticsLocation}
       // En móvil la caja visible mide 34px y el área táctil llega a 44 con
       // un ::after que la extiende arriba y abajo: tamaño visual y
       // superficie de toque no tienen por qué ser el mismo rectángulo, y
@@ -77,10 +90,14 @@ export function LinkUnderline({
   href,
   children,
   className = "",
-}: Props & { href: string }) {
+  analyticsEvent,
+  analyticsLocation,
+}: Props & { href: string } & TrackedActionProps) {
   return (
     <a
       href={href}
+      data-analytics-event={analyticsEvent}
+      data-link-location={analyticsLocation}
       // El padding da los 44px de área táctil en mobile; el subrayado vive
       // en el span para quedar pegado al texto y no al borde del área.
       className={`text-label self-start py-[15px] font-medium uppercase transition-colors duration-[180ms] hover:text-ink-subtle md:py-0 ${className}`}

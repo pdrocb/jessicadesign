@@ -5,6 +5,7 @@ import { faqs } from "@/lib/content";
 import { Eyebrow } from "@/components/ui";
 import type { HomeDocument } from "@/cms/content/home";
 import { homeFaqs, homeText } from "@/cms/content/model";
+import { trackEvent } from "@/lib/analytics";
 
 function toRomanNumeral(value: number) {
   const numerals: readonly [number, string][] = [
@@ -38,6 +39,7 @@ export function Faqs({ content }: { content?: HomeDocument } = {}) {
   return (
     <section
       aria-label="Frequently asked questions"
+      data-analytics-section="faqs"
       className="gutter section-y border-t border-line bg-bone lg:py-24"
     >
       <div className="shell grid items-start gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
@@ -60,7 +62,12 @@ export function Faqs({ content }: { content?: HomeDocument } = {}) {
                 <h3>
                   <button
                     type="button"
-                    onClick={() => setOpen(isOpen ? -1 : i)}
+                    onClick={() => {
+                      setOpen(isOpen ? -1 : i);
+                      if (!isOpen) {
+                        trackEvent({ event: "faq_open", faq_id: faq.id });
+                      }
+                    }}
                     aria-expanded={isOpen}
                     aria-controls={`faq-panel-${i}`}
                     className="flex w-full cursor-pointer items-baseline justify-between gap-6 px-1 py-[18px] text-left md:py-[22px]"

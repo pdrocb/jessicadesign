@@ -97,6 +97,8 @@ export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
                 <Link
                   key={item.label}
                   href={item.href}
+                  data-analytics-event={item.href === "/look-book" ? "look_book_click" : undefined}
+                  data-link-location={item.href === "/look-book" ? "header" : undefined}
                   aria-current={pathname === item.href ? "page" : undefined}
                   className={`relative whitespace-nowrap py-[15px] transition-colors duration-[180ms] hover:text-ink-subtle ${
                     pathname === item.href
@@ -108,7 +110,13 @@ export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
                 </Link>
               ))}
             </nav>
-            <ButtonOutline href="/inquire">Inquire</ButtonOutline>
+            <ButtonOutline
+              href="/inquire"
+              analyticsEvent="inquire_click"
+              analyticsLocation="header"
+            >
+              Inquire
+            </ButtonOutline>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
@@ -121,7 +129,13 @@ export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
               aria-hidden={!mobileCtaVisible}
               inert={!mobileCtaVisible}
             >
-              <ButtonOutline href="/inquire">Inquire</ButtonOutline>
+              <ButtonOutline
+                href="/inquire"
+                analyticsEvent="inquire_click"
+                analyticsLocation="mobile_sticky_header"
+              >
+                Inquire
+              </ButtonOutline>
             </div>
             <button
               type="button"
@@ -182,6 +196,8 @@ export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
                 key={item.label}
                 href={item.href}
                 onClick={closeMenu}
+                data-analytics-event={item.href === "/look-book" ? "look_book_click" : undefined}
+                data-link-location={item.href === "/look-book" ? "mobile_menu" : undefined}
                 aria-current={pathname === item.href ? "page" : undefined}
                 className="text-heading-lg border-b border-line py-4 font-display font-medium transition-colors duration-[180ms] hover:text-ink-subtle"
               >
@@ -195,11 +211,16 @@ export function SiteHeader({ settings }: { settings?: SiteSettingsDocument }) {
               href="/inquire"
               className="w-full"
               onClick={closeMenu}
+              analyticsEvent="inquire_click"
+              analyticsLocation="mobile_menu"
             >
               Start With a Conversation
             </ButtonPrimary>
             <a
               href={contactPhoneHref}
+              data-analytics-event="contact_click"
+              data-contact-method="phone"
+              data-link-location="mobile_menu"
               className="text-label-sm py-2 text-center font-medium tracking-[0.28em] text-ink-subtle uppercase"
             >
               Tel: {contactPhone}

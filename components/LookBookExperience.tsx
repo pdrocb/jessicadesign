@@ -9,6 +9,9 @@ import {
   type LookbookImage,
   type LookbookProject,
 } from "@/lib/lookbook";
+import { trackEvent } from "@/lib/analytics";
+
+type GalleryEntryPoint = "cover" | "preview" | "full_gallery";
 
 type ActiveGallery = {
   projectIndex: number;
@@ -120,7 +123,11 @@ function PreviewRows({
   images: LookbookImage[];
   project: LookbookProject;
   projectIndex: number;
-  onOpen: (projectIndex: number, imageIndex: number) => void;
+  onOpen: (
+    projectIndex: number,
+    imageIndex: number,
+    entryPoint: GalleryEntryPoint,
+  ) => void;
   className: string;
 }) {
   const compactBreaks = breakAfterIndices(images, 2);
@@ -180,7 +187,7 @@ function PreviewRows({
                 "--preview-ratio-compact": compactRatio,
                 "--preview-ratio-desktop": desktopRatio,
               } as CSSProperties}
-              onClick={() => onOpen(projectIndex, imageIndex)}
+              onClick={() => onOpen(projectIndex, imageIndex, "preview")}
               aria-label={`Open ${project.title} gallery at photograph ${imageIndex + 1}`}
               className="group relative mb-3 min-w-0 basis-0 overflow-hidden [aspect-ratio:var(--preview-ratio-compact)] [flex-grow:var(--preview-ratio-compact)] md:mb-6 lg:mb-10 lg:[aspect-ratio:var(--preview-ratio-desktop)] lg:[flex-grow:var(--preview-ratio-desktop)]"
             >
@@ -238,8 +245,14 @@ export function LookBookExperience({
   const openGallery = (
     projectIndex: number,
     imageIndex: number,
+    entryPoint: GalleryEntryPoint,
   ) => {
     returnFocusRef.current = document.activeElement as HTMLElement | null;
+    trackEvent({
+      event: "gallery_open",
+      project_slug: projects[projectIndex].slug,
+      gallery_entry_point: entryPoint,
+    });
     setActiveGallery({ projectIndex, imageIndex });
   };
 
@@ -272,7 +285,10 @@ export function LookBookExperience({
 
   return (
     <>
-      <section className="gutter bg-paper pt-16 md:pt-22 lg:pt-28">
+      <section
+        data-analytics-section="look_book_intro"
+        className="gutter bg-paper pt-16 md:pt-22 lg:pt-28"
+      >
         <div className="shell">
           <div className="grid gap-8 border-b border-line pb-12 md:grid-cols-12 md:items-end md:pb-16">
             <h1 className="text-display-hero font-display font-medium md:col-span-7">
@@ -335,7 +351,7 @@ export function LookBookExperience({
                 <button
                   type="button"
                   data-reveal
-                  onClick={() => openGallery(projectIndex, coverIndex)}
+                  onClick={() => openGallery(projectIndex, coverIndex, "cover")}
                   aria-label={`Open ${project.title} gallery at photograph ${coverIndex + 1}`}
                   className={`group relative aspect-[3/2] overflow-hidden md:col-span-8 md:row-start-1 ${
                     reverse ? "md:col-start-1" : "md:col-start-5"
@@ -369,7 +385,7 @@ export function LookBookExperience({
                 </p>
                 <button
                   type="button"
-                  onClick={() => openGallery(projectIndex, 0)}
+                  onClick={() => openGallery(projectIndex, 0, "full_gallery")}
                   className="text-label-sm min-h-11 border-b border-ink py-3 text-right font-medium tracking-[0.24em] uppercase transition-colors hover:text-ink-subtle"
                 >
                   View Full Gallery
