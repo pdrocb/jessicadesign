@@ -77,6 +77,7 @@ Eliminar un proyecto borra su registro y, mediante `ON DELETE CASCADE`, todas su
 
 - Recurso Vercel Marketplace: `jessicadesign-db`.
 - Neon project: `holy-forest-13064413`, región IAD, plan Free.
+- Ramas de datos: `main` es producción y `dev` es la copia aislada para desarrollo local. El repositorio está vinculado localmente a `dev` mediante `.neon`; ese archivo y `.env.local` no se versionan. Las variables de Vercel continúan apuntando a `main`.
 - Vercel Blob store público: `jessicadesign-media`, región IAD.
 - Variables: `DATABASE_URL`, `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET`, `BLOB_READ_WRITE_TOKEN` y `RESEND_API_KEY`.
 - `CMS_SITE_URL` es opcional para scripts locales; por defecto usa `http://localhost:3000` como origen, permitido por la configuración local de Neon Auth.
@@ -117,7 +118,7 @@ El comando reemplaza el hash de la cuenta `credential` con el algoritmo de Bette
 
 ## Leads y Resend
 
-El endpoint `/api/inquiry` exige nombre, email, teléfono, celebración, fecha, venue, invitados, Pinterest y visión; filtra un honeypot básico y escribe primero en `leads`. Los límites y formatos se validan también en servidor. Neon sigue siendo la fuente de verdad: después de obtener el ID insertado, el servicio intenta entregar los dos correos en un batch idempotente. Un fallo de Resend deja el lead guardado, registra `email_status = 'failed'` y no convierte el submit en un error que invite a crear duplicados. Si falta configuración, conserva `not_configured`; al completar la entrega guarda `sent`, `internal_email_id` y `client_email_id`.
+El endpoint `/api/inquiry` exige nombre, email, teléfono, celebración, fecha, venue, invitados y visión; Pinterest es opcional. Filtra un honeypot básico y escribe primero en `leads`. Los límites y formatos se validan también en servidor, incluida la URL de Pinterest cuando se proporciona. Neon sigue siendo la fuente de verdad: después de obtener el ID insertado, el servicio intenta entregar los dos correos en un batch idempotente. El aviso interno usa el inbox público de Site Settings únicamente cuando el request llega por `www.jessicasalomondesigns.com`; cualquier otro hostname lo dirige a `pedro@productpedro.com`. La confirmación continúa dirigida al email del solicitante. Un fallo de Resend deja el lead guardado, registra `email_status = 'failed'` y no convierte el submit en un error que invite a crear duplicados. Si falta configuración, conserva `not_configured`; al completar la entrega guarda `sent`, `internal_email_id` y `client_email_id`.
 
 `emails/` contiene el aviso interno y la confirmación a la persona interesada, ambos con HTML responsive y alternativa plain text. `/api/emails/preview` permite revisarlos únicamente fuera de producción. Los dos salen como `Jessica S. Designs <celebrate@jessicasalomonevents.com>`. El aviso interno se dirige al `publicEmail` administrado en Site Settings y permite responder directamente al email del lead; la confirmación va al lead y su respuesta vuelve a ese mismo inbox operativo. La única credencial de entorno es `RESEND_API_KEY`; debe existir localmente en `.env.local` y en Vercel para cada ambiente donde se habilite el envío.
 

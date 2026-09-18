@@ -43,3 +43,4 @@ next-env.d.ts
 
 # impeccable (artefactos regenerables — ver docs/README.md)
 /.impeccable/
+.neon

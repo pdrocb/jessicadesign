@@ -37,7 +37,7 @@ Esto tiene una consecuencia que todo trabajo futuro debe respetar: el sitio nunc
 ## Operating Context
 
 - La entrada es un formulario de *inquiry* que agenda una **consulta gratuita de una hora**. Está confirmado: aparece textual en su sitio vigente — *"Head on over to our inquiry tab to schedule a free 1 hour consultation to learn more about our services!"*
-- El formulario vigente (jessicasalomondesigns.com/contact) pide: nombre, email, tipo de celebración, teléfono de contacto para la consulta, fecha del evento, nombre y ubicación del venue, número de invitados, link al tablero de Pinterest, y una descripción libre de la visión. Lleva calendario integrado para elegir horario. En el nuevo `/inquire`, los nueve datos son obligatorios y el horario se acuerda posteriormente en la respuesta.
+- El formulario vigente (jessicasalomondesigns.com/contact) pide: nombre, email, tipo de celebración, teléfono de contacto para la consulta, fecha del evento, nombre y ubicación del venue, número de invitados, link al tablero de Pinterest, y una descripción libre de la visión. Lleva calendario integrado para elegir horario. En el nuevo `/inquire`, el tablero de Pinterest es opcional; los otros ocho datos son obligatorios y el horario se acuerda posteriormente en la respuesta.
 - **El tablero de Pinterest es un artefacto real de su proceso**, no un adorno: lo pide en el formulario y lo menciona en su propio "about" (*"My aim is to bring your Pinterest vision board to life, while adding some of my own expertise"*).
 - La página "Book Online" del sitio vigente está vacía ("Nothing to book right now").
 
@@ -76,7 +76,7 @@ Esto sustituye la incógnita anterior de "qué ocurre después de la consulta": 
 **Restricciones de información:**
 
 - No hay precios ni mínimos publicados, ni en el sitio vigente ni acordados aquí. El sitio no debe insinuar rangos.
-- El inbox operativo confirmado para inquiries es `celebrate@jessicasalomonevents.com`; Site Settings gobierna ese dato y cualquier exposición pública. El remitente transaccional es `Jessica S. Designs <celebrate@jessicasalomonevents.com>`. El formulario de `/inquire` valida y registra primero cada solicitud en Neon, luego envía por Resend el aviso interno y la confirmación. La base, no el email, sigue siendo la fuente de verdad del lead.
+- El inbox operativo confirmado para inquiries es `celebrate@jessicasalomonevents.com`; Site Settings gobierna ese dato y cualquier exposición pública. Solo los requests recibidos en `www.jessicasalomondesigns.com` envían el aviso interno a ese inbox. Localhost, previews de Vercel y cualquier otro dominio lo redirigen a `pedro@productpedro.com`, mientras la confirmación del solicitante conserva el email capturado en el formulario. El remitente transaccional es `Jessica S. Designs <celebrate@jessicasalomonevents.com>`. El formulario de `/inquire` valida y registra primero cada solicitud en Neon, luego envía por Resend el aviso interno y una confirmación breve y personal: agradecimiento, expectativa de respuesta en los próximos días y firma, sin repetir los datos enviados ni describir pasos posteriores. La base, no el email, sigue siendo la fuente de verdad del lead.
 - **El auto-agendado del Wix no se reproduce** (decisión PM, ago 2026). El calendario público de la página vigente promete una disponibilidad que nadie mantiene; el horario de la consulta se acuerda en la respuesta al inquiry.
 - Área de servicio: Hudson Valley, Nueva York — y viaja fuera.
 

@@ -4,6 +4,7 @@ import { getCmsDatabase } from "@/cms/database/client";
 import type { InquiryPayload } from "@/cms/inquiries/validation";
 import { getSiteSettings } from "@/cms/settings/repository";
 import { sendInquiryEmails } from "@/emails/delivery";
+import { resolveInternalInquiryRecipient } from "@/emails/routing";
 
 async function updateEmailDelivery(
   inquiryId: string,
@@ -30,7 +31,7 @@ function assetBase(siteUrl: string) {
   return siteUrl.replace(/\/+$/, "");
 }
 
-export async function saveInquiry(inquiry: InquiryPayload) {
+export async function saveInquiry(inquiry: InquiryPayload, requestUrl: string) {
   const sql = getCmsDatabase();
   const rows = await sql.query(
     `INSERT INTO leads (
@@ -59,13 +60,17 @@ export async function saveInquiry(inquiry: InquiryPayload) {
   let ids: { internalEmailId: string; clientEmailId: string };
   try {
     const settings = await getSiteSettings();
-    const internalRecipient = settings.publicEmail.trim();
+    const productionRecipient = settings.publicEmail.trim();
+    const internalRecipient = resolveInternalInquiryRecipient(
+      requestUrl,
+      productionRecipient,
+    );
 
-    if (!apiKey || !internalRecipient) {
+    if (!apiKey || !productionRecipient) {
       console.warn("Inquiry email delivery is not configured", {
         inquiryId,
         missingApiKey: !apiKey,
-        missingRecipient: !internalRecipient,
+        missingRecipient: !productionRecipient,
       });
       return inquiryId;
     }

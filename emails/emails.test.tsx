@@ -5,6 +5,10 @@ import { InquiryConfirmation } from "@/emails/InquiryConfirmation";
 import { NewInquiry } from "@/emails/NewInquiry";
 import { buildInquiryEmails, INQUIRY_SENDER } from "@/emails/delivery";
 import { plainTextConfirmation, plainTextNewInquiry } from "@/emails/plainText";
+import {
+  DEVELOPMENT_INQUIRY_RECIPIENT,
+  resolveInternalInquiryRecipient,
+} from "@/emails/routing";
 import { inquiryConfirmationSubject, internalInquirySubject } from "@/emails/subjects";
 
 const lead = {
@@ -19,14 +23,18 @@ const lead = {
   notes: "Warm, layered, and intentional.",
 };
 
-test("renders the client confirmation with Jessica's verified process", async () => {
+test("renders the client confirmation as a simple personal note", async () => {
   const html = await render(<InquiryConfirmation lead={lead} assetBase="https://example.com" />);
   const text = plainTextConfirmation(lead);
 
-  for (const value of ["Thank you", "complimentary", "Jessica Salomon", lead.venue, lead.notes]) {
+  for (const value of ["Thank you so much for reaching out", "I personally review every inquiry", "complimentary consultation", "Jessica"]) {
     assert.match(html, new RegExp(value, "i"));
     assert.match(text, new RegExp(value, "i"));
   }
+  assert.doesNotMatch(`${html}\n${text}`, /Founder & Creative Director|Wedding & Event Design & Styling/i);
+  assert.equal((text.match(/Jessica/g) ?? []).length, 1);
+  assert.doesNotMatch(`${html}\n${text}`, /what happens next|Step 1|A quick look at what you sent|Your vision/i);
+  assert.doesNotMatch(`${html}\n${text}`, new RegExp(lead.venue.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   assert.doesNotMatch(`${html}\n${text}`, /The Clementine|48.?72|investment|contract/i);
 });
 
@@ -48,6 +56,14 @@ test("renders the internal inquiry with every submitted field", async () => {
     assert.match(`${html}\n${text}`, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   }
   assert.doesNotMatch(`${html}\n${text}`, /The Clementine|investment/i);
+});
+
+test("omits Pinterest from the internal inquiry when none was submitted", async () => {
+  const internalLead = { ...lead, moodboardUrl: null, submittedAt: "Sep 2, 2026 · 5:15 PM EDT" };
+  const html = await render(<NewInquiry lead={internalLead} assetBase="https://example.com" />);
+  const text = plainTextNewInquiry(internalLead);
+
+  assert.doesNotMatch(`${html}\n${text}`, /Pinterest|Open moodboard/i);
 });
 
 test("builds safe, concise subjects for both messages", () => {
@@ -79,5 +95,28 @@ test("routes both inquiry messages through the verified sender", () => {
   assert.equal(confirmation.to, lead.email);
   assert.equal(confirmation.replyTo, "celebrate@jessicasalomonevents.com");
   assert.match(internal.text, /Sep 2, 2026 · 5:15 PM EDT/);
-  assert.match(confirmation.text, /Thank you, Maya/);
+  assert.match(confirmation.text, /^Maya,/);
+});
+
+test("routes internal inquiries by the request hostname", () => {
+  const productionRecipient = "celebrate@jessicasalomonevents.com";
+
+  assert.equal(
+    resolveInternalInquiryRecipient(
+      "https://www.jessicasalomondesigns.com/api/inquiry",
+      productionRecipient,
+    ),
+    productionRecipient,
+  );
+  assert.equal(
+    resolveInternalInquiryRecipient("http://localhost:3000/api/inquiry", productionRecipient),
+    DEVELOPMENT_INQUIRY_RECIPIENT,
+  );
+  assert.equal(
+    resolveInternalInquiryRecipient(
+      "https://jessicadesign-git-preview-productcb.vercel.app/api/inquiry",
+      productionRecipient,
+    ),
+    DEVELOPMENT_INQUIRY_RECIPIENT,
+  );
 });

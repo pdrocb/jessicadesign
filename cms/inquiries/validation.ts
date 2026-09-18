@@ -6,7 +6,7 @@ export type InquiryPayload = {
   eventDate: string;
   venue: string;
   guestCount: number;
-  moodboardUrl: string;
+  moodboardUrl: string | null;
   notes: string;
 };
 
@@ -86,13 +86,17 @@ export function validateInquiry(input: unknown): ValidationResult {
   if (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > 10000) {
     return { ok: false, message: "Enter a guest count between 1 and 10,000.", field: "guests" };
   }
-  const pinterestResult = requiredText(body, "pinterest", "Pinterest board", 2000);
-  if (!pinterestResult.ok) return pinterestResult;
-  try {
-    const url = new URL(pinterestResult.value);
-    if (url.protocol !== "http:" && url.protocol !== "https:") throw new Error();
-  } catch {
-    return { ok: false, message: "Enter a valid Pinterest URL.", field: "pinterest" };
+  const pinterest = text(body.pinterest);
+  if (pinterest.length > 2000) {
+    return { ok: false, message: "Pinterest board is too long.", field: "pinterest" };
+  }
+  if (pinterest) {
+    try {
+      const url = new URL(pinterest);
+      if (url.protocol !== "http:" && url.protocol !== "https:") throw new Error();
+    } catch {
+      return { ok: false, message: "Enter a valid Pinterest URL.", field: "pinterest" };
+    }
   }
   const visionResult = requiredText(body, "vision", "Your vision", 5000);
   if (!visionResult.ok) return visionResult;
@@ -107,7 +111,7 @@ export function validateInquiry(input: unknown): ValidationResult {
       eventDate: dateResult.value,
       venue: venueResult.value,
       guestCount,
-      moodboardUrl: pinterestResult.value,
+      moodboardUrl: pinterest || null,
       notes: visionResult.value,
     },
   };

@@ -227,7 +227,7 @@ export const inquiry = {
     { name: "date", label: "Date of the Event", type: "date", required: true },
     { name: "venue", label: "Name & Location of Venue", type: "text", required: true, maxLength: 500 },
     { name: "guests", label: "How Many Guests", type: "number", required: true, min: 1, max: 10000 },
-    { name: "pinterest", label: "Pinterest Board", type: "url", required: true, maxLength: 2000 },
+    { name: "pinterest", label: "Pinterest Board (Optional)", type: "url", required: false, maxLength: 2000 },
     { name: "vision", label: "Share Your Vision", type: "textarea", required: true, maxLength: 5000 },
   ],
 } as const;

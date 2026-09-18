@@ -41,22 +41,27 @@ export const bodyStyle: React.CSSProperties = {
 
 const responsiveCss = `
   @media only screen and (max-width: 620px) {
-    .email-shell { width: 100% !important; }
+    .email-shell { width: calc(100% - 24px) !important; }
+    .email-frame { padding-left: 0 !important; padding-right: 0 !important; }
     .email-pad { padding-left: 22px !important; padding-right: 22px !important; }
     .email-display { font-size: 40px !important; }
     .email-label-cell { width: 112px !important; }
     .email-brand-detail { display: none !important; }
     .email-summary-cell { display: block !important; width: 100% !important; padding: 0 0 18px !important; }
+    .email-footer-link { display: block !important; margin: 8px 0 0 !important; }
+    .email-footer-separator { display: none !important; }
   }
 `;
 
 export function EmailShell({
   preheader,
   assetBase,
+  masthead = "full",
   children,
 }: {
   preheader: string;
   assetBase: string;
+  masthead?: "full" | "mark";
   children: React.ReactNode;
 }) {
   return (
@@ -78,7 +83,7 @@ export function EmailShell({
         >
           <tbody>
             <tr>
-              <td align="center" style={{ padding: "28px 12px" }}>
+              <td className="email-frame" align="center" style={{ padding: "28px 12px" }}>
                 <table
                   role="presentation"
                   width="640"
@@ -94,54 +99,76 @@ export function EmailShell({
                   }}
                 >
                   <tbody>
-                    <tr>
-                      <td
-                        className="email-pad"
-                        style={{
-                          padding: "24px 38px",
-                          borderBottom: `1px solid ${EMAIL_COLORS.line}`,
-                        }}
-                      >
-                        <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} border={0}>
-                          <tbody>
-                            <tr>
-                              <td valign="middle" width={48}>
-                                {/* Email clients require a plain absolute image URL. */}
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={`${assetBase}/favicon.png`}
-                                  width={38}
-                                  height={38}
-                                  alt=""
-                                  style={{ display: "block", width: "38px", height: "38px", border: 0 }}
-                                />
-                              </td>
-                              <td valign="middle">
-                                <p
-                                  style={{
-                                    margin: 0,
-                                    fontFamily: EMAIL_FONTS.display,
-                                    fontSize: "21px",
-                                    fontWeight: 600,
-                                    lineHeight: "1.05",
-                                    letterSpacing: "0.02em",
-                                    color: EMAIL_COLORS.ink,
-                                  }}
-                                >
-                                  Jessica S. Designs
-                                </p>
-                                <p className="email-brand-detail" style={{ ...labelStyle, marginTop: "5px", fontSize: "8px" }}>
-                                  Wedding &amp; Event Design &amp; Styling
-                                </p>
-                              </td>
-                              <td className="email-brand-detail" align="right" valign="middle" style={{ ...labelStyle, whiteSpace: "nowrap" }}>
-                                Hudson Valley · NY
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
+                    {masthead === "mark" ? (
+                      <tr>
+                        <td
+                          align="center"
+                          style={{
+                            padding: "28px 38px",
+                            borderBottom: `1px solid ${EMAIL_COLORS.line}`,
+                          }}
+                        >
+                          {/* Email clients require a plain absolute image URL. */}
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`${assetBase}/favicon.png`}
+                            width={42}
+                            height={42}
+                            alt="Jessica S. Designs"
+                            style={{ display: "block", width: "42px", height: "42px", border: 0 }}
+                          />
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td
+                          className="email-pad"
+                          style={{
+                            padding: "24px 38px",
+                            borderBottom: `1px solid ${EMAIL_COLORS.line}`,
+                          }}
+                        >
+                          <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} border={0}>
+                            <tbody>
+                              <tr>
+                                <td valign="middle" width={48}>
+                                  {/* Email clients require a plain absolute image URL. */}
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={`${assetBase}/favicon.png`}
+                                    width={38}
+                                    height={38}
+                                    alt=""
+                                    style={{ display: "block", width: "38px", height: "38px", border: 0 }}
+                                  />
+                                </td>
+                                <td valign="middle">
+                                  <p
+                                    style={{
+                                      margin: 0,
+                                      fontFamily: EMAIL_FONTS.display,
+                                      fontSize: "21px",
+                                      fontWeight: 600,
+                                      lineHeight: "1.05",
+                                      letterSpacing: "0.02em",
+                                      color: EMAIL_COLORS.ink,
+                                    }}
+                                  >
+                                    Jessica S. Designs
+                                  </p>
+                                  <p className="email-brand-detail" style={{ ...labelStyle, marginTop: "5px", fontSize: "9px" }}>
+                                    Wedding &amp; Event Design &amp; Styling
+                                  </p>
+                                </td>
+                                <td className="email-brand-detail" align="right" valign="middle" style={{ ...labelStyle, whiteSpace: "nowrap" }}>
+                                  Hudson Valley · NY
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    )}
                     {children}
                   </tbody>
                 </table>
@@ -154,7 +181,53 @@ export function EmailShell({
   );
 }
 
-export function EmailFooter({ assetBase }: { assetBase: string }) {
+export function EmailFooter({
+  assetBase,
+  variant = "full",
+}: {
+  assetBase: string;
+  variant?: "full" | "minimal";
+}) {
+  if (variant === "minimal") {
+    return (
+      <tr>
+        <td
+          className="email-pad"
+          align="center"
+          style={{ padding: "25px 38px 27px", backgroundColor: EMAIL_COLORS.ink }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontFamily: EMAIL_FONTS.body,
+              fontSize: "13px",
+              lineHeight: "1.55",
+              color: EMAIL_COLORS.onDark,
+            }}
+          >
+            Hudson Valley, New York
+            <br />
+            <a className="email-footer-link" href={assetBase} style={{ color: EMAIL_COLORS.onDark, textDecoration: "underline" }}>
+              Website
+            </a>
+            <span className="email-footer-separator">{" · "}</span>
+            <a className="email-footer-link" href="tel:+18453757820" style={{ color: EMAIL_COLORS.onDark, textDecoration: "underline" }}>
+              845-375-7820
+            </a>
+            <span className="email-footer-separator">{" · "}</span>
+            <a
+              className="email-footer-link"
+              href="https://www.instagram.com/jessicasalomondesigns__/"
+              style={{ color: EMAIL_COLORS.onDark, textDecoration: "underline" }}
+            >
+              Instagram
+            </a>
+          </p>
+        </td>
+      </tr>
+    );
+  }
+
   return (
     <tr>
       <td

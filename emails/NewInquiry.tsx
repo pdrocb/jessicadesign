@@ -102,7 +102,7 @@ export function NewInquiry({ lead, assetBase }: { lead: InternalInquiryEmailLead
               <DetailRow label="Event date" value={formatEventDate(lead.eventDate)} />
               <DetailRow label="Venue" value={lead.venue} />
               <DetailRow label="Guest count" value={lead.guestCount.toLocaleString("en-US")} />
-              <DetailRow label="Pinterest" value="Open moodboard" href={lead.moodboardUrl} />
+              {lead.moodboardUrl ? <DetailRow label="Pinterest" value="Open moodboard" href={lead.moodboardUrl} /> : null}
             </tbody>
           </table>
 

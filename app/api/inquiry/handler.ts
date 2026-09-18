@@ -1,6 +1,6 @@
 import { validateInquiry, type InquiryPayload } from "@/cms/inquiries/validation";
 
-type Delivery = (inquiry: InquiryPayload) => Promise<string>;
+type Delivery = (inquiry: InquiryPayload, requestUrl: string) => Promise<string>;
 
 export function createInquiryPost(deliver: Delivery) {
   return async function POST(request: Request) {
@@ -23,7 +23,7 @@ export function createInquiryPost(deliver: Delivery) {
     }
 
     try {
-      await deliver(result.value);
+      await deliver(result.value, request.url);
       return Response.json({ ok: true, accepted: true }, { status: 201 });
     } catch (error) {
       console.error("Inquiry delivery failed", error);

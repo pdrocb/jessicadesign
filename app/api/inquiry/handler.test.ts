@@ -17,7 +17,7 @@ const valid = {
 
 function post(
   body: unknown,
-  deliver: (inquiry: InquiryPayload) => Promise<string> = async () => "123",
+  deliver: (inquiry: InquiryPayload, requestUrl: string) => Promise<string> = async () => "123",
 ) {
   return createInquiryPost(deliver)(new Request("http://localhost/api/inquiry", {
     method: "POST",
@@ -35,8 +35,10 @@ test("rejects invalid JSON", async () => {
 
 test("normalizes and delivers a complete inquiry", async () => {
   let delivered: InquiryPayload | undefined;
-  const response = await post(valid, async (inquiry) => {
+  let deliveredFrom = "";
+  const response = await post(valid, async (inquiry, requestUrl) => {
     delivered = inquiry;
+    deliveredFrom = requestUrl;
     return "456";
   });
 
@@ -53,9 +55,10 @@ test("normalizes and delivers a complete inquiry", async () => {
     moodboardUrl: "https://pinterest.com/example/celebration",
     notes: "Warm, layered, and intentional.",
   });
+  assert.equal(deliveredFrom, "http://localhost/api/inquiry");
 });
 
-for (const field of Object.keys(valid)) {
+for (const field of Object.keys(valid).filter((field) => field !== "pinterest")) {
   test(`requires ${field}`, async () => {
     const response = await post({ ...valid, [field]: "  " });
     const result = await response.json() as { field?: string };
@@ -63,6 +66,17 @@ for (const field of Object.keys(valid)) {
     assert.equal(result.field, field);
   });
 }
+
+test("accepts an inquiry without a Pinterest board", async () => {
+  let delivered: InquiryPayload | undefined;
+  const response = await post({ ...valid, pinterest: "  " }, async (inquiry) => {
+    delivered = inquiry;
+    return "456";
+  });
+
+  assert.equal(response.status, 201);
+  assert.equal(delivered?.moodboardUrl, null);
+});
 
 test("rejects malformed constrained fields", async () => {
   const cases = [
